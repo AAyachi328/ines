@@ -1,0 +1,86 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.0.min.js"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="db806269-c06a-4b8a-9b21-8dd96f54eb95" data-root-id="1316"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1472">
+          {"6bf4b3ef-bdb2-412c-a23c-372dec5ebf2b":{"defs":[],"roots":{"references":[{"attributes":{"line_color":"orange","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"1344","type":"Line"},{"attributes":{"line_alpha":0.1,"line_color":"orange","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"1345","type":"Line"},{"attributes":{},"id":"1355","type":"AllLabels"},{"attributes":{"coordinates":null,"group":null,"items":[{"id":"1360"}]},"id":"1359","type":"Legend"},{"attributes":{},"id":"1337","type":"ResetTool"},{"attributes":{"ticks":[1000,2000,3000,4000,5000,6000]},"id":"1363","type":"FixedTicker"},{"attributes":{"line_alpha":0.2,"line_color":"orange","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"1346","type":"Line"},{"attributes":{},"id":"1323","type":"LinearScale"},{"attributes":{"axis":{"id":"1327"},"coordinates":null,"grid_line_color":"lightgray","grid_line_width":0.5,"group":null,"ticker":{"id":"1365"}},"id":"1330","type":"Grid"},{"attributes":{"axis_label":"Puissance P (en chevaux DIN)","coordinates":null,"formatter":{"id":"1351"},"group":null,"major_label_policy":{"id":"1352"},"ticker":{"id":"1366"}},"id":"1331","type":"LinearAxis"},{"attributes":{},"id":"1356","type":"UnionRenderers"},{"attributes":{"label":{"value":"Puissance parabolique ajust\u00e9e"},"renderers":[{"id":"1347"}]},"id":"1360","type":"LegendItem"},{"attributes":{"callback":null,"renderers":[{"id":"1347"}],"tooltips":[["R\u00e9gime moteur","$x{0} tr/min"],["Puissance","$y{0.0} chevaux DIN"]]},"id":"1361","type":"HoverTool"},{"attributes":{"ticks":[1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900,5000,5100,5200,5300,5400,5500,5600,5700,5800,5900,6000]},"id":"1365","type":"FixedTicker"},{"attributes":{},"id":"1325","type":"LinearScale"},{"attributes":{"data":{"x":{"__ndarray__":"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","dtype":"float64","order":"little","shape":[300]},"y":[29.911640000000006,31.533064111724116,33.14672278230006,34.75261601172792,36.350743800007706,37.94110614713941,39.523703053123,41.09853451795843,42.66560054164577,44.22490112418504,45.776436265576194,47.32020596581921,48.85621022491412,50.38444904286101,51.904922419659755,53.41763035531042,54.922572849812894,56.419749903167315,57.909161515373654,59.390807686431884,60.86468841634198,62.33080370510396,63.78915355271789,65.23973795918371,66.68255692450137,68.11761044867097,69.54489853169244,70.96442117356585,72.37617837429114,73.78017013386831,75.17639645229737,76.56485732957833,77.94555276571121,79.31848276069596,80.68364731453264,82.04104642722118,83.39068009876164,84.732548329154,86.06665111839821,87.39298846649437,88.71156037344238,90.02236683924232,91.32540786389413,92.62068344739788,93.90819358975348,95.187938290961,96.45991755102044,97.72413136993173,98.9805797476949,100.22926268431002,101.47018017977703,102.70333223409591,103.92871884726671,105.14634001928938,106.35619575016396,107.55828603989046,108.75261088846882,109.93917029589907,111.11796426218125,112.28899278731532,113.45225587130126,114.60775351413913,115.75548571582885,116.89545247637052,118.02765379576407,119.1520896740095,120.26876011110681,121.37766510705606,122.4788046618572,123.57217877551024,124.65778744801514,125.73563067937194,126.80570846958067,127.86802081864127,128.92256772655378,129.96934919331815,131.00836521893444,132.03961580340268,133.06310094672276,134.07882064889475,135.08677490991857,136.08696372979438,137.07938710852207,138.06404504610163,139.04093754253307,140.01006459781644,140.97142621195172,141.92502238493887,142.8708531167779,143.80891840746887,144.73921825701171,145.66175266540645,146.57652163265305,147.48352515875158,148.38276324370202,149.27423588750435,150.15794309015857,151.03388485166468,151.90206117202268,152.7624720512326,153.61511748929442,154.4599974862081,155.2971120419737,156.12646115659118,156.94804483006058,157.76186306238185,158.56791585355504,159.3662032035801,160.15672511245708,160.93948158018597,161.71447260676672,162.48169819219936,163.24115833648392,163.9928530396204,164.73678230160874,165.472946122449,166.20134450214113,166.92197744068517,167.6348449380811,168.33994699432893,169.03728360942864,169.72685478338028,170.4086605161838,171.08270080783922,171.74897565834652,172.40748506770572,173.05822903591684,173.70120756297982,174.33642064889472,174.96386829366153,175.5835504972802,176.19546725975079,176.79961858107328,177.39600446124766,177.9846249002739,178.5654798981521,179.13856945488214,179.70389357046412,180.26145224489798,180.8112454781837,181.35327327032138,181.88753562131092,182.41403253115237,182.9327639998457,183.44373002739093,183.94693061378806,184.44236575903707,184.930035463138,185.4099397260908,185.88207854789553,186.34645192855214,186.80305986806064,187.25190236642106,187.69297942363335,188.12629103969755,188.55183721461364,188.96961794838163,189.3796332410015,189.7818830924733,190.17636750279695,190.56308647197255,190.94204,191.31322808687938,191.67665073261063,192.0323079371938,192.38019970062885,192.7203260229158,193.05268690405464,193.37728234404537,193.69411234288802,194.00317690058253,194.30447601712896,194.59800969252728,194.88377792677753,195.16178071987963,195.43201807183365,195.69448998263957,195.94919645229737,196.19613748080707,196.43531306816868,196.66672321438216,196.89036791944756,197.10624718336484,197.31436100613402,197.5147093877551,197.70729232822808,197.89210982755296,198.06916188572973,198.2384485027584,198.39996967863894,198.5537254133714,198.69971570695574,198.837940559392,198.96839997068014,199.0910939408202,199.20602246981213,199.31318555765594,199.41258320435168,199.5042154098993,199.58808217429882,199.66418349755025,199.73251937965355,199.79308982060877,199.84589482041588,199.89093437907488,199.92820849658577,199.95771717294858,199.97946040816328,199.99343820222984,199.99965055514835,199.99809746691872,199.98877893754099,199.97169496701517,199.94684555534124,199.9142307025192,199.87385040854906,199.8257046734308,199.76979349716447,199.70611687975,199.63467482118745,199.55546732147678,199.46849438061804,199.37375599861116,199.2712521754562,199.16098291115313,199.04294820570195,198.91714805910266,198.78358247135526,198.64225144245978,198.4931549724162,198.3362930612245,198.1716657088847,197.99927291539677,197.81911468076078,197.63119100497664,197.43550188804446,197.2320473299641,197.0208273307357,196.80184189035916,196.57509100883453,196.3405746861618,196.09829292234093,195.848245717372,195.59043307125495,195.3248549839898,195.05151145557656,194.7704024860152,194.48152807530573,194.18488822344816,193.8804829304425,193.56831219628873,193.24837602098685,192.92067440453684,192.58520734693877,192.2419748481926,191.89097690829828,191.5322135272559,191.1656847050654,190.79139044172678,190.40933073724008,190.01950559160525,189.62191500482234,189.21655897689132,188.8034375078122,188.38255059758495,187.95389824620963,187.51748045368618,187.07329722001464,186.62134854519502,186.16163442922726,185.6941548721114,185.21890987384745,184.7358994344354,184.24512355387523,183.74658223216696,183.24027546931057,182.7262032653061,182.20436562015354,181.67476253385286,181.13739400640407,180.59226003780716,180.03936062806218,179.4786957771691,178.91026548512787,178.33406975193856,177.75010857760114,177.15838196211567,176.55888990548203,175.95163240770032,175.33660946877046,174.71382108869255,174.08326726746654,173.44494800509239,172.79886330157012,172.14501315689978,171.48339757108135,170.8140165441148,170.13687007600015,169.45195816673737,168.75928081632654]},"selected":{"id":"1357"},"selection_policy":{"id":"1356"}},"id":"1343","type":"ColumnDataSource"},{"attributes":{},"id":"1357","type":"Selection"},{"attributes":{},"id":"1352","type":"AllLabels"},{"attributes":{"coordinates":null,"data_source":{"id":"1343"},"glyph":{"id":"1344"},"group":null,"hover_glyph":null,"muted_glyph":{"id":"1346"},"nonselection_glyph":{"id":"1345"},"view":{"id":"1348"}},"id":"1347","type":"GlyphRenderer"},{"attributes":{},"id":"1354","type":"BasicTickFormatter"},{"attributes":{"background_fill_color":"#fafafa","below":[{"id":"1327"}],"center":[{"id":"1330"},{"id":"1334"},{"id":"1359"}],"height":750,"left":[{"id":"1331"}],"renderers":[{"id":"1347"}],"title":{"id":"1317"},"toolbar":{"id":"1339"},"width":1000,"x_range":{"id":"1319"},"x_scale":{"id":"1323"},"y_range":{"id":"1321"},"y_scale":{"id":"1325"}},"id":"1316","subtype":"Figure","type":"Plot"},{"attributes":{"axis_label":"R\u00e9gime moteur (en tr/min)","coordinates":null,"formatter":{"id":"1354"},"group":null,"major_label_policy":{"id":"1355"},"ticker":{"id":"1363"}},"id":"1327","type":"LinearAxis"},{"attributes":{"overlay":{"id":"1338"}},"id":"1336","type":"BoxZoomTool"},{"attributes":{"bottom_units":"screen","coordinates":null,"fill_alpha":0.5,"fill_color":"lightgrey","group":null,"left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"right_units":"screen","syncable":false,"top_units":"screen"},"id":"1338","type":"BoxAnnotation"},{"attributes":{"coordinates":null,"group":null,"text":"Puissance moteur en fonction du r\u00e9gime moteur"},"id":"1317","type":"Title"},{"attributes":{},"id":"1321","type":"DataRange1d"},{"attributes":{"axis":{"id":"1331"},"coordinates":null,"dimension":1,"grid_line_color":"lightgray","grid_line_width":0.5,"group":null,"ticker":null},"id":"1334","type":"Grid"},{"attributes":{},"id":"1351","type":"BasicTickFormatter"},{"attributes":{},"id":"1335","type":"PanTool"},{"attributes":{"ticks":[0,20,40,60,80,100,120,140,160,180,200]},"id":"1366","type":"FixedTicker"},{"attributes":{"source":{"id":"1343"}},"id":"1348","type":"CDSView"},{"attributes":{"tools":[{"id":"1335"},{"id":"1336"},{"id":"1337"},{"id":"1361"}]},"id":"1339","type":"Toolbar"},{"attributes":{},"id":"1319","type":"DataRange1d"}],"root_ids":["1316"]},"title":"Bokeh Application","version":"2.4.0"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            const fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  const docs_json = document.getElementById('1472').textContent;
+                  const render_items = [{"docid":"6bf4b3ef-bdb2-412c-a23c-372dec5ebf2b","root_ids":["1316"],"roots":{"1316":"db806269-c06a-4b8a-9b21-8dd96f54eb95"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    let attempts = 0;
+                    const timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        clearInterval(timer);
+                        embed_document(root);
+                      } else {
+                        attempts++;
+                        if (attempts > 100) {
+                          clearInterval(timer);
+                          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        }
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
