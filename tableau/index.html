@@ -5,20 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau avec Flèches</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
         table {
             border-collapse: collapse;
-            width: 60%;
+            width: 70%;
             margin: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid black;
-            padding: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
             text-align: center;
         }
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        td {
+            font-size: 1.2em;
+        }
         svg {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             vertical-align: middle;
+        }
+        svg line {
+            stroke: #007bff;
+            stroke-width: 2;
+        }
+        marker polygon {
+            fill: #007bff;
         }
     </style>
 </head>
@@ -36,7 +64,7 @@
             <td>2</td>
             <td>
                 <svg>
-                    <line x1="0" y1="40" x2="50" y2="10" stroke="black" marker-end="url(#arrowhead)" />
+                    <line x1="0" y1="50" x2="60" y2="10" stroke="black" marker-end="url(#arrowhead)" />
                     <defs>
                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="black" />
@@ -47,7 +75,7 @@
             </td>
             <td>
                 <svg>
-                    <line x1="0" y1="10" x2="50" y2="40" stroke="black" marker-end="url(#arrowhead)" />
+                    <line x1="0" y1="10" x2="60" y2="50" stroke="black" marker-end="url(#arrowhead)" />
                     <defs>
                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="black" />
@@ -58,7 +86,7 @@
             </td>
             <td>
                 <svg>
-                    <line x1="0" y1="40" x2="50" y2="10" stroke="black" marker-end="url(#arrowhead)" />
+                    <line x1="0" y1="50" x2="60" y2="10" stroke="black" marker-end="url(#arrowhead)" />
                     <defs>
                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="black" />
