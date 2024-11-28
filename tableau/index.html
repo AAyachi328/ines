@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau avec Flèches</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        svg {
+            width: 40px;
+            height: 20px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>x</th>
+            <td>-5</td>
+            <td>-2</td>
+            <td>1</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <th>f(x)</th>
+            <td>2</td>
+            <td>
+                <svg>
+                    <line x1="0" y1="10" x2="40" y2="10" stroke="black" marker-end="url(#arrowhead)" />
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+                        </marker>
+                    </defs>
+                </svg>
+                -3
+            </td>
+            <td>
+                <svg>
+                    <line x1="0" y1="10" x2="40" y2="10" stroke="black" marker-end="url(#arrowhead)" />
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+                        </marker>
+                    </defs>
+                </svg>
+                4
+            </td>
+            <td>
+                <svg>
+                    <line x1="0" y1="10" x2="40" y2="10" stroke="black" marker-end="url(#arrowhead)" />
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+                        </marker>
+                    </defs>
+                </svg>
+                2
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
