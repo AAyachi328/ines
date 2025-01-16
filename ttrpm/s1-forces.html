@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séance 1 : Étude des Forces et des Mouvements</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        h1, h2 { color: #003366; }
+        .contenu { max-width: 800px; margin: auto; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
+        .editable { border: 1px solid #ccc; padding: 10px; min-height: 50px; cursor: text; }
+    </style>
+</head>
+<body>
+    <div class="contenu">
+        <h1>Séance 1 : Étude des Forces et des Mouvements</h1>
+        <h2>1. Définition de la Force</h2>
+        <p class="editable">Une <strong>force</strong> est une action mécanique capable de modifier le mouvement ou la forme d’un objet.</p>
+        
+        <h2>2. Représentation d’une Force</h2>
+        <ul>
+            <li><strong>Point d’application</strong></li>
+            <li><strong>Direction</strong></li>
+            <li><strong>Sens</strong></li>
+            <li><strong>Intensité</strong> (en Newtons, N)</li>
+        </ul>
+        <p class="editable">Exemple : Une corde tirant un objet.</p>
+        
+        <h2>3. Types de Forces</h2>
+        <table border="1" width="100%">
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Exemple</th>
+            </tr>
+            <tr>
+                <td>Forces de contact</td>
+                <td>Agissent par contact direct</td>
+                <td>Pousser un meuble</td>
+            </tr>
+            <tr>
+                <td>Forces à distance</td>
+                <td>Agissent sans contact</td>
+                <td>Gravitation</td>
+            </tr>
+        </table>
+        
+        <h2>4. Équilibre d’un Objet</h2>
+        <p class="editable">Un objet est en équilibre si la somme des forces qui s’exercent sur lui est nulle :
+        \( \sum \vec{F} = 0 \)</p>
+        
+        <h2>5. Expérience avec Dynamomètre</h2>
+        <p class="editable">Suspendez un objet et mesurez sa force avec un dynamomètre. Notez vos observations ci-dessous :</p>
+        <textarea placeholder="Décrivez vos observations ici..."></textarea>
+        
+        <h2>6. Exercices</h2>
+        <p class="editable">1. Quelle force empêche une boîte de tomber d’une table ?</p>
+        <textarea placeholder="Réponse..."></textarea>
+        <p class="editable">2. Décrivez une force appliquée sur un objet au repos.</p>
+        <textarea placeholder="Réponse..."></textarea>
+    </div>
+    
+    <script>
+        document.querySelectorAll('.editable').forEach(element => {
+            element.setAttribute('contenteditable', 'true');
+        });
+    </script>
+</body>
+</html>
