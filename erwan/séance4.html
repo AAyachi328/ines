@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problème complexe sur les volumes et conversions</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .editable {
+            background-color: #e6f7ff;
+            border: 1px dashed #0099cc;
+            padding: 10px;
+            min-height: 50px;
+            margin-bottom: 20px;
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <h1>Problème complexe : Volume, conversions et proportionnalité</h1>
+
+    <h2>Énoncé</h2>
+    <p>Un château d’eau de forme cylindrique a un diamètre de \( 6.4 \, \text{m} \) et une hauteur de \( 10.5 \, \text{m} \). 
+       Il est rempli à \( 75\% \) de sa capacité maximale. On souhaite distribuer cette eau en bouteilles de \( 1.5 \, \text{L} \) chacune.</p>
+    
+    <p>1. Calculez le volume total du château d’eau en \( \text{m}^3 \) et arrondissez au centième près.</p>
+    <div class="editable" contenteditable="true" placeholder="Écrivez votre réponse ici..."></div>
+    
+    <p>2. Déterminez le volume d’eau réellement disponible en tenant compte du remplissage partiel. Arrondissez au dixième près.</p>
+    <div class="editable" contenteditable="true" placeholder="Écrivez votre réponse ici..."></div>
+    
+    <p>3. Convertissez ce volume en litres (1 \( \text{m}^3 \) = 1000 L).</p>
+    <div class="editable" contenteditable="true" placeholder="Écrivez votre réponse ici..."></div>
+    
+    <p>4. Calculez combien de bouteilles de \( 1.5 \, \text{L} \) peuvent être remplies avec cette eau. Arrondissez à l’entier le plus proche.</p>
+    <div class="editable" contenteditable="true" placeholder="Écrivez votre réponse ici..."></div>
+    
+    <script>
+        document.querySelectorAll('.editable').forEach(div => {
+            div.contentEditable = true;
+        });
+    </script>
+</body>
+</html>
