@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices de Trigonométrie</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
+        .question { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Exercices de Trigonométrie</h1>
+    
+    <h2>Exercices Pratiques</h2>
+    <div class="question">
+        <p>1. Calculer la valeur exacte de \( \arcsin(\frac{1}{2}) \) :</p>
+        <textarea></textarea>
+    </div>
+    <div class="question">
+        <p>2. Résoudre \( \sin(x) = 0.5 \) pour \( x \) dans \([0, 2\pi]\) :</p>
+        <textarea></textarea>
+    </div>
+    <div class="question">
+        <p>3. Compléter : \( \arcsin(0.6) + \arccos(0.6) = ? \)</p>
+        <textarea></textarea>
+    </div>
+    
+    <h2>Devoir Maison</h2>
+    <div class="question">
+        <p>4. Un arbre projette une ombre de 5m sous un angle de 30°. Quelle est sa hauteur ?</p>
+        <textarea></textarea>
+    </div>
+    <div class="question">
+        <p>5. Un avion monte selon une pente de 10°. Exprimer la hauteur atteinte en fonction de la distance parcourue \( d \).</p>
+        <textarea></textarea>
+    </div>
+    
+    <script>
+        document.querySelectorAll("textarea").forEach(textarea => {
+            textarea.addEventListener("input", function() {
+                localStorage.setItem(textarea.previousElementSibling.innerText, textarea.value);
+            });
+            textarea.value = localStorage.getItem(textarea.previousElementSibling.innerText) || "";
+        });
+    </script>
+</body>
+</html>
