@@ -62,5 +62,30 @@
      
 
     </div>
+            <button onclick="enregistrerFichier()">📂 Enregistrer le fichier</button>
+    </div>
+    
+    <script>
+        function enregistrerFichier() {
+            let nom = document.getElementById('nom').value;
+            let prenom = document.getElementById('prenom').value;
+            let classe = document.getElementById('classe').value;
+            let date = document.getElementById('date').value;
+            let reponses = document.querySelectorAll('textarea');
+            
+            let contenu = `Nom: ${nom}\nPrénom: ${prenom}\nClasse: ${classe}\nDate: ${date}\n\n`;
+            reponses.forEach((textarea, index) => {
+                contenu += `Réponse ${index + 1}:\n${textarea.value}\n\n`;
+            });
+            
+            let blob = new Blob([contenu], { type: 'text/plain' });
+            let a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `reponses_${nom}_${prenom}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
 </body>
 </html>
