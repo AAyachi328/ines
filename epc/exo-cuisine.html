@@ -8,7 +8,7 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; background-color: #f4f4f4; }
-        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px gray; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px gray; max-width: 800px; margin: auto; }
         textarea { width: 100%; height: 80px; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         table, th, td { border: 1px solid black; text-align: center; }
@@ -19,6 +19,17 @@
     <div class="container">
         <h1>🍽️ Proportionnalité et conversions en cuisine 🍰</h1>
         <p><strong>Nom:</strong> <input type="text"> <strong>Prénom:</strong> <input type="text"> <strong>Classe:</strong> <input type="text"> <strong>Date:</strong> <input type="text"></p>
+        
+        <h2>👩‍🍳 Contexte :</h2>
+        <p>Lisa, une apprentie pâtissière, veut préparer un gâteau pour un groupe de <strong>15 personnes</strong> en utilisant une recette prévue pour <strong>6 personnes</strong>. Elle doit ajuster les quantités des ingrédients en conséquence.</p>
+        <p>Voici la recette de base pour <strong>6 personnes</strong> :</p>
+        <ul>
+            <li>Farine : 250 g</li>
+            <li>Sucre : 150 g</li>
+            <li>Beurre : 100 g</li>
+            <li>Lait : 200 mL</li>
+            <li>Œufs : 2</li>
+        </ul>
         
         <h2>📘 1️⃣ Ajustement des quantités (Proportionnalité)</h2>
         <p>Calcule les quantités nécessaires pour <strong>15 personnes</strong> en utilisant un tableau de proportionnalité.</p>
@@ -40,13 +51,7 @@
         <p>Calcule le coût total des ingrédients pour <strong>15 personnes</strong>.</p>
         <textarea></textarea>
         
-        <h2>📜 Fiche récapitulative</h2>
-        <ul>
-            <li><strong>Proportionnalité :</strong> \( X' = X \times \frac{B}{A} \)</li>
-            <li><strong>Conversions :</strong> 1 kg = 1000 g, 1 L = 1000 mL</li>
-            <li><strong>Arrondi :</strong> Arrondi au supérieur ou inférieur</li>
-            <li><strong>Calcul du coût :</strong> \( \text{Prix total} = \sum (\text{quantité utilisée} \times \text{prix unitaire}) \)</li>
-        </ul>
+
         
 
     </div>
