@@ -225,7 +225,7 @@ const routine = [
       if (index !== current) reset(current);
       current = index;
       const block = document.getElementById(`timer-${index}`);
-      block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      block.scrollIntoView({ behavior: 'instant', block: 'center' }); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' }); }); });;
       block.classList.add('active');
       block.style.boxShadow = '0 0 20px 5px yellow';
       setTimeout(() => block.style.boxShadow = '', 1000);
@@ -235,7 +235,7 @@ const routine = [
         const progressBar = document.getElementById(`bar-${index}`);
         runTimer(index, routine[index].duration);
         setTimeout(() => {
-          document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'instant', block: 'center' }); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' }); }); });;
         }, 100);
         return;
       }
@@ -315,7 +315,7 @@ const routine = [
             if (index + 1 < routine.length) {
               setTimeout(() => {
                 const nextBlock = document.getElementById(`timer-${index + 1}`);
-                nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                nextBlock.scrollIntoView({ behavior: 'instant', block: 'center' }); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' }); }); });;
                 nextBlock.style.boxShadow = '0 0 20px 5px yellow';
                 setTimeout(() => nextBlock.style.boxShadow = '', 1000);
                 start(index + 1);
@@ -390,7 +390,7 @@ setDifficulty(document.getElementById("difficulty").value);
   paused = false;
   current = 0;
   document.getElementById("indicator").textContent = "Recommençons la routine !";
-  document.getElementById(`timer-0`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById(`timer-0`).scrollIntoView({ behavior: 'instant', block: 'center' }); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' }); }); });;
   routine.forEach((_, i) => {
     const t = document.getElementById(`time-${i}`);
     const b = document.getElementById(`bar-${i}`);
