@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Routine Intermédiaire 5min</title>
+  <style>
+    :root {
+      --bg: #111;
+      --text: #fff;
+      --card: #222;
+      --desc: #ccc;
+      --bar: #0f0;
+      --progress: #444;
+      --button: #007bff;
+      --button-hover: #0056b3;
+    }
+    body.light {
+      --bg: #f4f4f4;
+      --text: #000;
+      --card: #fff;
+      --desc: #333;
+      --bar: #007bff;
+      --progress: #ddd;
+      --button: #28a745;
+      --button-hover: #1e7e34;
+    }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden;
+      font-family: Arial, sans-serif; background: var(--bg); color: var(--text); text-align: center;
+    }
+    h1 { font-size: 2.5rem; margin: 10px 0; }
+    .timer-block {
+  margin-bottom: 40px;
+      margin: 20px auto; padding: 20px; border-radius: 10px; max-width: 95vw;
+      background: var(--card); box-shadow: 0 0 20px rgba(255,255,255,0.05);
+    }
+    .title { font-size: 2.2rem; margin-bottom: 10px; }
+    .description { font-size: 1.2rem; color: var(--desc); margin-bottom: 10px; }
+    .time {
+  font-size: 8rem;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+  font-weight: 900;
+
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+  font-weight: 900;
+}
+    .progress-container {
+      width: 100%; height: 14px; background: var(--progress); border-radius: 7px;
+      overflow: hidden; margin-top: 10px;
+    }
+    .progress-bar {
+      height: 100%; width: 0%; background: var(--bar); transition: width 1s linear;
+    }
+    .progress-bar.warning {
+  animation: pulse-bar 0.5s infinite alternate, shake-bar 0.5s infinite alternate;
+  height: 20px;
+}
+    .controls {
+      margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    }
+    .controls button {
+  font-size: 1.5rem;
+  padding: 10px 16px;
+  background: transparent;
+  border: 2px solid var(--button);
+  border-radius: 50%;
+  color: var(--button);
+  cursor: pointer;
+  transform: scale(1);
+
+  transition: background 0.3s, transform 0.1s;
+}
+    .controls button:active {
+  transform: scale(0.95);
+}
+
+.controls button:hover {
+  background: var(--button);
+  color: white;
+}
+    #indicator { font-size: 1.2rem; margin-top: 20px; color: var(--bar); }
+    #to-top {
+      position: fixed; bottom: 20px; right: 20px; font-size: 2rem;
+      background: var(--button); border: none; color: white;
+      border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 100;
+    }
+    #toggle-theme {
+      top: 60px;
+      position: fixed; top: 20px; right: 20px; font-size: 1rem;
+      background: var(--button); border: none; color: white;
+      border-radius: 10px; padding: 10px 15px; cursor: pointer; z-index: 101;
+    }
+      .countdown-text {
+  color: #ffcc00;
+  font-size: 3rem;
+  animation: flash 0.5s infinite alternate;
+}
+    @keyframes flash {
+      from { opacity: 1; }
+      to { opacity: 0.3; }
+    }
+      .timer-block.active {
+      animation: fadeColor 2s infinite alternate;
+      color: #fff;
+    }
+
+    @keyframes fadeColor {
+  from { background-color: #222; }
+  to { background-color: #ff4444; }
+}
+      to { background-color: #e6c300; }
+    }
+      to { background-color: #444; }
+    }
+      .time.warning {
+  color: #fff;
+  background-color: #ff4444;
+  border-radius: 12px;
+  padding: 0 10px;
+  animation: pulse-text 0.5s infinite alternate;
+}
+    @keyframes pulse-text {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(1.1); opacity: 0.7; }
+    }
+
+    @keyframes pulse-bar {
+  from { background-color: var(--bar); }
+  to { background-color: #ff4444; }
+}
+
+@keyframes shake-bar {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+      to { background-color: #ff4444; }
+    }
+      to { transform: scale(1.1); opacity: 0.7; }
+    }
+  .timer-block.active.warning {
+  animation: fadeUrgent 0.5s infinite alternate;
+}
+@keyframes fadeUrgent {
+  from { background-color: #ff4444; }
+  to { background-color: #880000; }
+}
+</style>
+<audio id="click" src="https://aayachi328.github.io/ines/click.mp3" preload="auto"></audio>
+</head>
+<body>
+  <button id="toggle-theme" onclick="toggleTheme()">🌙</button>
+  <h1 style="position: sticky; top: 0; background: var(--bg); z-index: 100; padding: 10px 0;"><img src="https://raw.githubusercontent.com/AAyachi328/ines/main/gisors.jpg" alt="logo" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle; margin-right: 10px;">Routine Tennis Club de Gisors</h1>
+  <div><h3>5 minutes</h3></div>
+  <div id="indicator">Prêt à commencer ?</div>
+  <div style="margin: 10px 0;">
+    <label for="difficulty">Niveau : </label>
+    <select id="difficulty" onchange="setDifficulty(this.value)">
+      <option value="easy">🟢 Facile</option>
+      <option value="medium" selected>🟡 Moyen</option>
+      <option value="hard">🔴 Difficile</option>
+    </select>
+  </div>
+  <button onclick="start(0)" style="margin-top:10px; font-size:1.2rem; padding:12px 24px; border-radius:8px; background:orange; color:white; border:none; cursor:pointer; font-weight:bold;">🐐 Let's GOAT !</button>
+  <div id="routine"></div>
+  <div id="sound-indicator" style="display:none; color:lime; font-weight:bold; margin-top:10px;">🔉 Sons activés</div>
+  <button onclick="restartRoutine()" style="margin-top:20px; font-size:1rem; padding:10px 20px; border-radius:8px; background:var(--button); color:white; border:none; cursor:pointer;">🔁 Recommencer la routine</button>
+  <button onclick="resetDurations()" style="margin-top:10px; font-size:1rem; padding:10px 20px; border-radius:8px; background:crimson; color:white; border:none; cursor:pointer;">♻️ Réinitialiser les durées</button>
+  <button id="to-top" onclick="scrollToTop()">↑</button>
+  <audio id="beep" src="https://aayachi328.github.io/ines/beep-313342.mp3" preload="auto"></audio>
+  <audio id="gong" src="https://aayachi328.github.io/ines/bell-98033.mp3" preload="auto"></audio>
+
+  <script>
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    let baseDurations = [30, 45, 30, 45, 30, 30, 30];
+const routine = [
+      // Ajouter "countdown: false" à une entrée pour désactiver le compte à rebours
+
+      { name: "Jumping jacks", duration: 30, desc: "Echauffement cardio, bras et jambes en mouvement synchronisé." },
+      { name: "Squats", duration: 45, desc: "Pieds largeur épaules, descends en gardant le dos droit.", countdown: false },
+      { name: "Pompes classiques ou sur les genoux", duration: 30, desc: "Tronc gainé, mains sous les épaules, descends puis pousse." },
+      { name: "Gainage (planche)", duration: 45, desc: "Avant-bras au sol, corps droit, abdos serrés.", countdown: false },
+      { name: "Fentes alternées", duration: 30, desc: "Avance une jambe, genou arrière vers le sol, puis change de jambe." },
+      { name: "Montées de genoux rapides", duration: 30, desc: "En rythme, lève les genoux le plus haut possible.", countdown: false },
+      { name: "Étirements rapides", duration: 30, desc: "Étire bras, dos et jambes pour terminer en douceur." }
+    ];
+
+    const container = document.getElementById("routine");
+    let current = 0;
+    let interval, remaining, paused = false;
+    const beep = document.getElementById("beep");
+    const gong = document.getElementById("gong");
+
+    function createTimer(index) {
+      const block = document.createElement("div");
+      block.className = "timer-block";
+      block.id = `timer-${index}`;
+      block.innerHTML = `
+        <div class="title">${routine[index].name}</div>
+        <div class="description">${routine[index].desc}</div>
+        <div style='margin: 10px 0;'>Durée : <strong><span id="duration-label-${index}">${routine[index].duration} sec</span></strong></div>
+        <div class="time" id="time-${index}">${routine[index].duration}</div>
+        <div class="progress-container"><div class="progress-bar" id="bar-${index}"></div></div>
+        <div class="controls">
+  <button onclick="start(${index})" title="Démarrer">▶️</button>
+  <button onclick="pause()" title="Pause/Reprendre">⏸️</button>
+  <button onclick="reset(${index})" title="Réinitialiser">🔄</button>
+</div>
+      `;
+      container.appendChild(block);
+    }
+
+    function start(index) {
+  document.getElementById("click").play().catch(() => {});
+      if (interval) clearInterval(interval);
+      if (index !== current) reset(current);
+      current = index;
+      const block = document.getElementById(`timer-${index}`);
+      block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      block.classList.add('active');
+      block.style.boxShadow = '0 0 20px 5px yellow';
+      setTimeout(() => block.style.boxShadow = '', 1000);
+
+      if (routine[index].countdown === false) {
+        const timeDisplay = document.getElementById(`time-${index}`);
+        const progressBar = document.getElementById(`bar-${index}`);
+        runTimer(index, routine[index].duration);
+        setTimeout(() => {
+          document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        return;
+      }
+
+      let countdown = 5;
+      const timeDisplay = document.getElementById(`time-${index}`);
+      const progressBar = document.getElementById(`bar-${index}`);
+      document.getElementById("indicator").textContent = `Prépare-toi : ${routine[index].name}`;
+
+      const preInterval = setInterval(() => {
+        timeDisplay.innerHTML = `<span class='countdown-text'>Départ dans ${countdown}</span>`;
+        if (countdown <= 5 && countdown > 0) {
+          beep.play().catch(() => {});
+          if (countdown === 5 && 'vibrate' in navigator) navigator.vibrate(200);
+        }
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(preInterval);
+          gong.play().catch(() => {});
+          runTimer(index, routine[index].duration);
+        }
+      }, 1000);
+      
+    }
+
+    function runTimer(index, duration) {
+      remaining = duration;
+      const timeDisplay = document.getElementById(`time-${index}`);
+      const progressBar = document.getElementById(`bar-${index}`);
+      timeDisplay.textContent = remaining;
+          if (remaining <= 5 && remaining > 0) {
+            timeDisplay.classList.add('warning');
+          } else {
+            timeDisplay.classList.remove('warning');
+          }
+          if (remaining <= 5 && remaining > 0) {
+            timeDisplay.classList.add('warning');
+          } else {
+            timeDisplay.classList.remove('warning');
+          }
+          if (remaining <= 5 && remaining > 0) {
+            timeDisplay.classList.add('warning');
+          } else {
+            timeDisplay.classList.remove('warning');
+          }
+      progressBar.style.width = "0%";
+      document.getElementById("indicator").textContent = `En cours : ${routine[index].name}`;
+
+      interval = setInterval(() => {
+        if (!paused) {
+          remaining--;
+          if (remaining <= 5 && remaining > 0) {
+          beep.play().catch(() => {});
+          timeDisplay.classList.add('warning');
+          document.getElementById(`timer-${index}`).classList.add('warning');
+          timeDisplay.classList.add('warning');
+          }
+          timeDisplay.textContent = remaining;
+          progressBar.style.width = `${100 - (remaining / duration) * 100}%`;
+          if (remaining <= 5 && remaining > 0) {
+            progressBar.classList.add('warning');
+          } else {
+            progressBar.classList.remove('warning');
+          }
+          if (remaining <= 0) {
+          clearInterval(interval);
+          timeDisplay.classList.remove('warning');
+            gong.play().catch(() => {});
+            setTimeout(() => gong.play().catch(() => {}), 500);
+            setTimeout(() => gong.play().catch(() => {}), 1000);
+            const finishedBlock = document.getElementById(`timer-${index}`);
+            finishedBlock.classList.remove('warning');
+            finishedBlock.classList.remove('active');
+            finishedBlock.classList.remove('active');
+            finishedBlock.style.background = "#333";
+            finishedBlock.innerHTML += '<div style="font-size:2rem; margin-top:10px;">✅</div>';
+            if (index + 1 < routine.length) {
+              setTimeout(() => {
+                const nextBlock = document.getElementById(`timer-${index + 1}`);
+                nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                nextBlock.style.boxShadow = '0 0 20px 5px yellow';
+                setTimeout(() => nextBlock.style.boxShadow = '', 1000);
+                start(index + 1);
+              }, 1000);
+            } else {
+              document.getElementById("indicator").textContent = "Routine terminée !";
+            }
+          }
+        }
+      }, 1000);
+    }
+
+    function pause() {
+  document.getElementById("click").play().catch(() => {});
+  paused = !paused;
+}
+    function reset(index) {
+  document.getElementById("click").play().catch(() => {});
+      if (interval) clearInterval(interval);
+      document.getElementById(`time-${index}`).textContent = routine[index].duration;
+      document.getElementById(`bar-${index}`).style.width = "0%";
+      paused = false;
+    }
+
+function updateDuration(index, value) {
+  const val = parseInt(value);
+  if (!isNaN(val) && val > 0) {
+    routine[index].duration = val;
+    document.getElementById(`time-${index}`).textContent = val;
+    document.getElementById(`duration-label-${index}`).textContent = `${val} sec`;
+    localStorage.setItem("routine-durations", JSON.stringify(routine.map(r => r.duration)));
+  }
+}
+
+
+
+function resetDurations() {
+  localStorage.removeItem("routine-durations");
+  location.reload();
+}
+
+function setDifficulty(level) {
+  let factor = level === 'easy' ? 0.75 : level === 'hard' ? 1.25 : 1;
+  routine.forEach((_, i) => {
+    routine[i].duration = Math.round(baseDurations[i] * factor);
+    const timeEl = document.getElementById(`time-${i}`);
+    const labelEl = document.getElementById(`duration-label-${i}`);
+    if (timeEl) timeEl.textContent = routine[i].duration;
+    if (labelEl) labelEl.textContent = `${routine[i].duration} sec`;
+  });
+  localStorage.setItem("routine-difficulty", level);
+}
+
+function toggleTheme() {
+      document.body.classList.toggle('light');
+      const btn = document.getElementById('toggle-theme');
+      btn.textContent = document.body.classList.contains('light') ? '🌞' : '🌙';
+    }
+
+    const savedDurations = JSON.parse(localStorage.getItem("routine-durations"));
+if (savedDurations && savedDurations.length === routine.length) {
+  savedDurations.forEach((val, i) => routine[i].duration = val);
+}
+routine.forEach((_, i) => createTimer(i));
+
+document.getElementById("difficulty").value = localStorage.getItem("routine-difficulty") || "medium";
+setDifficulty(document.getElementById("difficulty").value);
+
+    
+  function restartRoutine() {
+  if (interval) clearInterval(interval);
+  paused = false;
+  current = 0;
+  document.getElementById("indicator").textContent = "Recommençons la routine !";
+  document.getElementById(`timer-0`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  routine.forEach((_, i) => {
+    const t = document.getElementById(`time-${i}`);
+    const b = document.getElementById(`bar-${i}`);
+    const card = document.getElementById(`timer-${i}`);
+    t.textContent = routine[i].duration;
+    b.style.width = "0%";
+    card.style.background = "";
+  });
+  setTimeout(() => start(0), 1000);
+}
+</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('✅ Service Worker registered'))
+          .catch(err => console.error('❌ Service Worker error', err));
+      });
+    }
+  </script>
+</body>
+</html>
