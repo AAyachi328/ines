@@ -90,15 +90,29 @@
       border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 100;
     }
     #toggle-theme {
-  top: 70px;
+  top: 60px;
   position: fixed; right: 20px; font-size: 1rem;
   background: var(--button); border: none; color: white;
   border-radius: 10px; padding: 10px 15px; cursor: pointer; z-index: 101;
 }
       .countdown-text {
+  
   color: #ffcc00;
-  font-size: 3rem;
-  animation: flash 0.5s infinite alternate;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  flex-direction: column;
+  gap: 10px;
+}
+.count-num {
+  font-size: 8rem;
+  font-weight: bold;
+  margin-left: 10px;
+  display: inline-block;
+  animation: countdown-pop 0.3s ease;
 }
     @keyframes flash {
       from { opacity: 1; }
@@ -152,12 +166,26 @@
   from { background-color: #ff4444; }
   to { background-color: #880000; }
 }
+.count-num {
+  font-size: 8rem;
+  font-weight: bold;
+  margin-left: 10px;
+  display: inline-block;
+}
+@keyframes countdown-pop {
+  0% { transform: scale(1); opacity: 1; text-shadow: none; }
+  50% { transform: scale(1.2); opacity: 0.9; text-shadow: 0 0 20px red; }
+  100% { transform: scale(1); opacity: 1; text-shadow: none; }
+}
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
 </style>
 <audio id="click" src="https://aayachi328.github.io/ines/click.mp3" preload="auto"></audio>
 </head>
 <body>
   <button id="toggle-theme" onclick="toggleTheme()">🌙</button>
-  <h1 style="position: sticky; top: 0; background: var(--bg); z-index: 100; padding: 10px 0;">Routine GOAT</h1>
+  <h1 style="position: sticky; top: 0; background: var(--bg); z-index: 100; padding: 10px 0;"><img src="https://raw.githubusercontent.com/AAyachi328/ines/main/tennis-ball.jpg" alt="logo" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle; margin-right: 10px;">Routine GOAT</h1>
   <div><h3>3 à 5 min - 1 à 3 fois/jour</h3></div>
   <div id="indicator">Prêt à commencer ?</div>
   <div style="margin: 10px 0; display: flex; justify-content: center; gap: 10px;" id="difficulty-buttons">
@@ -165,10 +193,12 @@
   <button onclick="setDifficulty('medium')" id="btn-medium" style="padding: 10px 15px; border-radius: 8px; background: orange; color: white; border: none; cursor: pointer;">🟡 Moyen</button>
   <button onclick="setDifficulty('hard')" id="btn-hard" style="padding: 10px 15px; border-radius: 8px; background: red; color: white; border: none; cursor: pointer;">🔴 Difficile</button>
 </div>
-  <button onclick="start(0)" style="margin-top:10px; font-size:1.2rem; padding:12px 24px; border-radius:8px; background:orange; color:white; border:none; cursor:pointer; font-weight:bold;">🐐 Let's GOAT !</button>
+<div id="duration-total" style="margin: 10px 0; font-weight: bold; font-size: 1.1rem; color: var(--desc);">Durée totale : <span id="total-time">...</span></div>
+<button onclick="start(0)" style="margin-top:10px; font-size:1.2rem; padding:12px 24px; border-radius:8px; background:orange; color:white; border:none; cursor:pointer; font-weight:bold;">🐐 Let's GOAT !</button>
   <div id="routine"></div>
   <div id="sound-indicator" style="display:none; color:lime; font-weight:bold; margin-top:10px;">🔉 Sons activés</div>
   <button onclick="restartRoutine()" style="margin-top:20px; font-size:1rem; padding:10px 20px; border-radius:8px; background:var(--button); color:white; border:none; cursor:pointer;">🔁 Recommencer la routine</button>
+  <button id="to-top" onclick="scrollToTop()">↑</button>
   <audio id="beep" src="https://aayachi328.github.io/ines/beep-313342.mp3" preload="auto"></audio>
   <audio id="gong" src="https://aayachi328.github.io/ines/bell-98033.mp3" preload="auto"></audio>
 
@@ -241,7 +271,7 @@ const routine = [
       document.getElementById("indicator").textContent = `Prépare-toi : ${routine[index].name}`;
 
       const preInterval = setInterval(() => {
-        timeDisplay.innerHTML = `<span class='countdown-text'>Départ dans ${countdown}</span>`;
+        timeDisplay.innerHTML = `<div class='countdown-text'><div>Départ dans</div><div class='count-num'>${countdown}</div></div>`;
         if (countdown <= 5 && countdown > 0) {
           beep.play().catch(() => {});
           if (countdown === 5 && 'vibrate' in navigator) navigator.vibrate(200);
@@ -353,6 +383,7 @@ function resetDurations() {
 }
 
 function setDifficulty(level) {
+  let total = 0;
   let factor = level === 'easy' ? 0.75 : level === 'hard' ? 1.25 : 1;
   routine.forEach((_, i) => {
     routine[i].duration = Math.round(baseDurations[i] * factor);
@@ -360,8 +391,12 @@ function setDifficulty(level) {
     const labelEl = document.getElementById(`duration-label-${i}`);
     if (timeEl) timeEl.textContent = routine[i].duration;
     if (labelEl) labelEl.textContent = `${routine[i].duration} sec`;
+    total += routine[i].duration;
   });
   localStorage.setItem("routine-difficulty", level);
+  const min = Math.floor(total / 60);
+  const sec = total % 60;
+  document.getElementById("total-time").textContent = `${min} min ${sec} sec`;
 
   ['easy', 'medium', 'hard'].forEach(lvl => {
     const btn = document.getElementById(`btn-${lvl}`);
@@ -381,8 +416,7 @@ if (savedDurations && savedDurations.length === routine.length) {
 }
 routine.forEach((_, i) => createTimer(i));
 
-document.getElementById("difficulty").value = localStorage.getItem("routine-difficulty") || "medium";
-setDifficulty(document.getElementById("difficulty").value);
+setDifficulty(localStorage.getItem("routine-difficulty") || "medium");
 
     
   function restartRoutine() {
@@ -390,14 +424,22 @@ setDifficulty(document.getElementById("difficulty").value);
   paused = false;
   current = 0;
   document.getElementById("indicator").textContent = "Recommençons la routine !";
-  document.getElementById(`timer-0`).scrollIntoView({ behavior: 'instant', block: 'center' }); requestAnimationFrame(() => { requestAnimationFrame(() => { document.getElementById(`timer-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' }); }); });;
   routine.forEach((_, i) => {
     const t = document.getElementById(`time-${i}`);
     const b = document.getElementById(`bar-${i}`);
     const card = document.getElementById(`timer-${i}`);
     t.textContent = routine[i].duration;
     b.style.width = "0%";
+    card.classList.remove("active", "warning");
     card.style.background = "";
+    const check = card.querySelector("div[style*='✅']");
+    if (check) check.remove();
+  });
+  document.getElementById("timer-0").scrollIntoView({ behavior: 'instant', block: 'center' });
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.getElementById("timer-0").scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   });
   setTimeout(() => start(0), 1000);
 }
