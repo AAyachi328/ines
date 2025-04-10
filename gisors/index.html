@@ -160,19 +160,15 @@
   <h1 style="position: sticky; top: 0; background: var(--bg); z-index: 100; padding: 10px 0;"><img src="https://raw.githubusercontent.com/AAyachi328/ines/main/gisors.jpg" alt="logo" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle; margin-right: 10px;">Routine Tennis Club de Gisors</h1>
   <div><h3>5 minutes</h3></div>
   <div id="indicator">Prêt à commencer ?</div>
-  <div style="margin: 10px 0;">
-    <label for="difficulty">Niveau : </label>
-    <select id="difficulty" onchange="setDifficulty(this.value)">
-      <option value="easy">🟢 Facile</option>
-      <option value="medium" selected>🟡 Moyen</option>
-      <option value="hard">🔴 Difficile</option>
-    </select>
-  </div>
+  <div style="margin: 10px 0; display: flex; justify-content: center; gap: 10px;" id="difficulty-buttons">
+  <button onclick="setDifficulty('easy')" id="btn-easy" style="padding: 10px 15px; border-radius: 8px; background: green; color: white; border: none; cursor: pointer;">🟢 Facile</button>
+  <button onclick="setDifficulty('medium')" id="btn-medium" style="padding: 10px 15px; border-radius: 8px; background: orange; color: white; border: none; cursor: pointer;">🟡 Moyen</button>
+  <button onclick="setDifficulty('hard')" id="btn-hard" style="padding: 10px 15px; border-radius: 8px; background: red; color: white; border: none; cursor: pointer;">🔴 Difficile</button>
+</div>
   <button onclick="start(0)" style="margin-top:10px; font-size:1.2rem; padding:12px 24px; border-radius:8px; background:orange; color:white; border:none; cursor:pointer; font-weight:bold;">🐐 Let's GOAT !</button>
   <div id="routine"></div>
   <div id="sound-indicator" style="display:none; color:lime; font-weight:bold; margin-top:10px;">🔉 Sons activés</div>
   <button onclick="restartRoutine()" style="margin-top:20px; font-size:1rem; padding:10px 20px; border-radius:8px; background:var(--button); color:white; border:none; cursor:pointer;">🔁 Recommencer la routine</button>
-  <button onclick="resetDurations()" style="margin-top:10px; font-size:1rem; padding:10px 20px; border-radius:8px; background:crimson; color:white; border:none; cursor:pointer;">♻️ Réinitialiser les durées</button>
   <button id="to-top" onclick="scrollToTop()">↑</button>
   <audio id="beep" src="https://aayachi328.github.io/ines/beep-313342.mp3" preload="auto"></audio>
   <audio id="gong" src="https://aayachi328.github.io/ines/bell-98033.mp3" preload="auto"></audio>
@@ -367,6 +363,11 @@ function setDifficulty(level) {
     if (labelEl) labelEl.textContent = `${routine[i].duration} sec`;
   });
   localStorage.setItem("routine-difficulty", level);
+
+  ['easy', 'medium', 'hard'].forEach(lvl => {
+    const btn = document.getElementById(`btn-${lvl}`);
+    if (btn) btn.style.outline = lvl === level ? '3px solid #fff' : 'none';
+  });
 }
 
 function toggleTheme() {
