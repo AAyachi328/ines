@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mini jeu Dino</title>
+    <style>
+      :root {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        color: #222;
+      }
+
+      body {
+        margin: 40px auto;
+        max-width: 760px;
+        padding: 0 20px 60px;
+      }
+
+      h1 {
+        color: #e63946;
+        text-align: center;
+      }
+
+      .game-wrapper {
+        margin-top: 32px;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
+        padding: 28px;
+      }
+
+      #game {
+        display: block;
+        margin: 0 auto;
+        background: linear-gradient(#f4f4f4 68%, #dfdfdf 68%);
+        border: 2px solid #333;
+        border-radius: 10px;
+      }
+
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-weight: bold;
+        margin-top: 18px;
+      }
+
+      .instructions {
+        margin-top: 14px;
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.5;
+      }
+
+      .instructions strong {
+        color: #1d3557;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mini jeu style Dino</h1>
+    <div class="game-wrapper">
+      <canvas id="game" width="720" height="240"></canvas>
+
+      <div class="status-bar">
+        <span>Score&nbsp;: <span id="score">0</span></span>
+        <span>Niveau&nbsp;: <span id="level">1</span></span>
+        <span id="status">En jeu…</span>
+      </div>
+
+      <p class="instructions">
+        Appuie sur <strong>Espace</strong> ou touche l&apos;écran pour faire
+        sauter ton dino. Évite les cactus pour battre ton record. Chaque palier
+        de 10 points accélère le jeu&nbsp;!
+      </p>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const scoreEl = document.getElementById("score");
+      const levelEl = document.getElementById("level");
+      const statusEl = document.getElementById("status");
+
+      const groundY = canvas.height - 50;
+      const player = {
+        x: 70,
+        y: groundY - 40,
+        width: 38,
+        height: 42,
+        vy: 0,
+        jumpPower: -14,
+        gravity: 0.7,
+        isOnGround: true,
+      };
+
+      let obstacles = [];
+      let score = 0;
+      let level = 1;
+      let speed = 6;
+      let gameOver = false;
+      let frameCount = 0;
+
+      function resetGame() {
+        obstacles = [];
+        score = 0;
+        level = 1;
+        speed = 6;
+        player.y = groundY - player.height;
+        player.vy = 0;
+        player.isOnGround = true;
+        gameOver = false;
+        statusEl.textContent = "En jeu…";
+        requestAnimationFrame(loop);
+      }
+
+      function spawnObstacle() {
+        const height = 28 + Math.random() * 40;
+        obstacles.push({
+          x: canvas.width + 20,
+          y: groundY - height,
+          width: 16 + Math.random() * 18,
+          height,
+        });
+      }
+
+      function drawGround() {
+        ctx.fillStyle = "#888";
+        ctx.fillRect(0, groundY, canvas.width, 4);
+      }
+
+      function drawPlayer() {
+        ctx.fillStyle = "#1d3557";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(player.x + 6, player.y + 10, 8, 8); // œil
+
+        ctx.strokeStyle = "#457b9d";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(player.x + 10, player.y + player.height);
+        ctx.lineTo(player.x + 10, player.y + player.height + 16);
+        ctx.moveTo(player.x + player.width - 10, player.y + player.height);
+        ctx.lineTo(
+          player.x + player.width - 10,
+          player.y + player.height + 16
+        );
+        ctx.stroke();
+      }
+
+      function drawObstacles() {
+        ctx.fillStyle = "#2a9d8f";
+        obstacles.forEach((obs) => {
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+        });
+      }
+
+      function updatePlayer() {
+        player.vy += player.gravity;
+        player.y += player.vy;
+        if (player.y >= groundY - player.height) {
+          player.y = groundY - player.height;
+          player.vy = 0;
+          player.isOnGround = true;
+        }
+      }
+
+      function updateObstacles() {
+        obstacles.forEach((obs) => {
+          obs.x -= speed;
+        });
+        obstacles = obstacles.filter((obs) => obs.x + obs.width > 0);
+      }
+
+      function detectCollision() {
+        return obstacles.some((obs) => {
+          const collidesX =
+            player.x < obs.x + obs.width && player.x + player.width > obs.x;
+          const collidesY =
+            player.y < obs.y + obs.height && player.y + player.height > obs.y;
+          return collidesX && collidesY;
+        });
+      }
+
+      function updateScore() {
+        score += 0.05;
+        const rounded = Math.floor(score);
+        scoreEl.textContent = rounded;
+
+        const nextLevel = 1 + Math.floor(rounded / 10);
+        if (nextLevel !== level) {
+          level = nextLevel;
+          levelEl.textContent = level;
+          speed = 5 + level * 1.3;
+        }
+      }
+
+      function loop() {
+        if (gameOver) {
+          return;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGround();
+        drawPlayer();
+        drawObstacles();
+
+        updatePlayer();
+        updateObstacles();
+        updateScore();
+
+        if (frameCount % Math.max(50, 110 - level * 6) === 0) {
+          spawnObstacle();
+        }
+
+        if (detectCollision()) {
+          gameOver = true;
+          statusEl.textContent = "Perdu ! Espace pour rejouer.";
+          return;
+        }
+
+        frameCount += 1;
+        requestAnimationFrame(loop);
+      }
+
+      function jump() {
+        if (gameOver) {
+          resetGame();
+          return;
+        }
+
+        if (!player.isOnGround) {
+          return;
+        }
+
+        player.vy = player.jumpPower;
+        player.isOnGround = false;
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "Space" || event.key === " ") {
+          event.preventDefault();
+          jump();
+        }
+      });
+
+      canvas.addEventListener("pointerdown", () => {
+        jump();
+      });
+
+      loop();
+    </script>
+  </body>
+</html>
