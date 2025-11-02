@@ -86,12 +86,12 @@
       const groundY = canvas.height - 50;
       const player = {
         x: 70,
-        y: groundY - 40,
-        width: 38,
-        height: 42,
+        y: groundY - 46,
+        width: 44,
+        height: 46,
         vy: 0,
-        jumpPower: -14,
-        gravity: 0.7,
+        jumpPower: -15,
+        gravity: 0.75,
         isOnGround: true,
       };
 
@@ -116,11 +116,11 @@
       }
 
       function spawnObstacle() {
-        const height = 28 + Math.random() * 40;
+        const height = 36 + Math.random() * 26;
         obstacles.push({
           x: canvas.width + 20,
           y: groundY - height,
-          width: 16 + Math.random() * 18,
+          width: 44,
           height,
         });
       }
@@ -130,31 +130,64 @@
         ctx.fillRect(0, groundY, canvas.width, 4);
       }
 
-      function drawPlayer() {
-        ctx.fillStyle = "#1d3557";
-        ctx.fillRect(player.x, player.y, player.width, player.height);
-
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(player.x + 6, player.y + 10, 8, 8); // œil
-
-        ctx.strokeStyle = "#457b9d";
-        ctx.lineWidth = 4;
+      function drawHeart(x, y, width, height, fill = "#e63946") {
+        ctx.save();
+        ctx.translate(x + width / 2, y + height / 2);
+        ctx.scale(width / 60, height / 60);
         ctx.beginPath();
-        ctx.moveTo(player.x + 10, player.y + player.height);
-        ctx.lineTo(player.x + 10, player.y + player.height + 16);
-        ctx.moveTo(player.x + player.width - 10, player.y + player.height);
-        ctx.lineTo(
-          player.x + player.width - 10,
-          player.y + player.height + 16
+        ctx.moveTo(0, 24);
+        ctx.bezierCurveTo(30, -12, 30, -36, 0, -12);
+        ctx.bezierCurveTo(-30, -36, -30, -12, 0, 24);
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawCake(obs) {
+        const { x, y, width, height } = obs;
+        const baseHeight = height * 0.6;
+        const icingHeight = height * 0.2;
+        const candleHeight = height * 0.3;
+
+        // Gateau
+        ctx.fillStyle = "#f4a261";
+        ctx.fillRect(x, y + (height - baseHeight), width, baseHeight);
+
+        // Glaçage
+        ctx.fillStyle = "#fde2e4";
+        ctx.fillRect(x, y + (height - baseHeight) - icingHeight, width, icingHeight);
+
+        // Bougie
+        ctx.fillStyle = "#264653";
+        ctx.fillRect(
+          x + width / 2 - width * 0.06,
+          y + (height - baseHeight) - icingHeight - candleHeight,
+          width * 0.12,
+          candleHeight
         );
-        ctx.stroke();
+
+        // Flamme
+        ctx.fillStyle = "#fcca46";
+        ctx.beginPath();
+        ctx.ellipse(
+          x + width / 2,
+          y + (height - baseHeight) - icingHeight - candleHeight - width * 0.08,
+          width * 0.06,
+          width * 0.1,
+          0,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+
+      function drawPlayer() {
+        drawHeart(player.x, player.y, player.width, player.height);
       }
 
       function drawObstacles() {
-        ctx.fillStyle = "#2a9d8f";
-        obstacles.forEach((obs) => {
-          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-        });
+        obstacles.forEach(drawCake);
       }
 
       function updatePlayer() {
