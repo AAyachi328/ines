@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Évaluation – Terminale Pro – Statistiques à deux variables</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind-lite reset -->
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;line-height:1.5;margin:0;padding:24px;background:#fafafa;color:#111}
+    h1,h2,h3{margin:16px 0 8px 0}
+    h1{font-size:1.6rem}
+    h2{font-size:1.25rem}
+    h3{font-size:1.1rem}
+    .card{background:#fff;border:1px solid #e6e6e6;border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:14px}
+    table{border-collapse:collapse;width:100%;margin:8px 0}
+    th,td{border:1px solid #cfd8dc;padding:8px;text-align:center}
+    th{background:#f1f5f9}
+    .badge{display:inline-block;background:#e0f2fe;color:#075985;border-radius:999px;padding:2px 8px;font-size:.85rem;margin-left:6px}
+    .formula{font-weight:700;font-size:1.05rem}
+    textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;min-height:56px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .small{font-size:.92rem;color:#374151}
+    .note{background:#fff7ed;border:1px dashed #fdba74;padding:10px;border-radius:10px}
+    .svg-wrap{display:flex;justify-content:center;align-items:center;margin:6px 0 10px}
+    .score{font-weight:700}
+    .bar{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    input[type="text"]{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px}
+    .muted{color:#6b7280}
+    .center{text-align:center}
+  </style>
+  <!-- MathJax CDN for LaTeX -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(','\\)'],['$','$']] } };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+</head>
+<body>
+  <!-- En-tête élève -->
+  <div class="row">
+    <div>Nom : <input type="text" style="width:180px"></div>
+    <div>Prénom : <input type="text" style="width:180px"></div>
+    <div>Classe : <input type="text" style="width:140px"></div>
+    <div>Date : <input type="text" style="width:140px"></div>
+  </div>
+
+  <h1>Évaluation – Terminale Pro – Statistiques à deux variables <span class="badge">/20</span></h1>
+  <div class="small muted">Conforme au programme : choix de modèles (affine ou non), ajustement et extrapolation.</div>
+
+  <div class="card">
+    <h3>Contexte</h3>
+    <p>Dans une usine, une calibreuse règle le tri des pommes selon la <b>masse (g)</b> et le <b>calibre (mm)</b>. Données :</p>
+    <table>
+      <tr><th>Masse (g)</th><td>92</td><td>108</td><td>125</td><td>155</td><td>190</td></tr>
+      <tr><th>Calibre (mm)</th><td>57,5</td><td>62,5</td><td>67,5</td><td>72,5</td><td>77,5</td></tr>
+    </table>
+    <div class="svg-wrap">
+      <!-- Illustration SVG (style photo/infographie) -->
+      <svg width="460" height="120" viewBox="0 0 460 120" xmlns="http://www.w3.org/2000/svg" aria-label="Ligne de tri des pommes">
+        <defs>
+          <linearGradient id="belt" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#0f172a"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="70" width="460" height="28" fill="url(#belt)" rx="6"/>
+        <g fill="#ef4444" stroke="#7f1d1d" stroke-width="2">
+          <circle cx="40" cy="67" r="12"/><circle cx="120" cy="64" r="13"/>
+          <circle cx="200" cy="61" r="14"/><circle cx="300" cy="58" r="16"/>
+          <circle cx="400" cy="55" r="17"/>
+        </g>
+        <g fill="#22c55e">
+          <circle cx="45" cy="62" r="3"/><circle cx="124" cy="59" r="3"/>
+          <circle cx="205" cy="56" r="3"/><circle cx="305" cy="53" r="3"/>
+          <circle cx="405" cy="50" r="3"/>
+        </g>
+        <text x="5" y="20" fill="#111" font-size="14">Calibre ↑</text>
+        <text x="390" y="110" fill="#e5e7eb" font-size="12">Convoyeur</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Barème</h3>
+    <p><span class="score">Q1 : 4 pts</span> • <span class="score">Q2 : 4 pts</span> • <span class="score">Q3 : 5 pts</span> • <span class="score">Q4 : 4 pts</span> • <span class="score">Q5 : 3 pts</span></p>
+  </div>
+
+  <!-- Q1 -->
+  <div class="card">
+    <h2>Q1. Nuage de points (m ; c) <span class="badge">S’approprier • Réaliser</span></h2>
+    <p>Tracer les axes (g et mm), placer les 5 points et légender.</p>
+    <div class="note">🤝 Coup de pouce : choisis des échelles régulières (ex. 80–200 g ; 55–80 mm).</div>
+    <p class="small"><b>Réponse attendue :</b> nuage croissant avec légère concavité vers le bas.</p>
+    <textarea rows="3" placeholder="Schéma ou justification"></textarea>
+    <div class="bar small"><b>Mini-fiche :</b> Un <span class="formula">nuage de points</span> visualise la relation entre deux variables.</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card">
+    <h2>Q2. Choix du modèle <span class="badge">Analyser/Raisonner • Valider • Communiquer</span></h2>
+    <p>Justifier s’il faut utiliser un modèle affine <span class="formula">c=am+b</span> ou parabolique <span class="formula">c=\alpha m^2+\beta m+\gamma</span>.</p>
+    <div class="note">🤝 Coup de pouce : observe les résidus visuels par rapport à une droite.</div>
+    <p class="small"><b>Réponse attendue :</b> courbure concave → préférer l’ajustement <u>parabolique</u>.</p>
+    <textarea rows="3" placeholder="Argumentation sur la forme et les résidus"></textarea>
+    <div class="bar small"><b>Mini-fiche :</b> Choisir le modèle qui laisse les résidus les plus « aléatoires ».</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card">
+    <h2>Q3. Ajustement parabolique (arrondir à 0,001) <span class="badge">Réaliser • Communiquer</span></h2>
+    <p>Déterminer <span class="formula">\( \alpha, \beta, \gamma \)</span> dans <span class="formula">\( c=\alpha m^2+\beta m+\gamma \)</span>.</p>
+    <div class="note">🤝 Coup de pouce : résous un système sur trois points (p.ex. 92, 155, 190) ou utilise un tableur.</div>
+    <p class="small"><b>Réponse attendue :</b> <span class="formula">\( c\approx-0,001\,m^2+0,478\,m+21,690 \)</span> (mm).</p>
+    <textarea rows="3" placeholder="Détail des calculs / captures d’outil"></textarea>
+    <div class="bar small"><b>Mini-fiche :</b> Méthode des <span class="formula">moindres carrés</span> (outil numérique conseillé).</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card">
+    <h2>Q4. Réglage pour une variété de 230 g <span class="badge">Réaliser • Valider</span></h2>
+    <p>Utiliser le modèle de Q3 pour estimer le calibre à enregistrer.</p>
+    <div class="note">🤝 Coup de pouce : substitue <span class="formula">m=230</span> dans la formule.</div>
+    <p class="small"><b>Réponse attendue :</b> <span class="formula">\( c(230)\approx 80,2 \) mm</span>. Réglage : <b>230 g ; 80,2 mm</b>.</p>
+    <textarea rows="3" placeholder="Calcul et phrase de conclusion avec unités"></textarea>
+    <div class="bar small"><b>Mini-fiche :</b> <span class="formula">Interpolation/Extrapolation</span> → toujours conclure avec unités.</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="card">
+    <h2>Q5. Valider et interpréter <span class="badge">Analyser/Raisonner • Valider • Communiquer</span></h2>
+    <ol>
+      <li>Plausibilité de \(c(230)\approx 80{,}2\) mm ?</li>
+      <li>Comparer avec l’ajustement affine <span class="formula">\( c\approx 0,200\,m+40,7 \)</span> (à 230 g).</li>
+      <li>Portée du modèle et marge pratique.</li>
+    </ol>
+    <div class="note">🤝 Coup de pouce : la droite donne ~86,7 mm ; qui surestime aux fortes masses ?</div>
+    <p class="small"><b>Réponse attendue :</b> valeur cohérente ~80 mm ; la droite <u>surestime</u> (86,7 mm) ; validité ~[90;200] g, marge ±0,5 mm.</p>
+    <textarea rows="4" placeholder="Analyse, comparaison, recommandations de réglage"></textarea>
+    <div class="bar small"><b>Mini-fiche :</b> Attention à l’<span class="formula">extrapolation</span> et à la différence <u>corrélation/causalité</u>.</div>
+  </div>
+
+  <!-- Tableau d'évaluation -->
+  <div class="card">
+    <h2>Tableau d’évaluation par compétences</h2>
+    <table>
+      <tr>
+        <th>Compétences (Q°)</th>
+        <th>Très bonne maîtrise</th>
+        <th>Maîtrise satisfaisante</th>
+        <th>Fragile</th>
+        <th>Insuffisant</th>
+      </tr>
+      <tr><td>S’approprier (Q1)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Réaliser (Q1, Q3, Q4)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Analyser/Raisonner (Q2, Q5)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Valider (Q2, Q4, Q5)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Communiquer (Q2, Q3, Q4, Q5)</td><td></td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+
+  <!-- Boutons d'édition -->
+  <div class="row">
+    <button id="editBtn">Activer l’édition de la page</button>
+    <button id="saveBtn">Exporter en HTML</button>
+  </div>
+
+  <script>
+    // Rendre toute la page éditable
+    const btn = document.getElementById('editBtn');
+    btn.addEventListener('click', ()=>{
+      const nowEditable = document.body.contentEditable !== "true";
+      document.body.contentEditable = nowEditable ? "true" : "false";
+      btn.textContent = nowEditable ? "Désactiver l’édition" : "Activer l’édition de la page";
+    });
+    // Exporter le contenu
+    document.getElementById('saveBtn').addEventListener('click', ()=>{
+      const blob = new Blob([document.documentElement.outerHTML], {type:'text/html;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'evaluation-terminale-stat2v.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  </script>
+</body>
+</html>
