@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Créer 3 groupes aléatoires (6 noms)</title>
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --accent2:#60a5fa; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial; background:linear-gradient(160deg,#0b1022,#0f172a 35%,#111827); color:var(--text);}
+    .container{max-width:860px; margin:40px auto; padding:24px;}
+    .card{background:rgba(17,24,39,.75); border:1px solid rgba(255,255,255,.06); backdrop-filter: blur(6px); border-radius:18px; padding:22px; box-shadow:0 10px 25px rgba(0,0,0,.25)}
+    h1{margin:0 0 8px; font-size:clamp(22px,3vw,32px)}
+    p{margin:0 0 18px; color:var(--muted)}
+    .grid{display:grid; grid-template-columns:repeat(6,1fr); gap:12px;}
+    @media (max-width:700px){ .grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:420px){ .grid{grid-template-columns:repeat(2,1fr)} }
+    .input{appearance:none; width:100%; padding:12px 12px; border-radius:12px; background:#0b1222; border:1px solid rgba(255,255,255,.08); color:var(--text); outline:none; transition:.2s border-color,.2s box-shadow}
+    .input:focus{border-color:var(--accent2); box-shadow:0 0 0 4px rgba(96,165,250,.15)}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:16px}
+    .btn{cursor:pointer; border:0; border-radius:12px; padding:12px 16px; font-weight:600; color:#0a0f1f; background:linear-gradient(135deg,var(--accent),#10b981); box-shadow:0 8px 20px rgba(16,185,129,.35); transition:transform .05s ease}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{background:linear-gradient(135deg,var(--accent2),#3b82f6); color:#07142a; box-shadow:0 8px 20px rgba(59,130,246,.35)}
+    .hint{font-size:14px; color:var(--muted)}
+    .groups{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+    @media (max-width:800px){ .groups{grid-template-columns:1fr} }
+    .group{background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px}
+    .group h3{margin:0 0 8px; font-size:16px; letter-spacing:.4px; color:#93c5fd}
+    .chip{display:inline-block; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); padding:8px 10px; border-radius:999px; margin:6px 6px 0 0}
+    .error{margin-top:12px; color:#fecaca}
+    footer{opacity:.7; font-size:12px; margin-top:10px}
+    .spacer{height:8px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Créer 3 groupes aléatoires</h1>
+      <p>Entrez jusqu’à <strong>6 noms</strong> (exactement 6 pour former 3 binômes), puis cliquez sur « Créer les groupes ».</p><div class="grid" id="inputs"></div>
+
+  <div class="row">
+    <button class="btn" id="make">Créer les groupes</button>
+    <button class="btn secondary" id="shuffle">Re‑tirer au sort</button>
+    <button class="btn secondary" id="demo">Pré‑remplir</button>
+    <span class="hint">Astuce : utilisez <kbd>Tab</kbd> pour passer d’un champ à l’autre.</span>
+  </div>
+  <div class="error" id="error" aria-live="polite"></div>
+
+  <div class="groups" id="groups" aria-live="polite"></div>
+  <footer>⚙️ Algorithme : mélange de Fisher‑Yates, puis répartition 2 par 2.</footer>
+</div>
+
+  </div><script>
+  const inputsContainer = document.getElementById('inputs');
+  const groupsEl = document.getElementById('groups');
+  const errorEl = document.getElementById('error');
+  const makeBtn = document.getElementById('make');
+  const shuffleBtn = document.getElementById('shuffle');
+  const demoBtn = document.getElementById('demo');
+
+  // Create six inputs
+  const inputs = Array.from({length:6}, (_,i)=>{
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = `Nom ${i+1}`;
+    inp.className = 'input';
+    inp.autocomplete = 'off';
+    inputsContainer.appendChild(inp);
+    return inp;
+  });
+
+  function getNames(){
+    return inputs.map(i=>i.value.trim()).filter(v=>v.length>0);
+  }
+
+  function fisherYates(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function renderGroups(list){
+    groupsEl.innerHTML = '';
+    const titles = ['Groupe A','Groupe B','Groupe C'];
+    for(let g=0; g<3; g++){
+      const box = document.createElement('div');
+      box.className = 'group';
+      const h = document.createElement('h3');
+      h.textContent = titles[g];
+      box.appendChild(h);
+      const pair = list.slice(g*2, g*2+2);
+      pair.forEach(name=>{
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.textContent = name || '—';
+        box.appendChild(chip);
+      });
+      groupsEl.appendChild(box);
+    }
+  }
+
+  function makeGroups(){
+    errorEl.textContent='';
+    const names = getNames();
+    if(names.length !== 6){
+      errorEl.textContent = 'Veuillez renseigner exactement 6 noms pour former 3 groupes de 2.';
+      groupsEl.innerHTML = '';
+      return;
+    }
+    const unique = new Set(names.map(n=>n.toLowerCase()));
+    if(unique.size < names.length){
+      errorEl.textContent = 'Chaque nom doit être unique.';
+      groupsEl.innerHTML = '';
+      return;
+    }
+    const shuffled = fisherYates(names);
+    renderGroups(shuffled);
+  }
+
+  makeBtn.addEventListener('click', makeGroups);
+  shuffleBtn.addEventListener('click', ()=>{
+    if(groupsEl.children.length===0){ makeGroups(); return; }
+    const names = getNames();
+    if(names.length!==6){ errorEl.textContent='Entrez d’abord 6 noms.'; return; }
+    renderGroups(fisherYates(names));
+  });
+
+  demoBtn.addEventListener('click', ()=>{
+    const demo = ['Alice','Bruno','Camille','David','Emma','Farid'];
+    inputs.forEach((inp,i)=> inp.value = demo[i] || '');
+    makeGroups();
+  });
+
+  // Quality of life: Enter to jump, Ctrl+Enter to create
+  inputs.forEach((inp, idx)=>{
+    inp.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' && !e.ctrlKey){
+        e.preventDefault();
+        (inputs[idx+1] || makeBtn).focus();
+      } else if(e.key==='Enter' && e.ctrlKey){
+        makeGroups();
+      }
+    });
+  });
+</script></body>
+</html>
