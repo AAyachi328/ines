@@ -4,340 +4,303 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Préparation au CCF 1</title>
-    <style>
-        /*
-        Cette feuille de style vise à recréer au mieux la mise en page du document papier fourni.  
-        Les couleurs, marges et typographies ont été choisies pour s'approcher de l'esthétique de l'original tout
-        en restant lisibles sur écran.  
-        */
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fdfdfd;
-            color: #333;
-        }
+   <style>
+    /*
+      Feuille de style inspirée de la maquette que tu as montrée :
+      – fond général beige
+      – fiche blanche au centre avec ombre
+      – bandeau marron pour le titre
+      – pastille « Chimie 1 et Chimie 2 »
+      – encadrés crème pour MATÉRIEL et Problématique
+    */
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    /* --------- Base de la page --------- */
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f1eb;       /* fond léger beige */
+        color: #3a2a1b;                  /* texte brun */
+    }
 
-        /* En-tête du document */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            background-color: #dbe7f6;
-            border: 1px solid #b3cbe8;
-            border-radius: 6px;
-            padding: 12px;
-        }
+    .container {
+        max-width: 900px;
+        margin: 32px auto 40px;
+        padding: 32px 40px 40px;
+        background-color: #ffffff;       /* fiche blanche */
+        border-radius: 10px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
 
-        .header-left h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #2e4a6f;
-        }
+    /* --------- En-tête --------- */
+    .header {
+        position: relative;
+        background-color: #f7f3ee;       /* beige clair */
+        border: 1px solid #d3c3b0;
+        border-radius: 6px;
+        padding: 18px 20px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
 
-        .header-left .subtitle {
-            display: inline-block;
-            margin-top: 4px;
-            padding: 4px 8px;
-            background-color: #6f93c6;
-            color: #fff;
-            font-size: 12px;
-            border-radius: 4px;
-        }
+    .header-left h1 {
+        margin: 0;
+        font-size: 22px;
+        background-color: #b57a45;       /* bandeau marron */
+        color: #ffffff;
+        padding: 8px 20px;
+        border-radius: 4px;
+        letter-spacing: 0.02em;
+    }
 
-        .header-right table {
-            font-size: 13px;
-            border-collapse: collapse;
-        }
+    .header-left .subtitle {
+        position: absolute;
+        top: 10px;
+        right: 16px;
+        padding: 4px 14px;
+        background-color: #d0a66a;       /* pastille beige/orange */
+        color: #ffffff;
+        font-size: 12px;
+        border-radius: 999px;
+    }
 
-        .header-right td {
-            padding: 4px 6px;
-            vertical-align: top;
-        }
+    .header-right table {
+        font-size: 13px;
+        border-collapse: collapse;
+    }
 
-        .header-right td.line {
-            width: 180px;
-            border-bottom: 1px dotted #999;
-        }
+    .header-right td {
+        padding: 2px 4px;
+        vertical-align: top;
+    }
 
-        /* Titre principal */
-        .title {
-            text-align: center;
-            margin: 24px 0 16px;
-            font-size: 28px;
-            font-weight: bold;
-        }
+    .header-right td.line {
+        width: 180px;
+        border-bottom: 1px solid #c9b79f;
+    }
 
-        /* Sections générales */
-        .section {
-            margin-bottom: 28px;
-        }
+    /* --------- Titre principal --------- */
+    .title {
+        text-align: center;
+        margin: 26px 0 18px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #5a3b21;
+        border-bottom: 2px solid #d0a66a;
+        padding-bottom: 6px;
+    }
 
-        .section-header {
-            background-color: #dbe7f6;
-            border: 1px solid #b3cbe8;
-            padding: 8px 12px;
-            font-weight: bold;
-            font-size: 18px;
-            border-radius: 4px;
-        }
+    /* --------- Sections générales --------- */
+    .section {
+        margin-bottom: 28px;
+    }
 
-        /* Liste du matériel */
-        .material-list {
-            background-color: #f6f6f6;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 12px;
-            margin-top: 6px;
-        }
+    .section-header {
+        display: inline-block;
+        background-color: #b57a45;       /* même marron que le bandeau */
+        color: #ffffff;
+        padding: 6px 18px;
+        font-weight: bold;
+        font-size: 16px;
+        border-radius: 999px;
+        margin-bottom: 6px;
+    }
 
-        .material-list ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
+    /* --------- Bloc MATÉRIEL --------- */
+    .material-list {
+        background-color: #f8f2e9;       /* crème */
+        border: 1px solid #d1bda4;
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin-top: 4px;
+    }
 
-        .material-list li {
-            margin-bottom: 6px;
-        }
+    .material-list ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        columns: 2;                      /* deux colonnes comme sur ton exemple */
+        column-gap: 40px;
+    }
 
-        .material-highlight {
-            font-weight: bold;
-            background-color: #ffffa0;
-            padding: 2px 4px;
-        }
+    .material-list li {
+        margin-bottom: 6px;
+    }
 
-        /* Encadré problématique */
-        .problematic {
-            background-color: #f6f6f6;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 12px;
-            margin-top: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .material-highlight {
+        font-weight: bold;
+        background-color: #f9e6b3;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
 
-        .problematic-text {
-            flex: 1;
-        }
+    /* --------- Encadré Problématique --------- */
+    .problematic {
+        background-color: #f8f2e9;
+        border: 1px solid #d1bda4;
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin-top: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .problematic-text p {
-            margin: 0 0 8px;
-            line-height: 1.4;
-        }
+    .problematic-text {
+        flex: 1;
+    }
 
-        .problematic img {
-            width: 200px;
-            height: auto;
-            margin-left: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
+    .problematic-text p {
+        margin: 0 0 8px;
+        line-height: 1.45;
+    }
 
-        /* Étapes et listes numérotées */
-        .step-list, .bullet-list {
-            margin: 12px 0 16px 24px;
-        }
+    .problematic img {
+        width: 120px;
+        height: auto;
+        margin-left: 24px;
+        border-radius: 6px;
+    }
 
-        .step-list li {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
+    /* --------- Listes d’étapes --------- */
+    .step-list,
+    .bullet-list {
+        margin: 12px 0 16px 24px;
+    }
 
-        .bullet-list li {
-            margin-bottom: 8px;
-            list-style-type: square;
-        }
+    .step-list li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
 
-        /* Appels à l'examinateur */
-        .callout {
-            display: inline-block;
-            background-color: #fff5cc;
-            border: 1px solid #e0c66a;
-            border-radius: 4px;
-            color: #755600;
-            font-weight: bold;
-            padding: 4px 8px;
-            margin-right: 8px;
-        }
+    .bullet-list li {
+        margin-bottom: 8px;
+        list-style-type: square;
+    }
 
-        /* Cases à cocher */
-        .checkbox-group label {
-            display: inline-block;
-            margin-right: 16px;
-            margin-top: 4px;
-        }
+    /* --------- Pastilles Appel n°1, n°2… --------- */
+    .callout {
+        display: inline-block;
+        background-color: #f9e6b3;
+        border: 1px solid #d4b47a;
+        border-radius: 999px;
+        color: #6b4a1f;
+        font-weight: bold;
+        padding: 3px 10px;
+        margin-right: 8px;
+        font-size: 13px;
+    }
 
-        .checkbox-group input[type="checkbox"] {
-            margin-right: 4px;
-        }
+    /* --------- Cases à cocher --------- */
+    .checkbox-group label {
+        display: inline-block;
+        margin-right: 16px;
+        margin-top: 4px;
+    }
 
-        /* Pied de page */
-        .footer {
-            text-align: right;
-            font-size: 12px;
-            color: #666;
-            font-weight: bold;
-            margin-top: 40px;
-        }
-        /* Nouveaux styles pour la deuxième page */
-        .page-break {
-            margin-top: 60px;
-            border-top: 2px dotted #ccc;
-            padding-top: 20px;
-        }
-        .equipment {
-            display: flex;
-            justify-content: space-around;
-            margin: 12px 0;
-        }
-        .equipment-item {
-            text-align: center;
-            font-size: 14px;
-            max-width: 120px;
-        }
-        .equipment-item .icon {
-            margin: 0 auto 6px;
-            display: block;
-        }
-        /* Icône d'éprouvette graduée */
-        .icon-cylinder {
-            width: 24px;
-            height: 60px;
-            border: 2px solid #777;
-            border-radius: 3px;
-            position: relative;
-            background: linear-gradient(to bottom, #fff 0%, #eef3f8 100%);
-        }
-        .icon-cylinder::after {
-            content: "";
-            position: absolute;
-            left: 3px;
-            right: 3px;
-            top: 10px;
-            height: 1px;
-            background: #777;
-            box-shadow:
-                0 6px 0 0 #777,
-                0 12px 0 0 #777,
-                0 18px 0 0 #777,
-                0 24px 0 0 #777,
-                0 30px 0 0 #777,
-                0 36px 0 0 #777;
-        }
-        /* Icône de balance */
-        .icon-scale {
-            width: 60px;
-            height: 35px;
-            border: 2px solid #777;
-            border-radius: 4px;
-            position: relative;
-            background: #eef3f8;
-        }
-        .icon-scale::before {
-            content: "";
-            position: absolute;
-            left: 8px;
-            right: 8px;
-            top: 8px;
-            height: 14px;
-            border: 1px solid #777;
-            border-radius: 2px;
-            background: #fff;
-        }
-        /* Icône de dynamomètre */
-        .icon-dynamometer {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #777;
-            border-radius: 50%;
-            position: relative;
-            background: #eef3f8;
-        }
-        .icon-dynamometer::before {
-            content: "";
-            position: absolute;
-            top: 5px;
-            bottom: 5px;
-            left: 50%;
-            width: 2px;
-            background: #777;
-            transform: translateX(-50%);
-        }
-        .icon-dynamometer::after {
-            content: "";
-            position: absolute;
-            left: 5px;
-            right: 5px;
-            top: 50%;
-            height: 2px;
-            background: #777;
-            transform: translateY(-50%);
-        }
-        /* Ligne de réponse vide */
-        .blank-line {
-            border-bottom: 1px dotted #999;
-            margin: 6px 0 12px;
-            height: 18px;
-        }
-        /* Tableau d'évaluation */
-        .evaluation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-            font-size: 14px;
-        }
-        .evaluation-table th,
-        .evaluation-table td {
-            border: 1px solid #999;
-            padding: 6px 8px;
-            vertical-align: top;
-        }
-        .evaluation-table th {
-            background-color: #dbe7f6;
-            color: #2e4a6f;
-            text-align: left;
-        }
-        .evaluation-table .category {
-            background-color: #f6f6f6;
-            font-weight: bold;
-            text-align: center;
-        }
-        .evaluation-table .sub-category {
-            font-weight: bold;
-        }
-        .evaluation-table .appreciation {
-            text-align: center;
-            white-space: nowrap;
-        }
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 4px;
+    }
 
-        .invisible-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .invisible-table td {
-            border: none;
-            padding: 4px 8px;
-        }
+    /* --------- Matériel pour l’exercice sucré --------- */
+    .equipment {
+        display: flex;
+        justify-content: space-around;
+        margin: 12px 0;
+    }
 
-        /* Styles d'impression pour éviter que les paragraphes et les éléments de liste ne soient coupés entre deux pages lors de l'export en PDF */
-        @media print {
-            p,
-            li {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-        }
+    .equipment-item {
+        text-align: center;
+        font-size: 14px;
+        max-width: 140px;
+    }
 
-    </style>
+    .equipment-item img {
+        display: block;
+        margin: 0 auto 6px;
+    }
+
+    /* --------- Lignes de réponse --------- */
+    .blank-line {
+        border-bottom: 1px dotted #999;
+        margin: 6px 0 12px;
+        height: 18px;
+    }
+
+    /* --------- Page 2 (séparation visuelle) --------- */
+    .page-break {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px dotted #d1bda4;
+    }
+
+    /* --------- Tableau d’évaluation --------- */
+    .evaluation-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 14px;
+    }
+
+    .evaluation-table th,
+    .evaluation-table td {
+        border: 1px solid #999;
+        padding: 6px 8px;
+        vertical-align: top;
+    }
+
+    .evaluation-table th {
+        background-color: #f0e3d2;
+        color: #5a3b21;
+        text-align: left;
+    }
+
+    .evaluation-table .category {
+        background-color: #f8f2e9;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .evaluation-table .sub-category {
+        font-weight: bold;
+    }
+
+    .evaluation-table .appreciation {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Tableau invisible pour aligner les réponses sur une ligne */
+    .invisible-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .invisible-table td {
+        border: none;
+        padding: 4px 8px;
+    }
+
+    /* --------- Pied de page --------- */
+    .footer {
+        text-align: right;
+        font-size: 12px;
+        color: #8b7966;
+        font-weight: bold;
+        margin-top: 40px;
+    }
+
+    /* --------- Impression / export PDF --------- */
+    @media print {
+        p,
+        li {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+    }
+</style>
+
 </head>
 <body>
     <div class="container">
