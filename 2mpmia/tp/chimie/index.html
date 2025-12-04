@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TP - 2MPMIA</title>
+    <title>Préparation au CCF 1</title>
     <style>
         /*
         Cette feuille de style vise à recréer au mieux la mise en page du document papier fourni.  
@@ -256,7 +256,7 @@
         /* Icône de dynamomètre */
         .icon-dynamometer {
             width: 50px;
-            height: ;
+            height: 50px;
             border: 2px solid #777;
             border-radius: 50%;
             position: relative;
@@ -328,6 +328,15 @@
             padding: 4px 8px;
         }
 
+        /* Styles d'impression pour éviter que les paragraphes et les éléments de liste ne soient coupés entre deux pages lors de l'export en PDF */
+        @media print {
+            p,
+            li {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -357,7 +366,7 @@
         </div>
 
         <!-- Titre principal -->
-        <div class="title" contenteditable="true">Comment diminuer l’acidité d’une boisson&nbsp;?</div>
+        <div class="title"  contenteditable="true">Comment diminuer l’acidité d’une boisson&nbsp;?</div>
 
         <!-- Section Matériel -->
         <div class="section">
@@ -579,6 +588,9 @@
             </table>
             <p style="font-size:12px; margin-top:8px;" contenteditable="true">Note sur 10 = … × 0,5</p>
         </div>
+
+<!-- Pied de page -->
+        <div class="footer" contenteditable="true">Préparation au CCF</div>
     </div>
 </body>
 </html>
