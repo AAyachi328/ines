@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Préparation au CCF 1</title>
+    <style>
+        /*
+        Cette feuille de style vise à recréer au mieux la mise en page du document papier fourni.  
+        Les couleurs, marges et typographies ont été choisies pour s'approcher de l'esthétique de l'original tout
+        en restant lisibles sur écran.  
+        */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* En-tête du document */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background-color: #dbe7f6;
+            border: 1px solid #b3cbe8;
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .header-left h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #2e4a6f;
+        }
+
+        .header-left .subtitle {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 4px 8px;
+            background-color: #6f93c6;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .header-right table {
+            font-size: 13px;
+            border-collapse: collapse;
+        }
+
+        .header-right td {
+            padding: 4px 6px;
+            vertical-align: top;
+        }
+
+        .header-right td.line {
+            width: 180px;
+            border-bottom: 1px dotted #999;
+        }
+
+        /* Titre principal */
+        .title {
+            text-align: center;
+            margin: 24px 0 16px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Sections générales */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            background-color: #dbe7f6;
+            border: 1px solid #b3cbe8;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+
+        /* Liste du matériel */
+        .material-list {
+            background-color: #f6f6f6;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 6px;
+        }
+
+        .material-list ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .material-list li {
+            margin-bottom: 6px;
+        }
+
+        .material-highlight {
+            font-weight: bold;
+            background-color: #ffffa0;
+            padding: 2px 4px;
+        }
+
+        /* Encadré problématique */
+        .problematic {
+            background-color: #f6f6f6;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .problematic-text {
+            flex: 1;
+        }
+
+        .problematic-text p {
+            margin: 0 0 8px;
+            line-height: 1.4;
+        }
+
+        .problematic img {
+            width: 200px;
+            height: auto;
+            margin-left: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Étapes et listes numérotées */
+        .step-list, .bullet-list {
+            margin: 12px 0 16px 24px;
+        }
+
+        .step-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .bullet-list li {
+            margin-bottom: 8px;
+            list-style-type: square;
+        }
+
+        /* Appels à l'examinateur */
+        .callout {
+            display: inline-block;
+            background-color: #fff5cc;
+            border: 1px solid #e0c66a;
+            border-radius: 4px;
+            color: #755600;
+            font-weight: bold;
+            padding: 4px 8px;
+            margin-right: 8px;
+        }
+
+        /* Cases à cocher */
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 16px;
+            margin-top: 4px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 4px;
+        }
+
+        /* Pied de page */
+        .footer {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+        /* Nouveaux styles pour la deuxième page */
+        .page-break {
+            margin-top: 60px;
+            border-top: 2px dotted #ccc;
+            padding-top: 20px;
+        }
+        .equipment {
+            display: flex;
+            justify-content: space-around;
+            margin: 12px 0;
+        }
+        .equipment-item {
+            text-align: center;
+            font-size: 14px;
+            max-width: 120px;
+        }
+        .equipment-item .icon {
+            margin: 0 auto 6px;
+            display: block;
+        }
+        /* Icône d'éprouvette graduée */
+        .icon-cylinder {
+            width: 24px;
+            height: 60px;
+            border: 2px solid #777;
+            border-radius: 3px;
+            position: relative;
+            background: linear-gradient(to bottom, #fff 0%, #eef3f8 100%);
+        }
+        .icon-cylinder::after {
+            content: "";
+            position: absolute;
+            left: 3px;
+            right: 3px;
+            top: 10px;
+            height: 1px;
+            background: #777;
+            box-shadow:
+                0 6px 0 0 #777,
+                0 12px 0 0 #777,
+                0 18px 0 0 #777,
+                0 24px 0 0 #777,
+                0 30px 0 0 #777,
+                0 36px 0 0 #777;
+        }
+        /* Icône de balance */
+        .icon-scale {
+            width: 60px;
+            height: 35px;
+            border: 2px solid #777;
+            border-radius: 4px;
+            position: relative;
+            background: #eef3f8;
+        }
+        .icon-scale::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            top: 8px;
+            height: 14px;
+            border: 1px solid #777;
+            border-radius: 2px;
+            background: #fff;
+        }
+        /* Icône de dynamomètre */
+        .icon-dynamometer {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #777;
+            border-radius: 50%;
+            position: relative;
+            background: #eef3f8;
+        }
+        .icon-dynamometer::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            bottom: 5px;
+            left: 50%;
+            width: 2px;
+            background: #777;
+            transform: translateX(-50%);
+        }
+        .icon-dynamometer::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            top: 50%;
+            height: 2px;
+            background: #777;
+            transform: translateY(-50%);
+        }
+        /* Ligne de réponse vide */
+        .blank-line {
+            border-bottom: 1px dotted #999;
+            margin: 6px 0 12px;
+            height: 18px;
+        }
+        /* Tableau d'évaluation */
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+        .evaluation-table th,
+        .evaluation-table td {
+            border: 1px solid #999;
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+        .evaluation-table th {
+            background-color: #dbe7f6;
+            color: #2e4a6f;
+            text-align: left;
+        }
+        .evaluation-table .category {
+            background-color: #f6f6f6;
+            font-weight: bold;
+            text-align: center;
+        }
+        .evaluation-table .sub-category {
+            font-weight: bold;
+        }
+        .evaluation-table .appreciation {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .invisible-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invisible-table td {
+            border: none;
+            padding: 4px 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <div class="header-left">
+                <h1 contenteditable="true">Préparation au CCF&nbsp;1</h1>
+                <div class="subtitle" contenteditable="true">Chimie&nbsp;1 et Chimie&nbsp;2</div>
+            </div>
+            <div class="header-right">
+                <table>
+                    <tr>
+                        <td contenteditable="true"><strong>Nom&nbsp;:</strong></td>
+                        <td class="line" contenteditable="true">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true"><strong>Prénom&nbsp;:</strong></td>
+                        <td class="line" contenteditable="true">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true"><strong>Date&nbsp;:</strong></td>
+                        <td class="line" contenteditable="true">&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Titre principal -->
+        <div class="title">Comment diminuer l’acidité d’une boisson&nbsp;?</div>
+
+        <!-- Section Matériel -->
+        <div class="section">
+            <div class="section-header" contenteditable="true">MATÉRIEL</div>
+            <div class="material-list">
+                <ul>
+                    <li contenteditable="true">Jus de citron</li>
+                    <li contenteditable="true">Bécher&nbsp;①, bécher&nbsp;②</li>
+                    <li contenteditable="true">Fiole jaugée de 100&nbsp;mL</li>
+                    <li contenteditable="true">Pipette jaugée de 10&nbsp;mL avec dispositif d’aspiration</li>
+                    <li contenteditable="true">Stylo‑pH</li>
+                    <li contenteditable="true">Spatule</li>
+                    <li contenteditable="true">Balance</li>
+                    <li contenteditable="true">Dynamomètre</li>
+                    <li contenteditable="true">Éprouvette graduée</li>
+                    <li contenteditable="true">Pissette d’eau distillée</li>
+                    <li contenteditable="true"><span class="material-highlight">Sucre en poudre</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section Problématique -->
+        <div class="section">
+            <div class="section-header" contenteditable="true">Problématique</div>
+            <div class="problematic">
+                <div class="problematic-text">
+                    <p contenteditable="true">Paul, sujet aux brûlures d’estomac, trouve que son cocktail à base de jus de citron est trop acide.</p>
+                    <p contenteditable="true">Son amie Alice lui propose de rajouter du sucre. A‑t‑elle raison&nbsp;?</p>
+                </div>
+                <!-- Image d'illustration du verre de citron avec fond blanc -->
+                <img src="juice_illustration.png" alt="Illustration d’un verre de jus de citron" />
+            </div>
+        </div>
+
+        <!-- Section Jus de citron pur -->
+        <div class="section">
+            <div class="section-header" contenteditable="true">Le jus de citron pur</div>
+            <ol class="step-list">
+                <li contenteditable="true">Verser environ 20&nbsp;mL de jus de citron dans le bécher&nbsp;①. Mesurer le pH à l’aide du stylo‑pH&nbsp;: pH&nbsp;=&nbsp;………………</li>
+                <li contenteditable="true">Cochez la bonne réponse. Le jus de citron pur est&nbsp;:
+                    <span class="checkbox-group">
+                        <label><input type="checkbox">acide</label>
+                        <label><input type="checkbox">basique</label>
+                    </span>
+                </li>
+            </ol>
+            <div><span class="callout" contenteditable="true">Appel n°&nbsp;1</span>Faire vérifier la mesure de pH.</div>
+        </div>
+
+        <!-- Section Jus de citron dilué -->
+        <div class="section">
+            <div class="section-header" contenteditable="true">Le jus de citron dilué</div>
+            <ol class="step-list" start="3">
+                <li contenteditable="true">On souhaite préparer une solution de jus de citron diluée au 1/10<sup>e</sup> par rapport au jus de citron pur.</li>
+            </ol>
+            <div><span class="callout" contenteditable="true">Appel n°&nbsp;2</span>Effectuer les opérations suivantes en présence de l’examinateur&nbsp;:</div>
+            <ul class="bullet-list">
+                <li contenteditable="true">Prélever 10&nbsp;mL de jus de citron (bécher&nbsp;①) à l’aide d’une pipette jaugée munie de son dispositif d’aspiration.</li>
+                <li contenteditable="true">Introduire le contenu de la pipette dans une fiole jaugée de 100&nbsp;mL.</li>
+                <li contenteditable="true">Compléter la fiole avec de l’eau distillée.</li>
+                <li contenteditable="true">Agiter la solution et verser environ 20&nbsp;mL de cette solution dans le bécher&nbsp;②.</li>
+            </ul>
+            <ol class="step-list" start="4">
+                <li contenteditable="true">Après avoir rincé le stylo‑pH à l’eau du robinet, mesurer le pH de la solution obtenue (bécher&nbsp;②). pH&nbsp;=&nbsp;………………</li>
+            </ol>
+            <ol class="step-list" start="5">
+                <li contenteditable="true">Cochez les bonnes réponses.<br/>
+                    
+                    <table class="invisible-table">
+                        <tr>
+                            <td contenteditable="true"><label><input type="checkbox">La dilution ne change pas le pH</label></td>
+                            <td contenteditable="true"><label><input type="checkbox">La dilution entraîne une augmentation du pH</label></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true"><label><input type="checkbox">La dilution ne change pas l’acidité</label></td>
+                            <td contenteditable="true"><label><input type="checkbox">La dilution provoque une diminution du pH</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" contenteditable="true"><label><input type="checkbox">La dilution permet de diminuer l’acidité</label></td>
+                        </tr>
+                    </table>
+    
+                </li>
+            </ol>
+        </div>
+
+        
+        <!-- Nouvelle page : Le jus de citron sucré -->
+        <div class="page-break section">
+            <div class="section-header" contenteditable="true">Le jus de citron sucré</div>
+            <!-- Étape 6 -->
+            <ol class="step-list" start="6">
+                <li contenteditable="true">
+                    <strong>a.</strong> On souhaite ajouter 6&nbsp;g de sucre en poudre (équivalent d’un morceau de sucre) au bécher&nbsp;①. Pour mesurer la quantité de sucre à ajouter, on utilise :
+                    <div class="equipment">
+                        <div class="equipment-item">
+                            <img src="graduated_cylinder.png" alt="Éprouvette graduée" style="width:50px; height:auto;">
+                            <label><input type="checkbox"> une éprouvette graduée</label>
+                        </div>
+                        <div class="equipment-item">
+                            <img src="lab_balance.png" alt="Balance de laboratoire" style="width:50px; height:auto;">
+                            <label><input type="checkbox"> une balance</label>
+                        </div>
+                        <div class="equipment-item">
+                            <img src="dynamometer.png" alt="Dynamomètre" style="width:50px; height:auto;">
+                            <label><input type="checkbox"> un dynamomètre</label>
+                        </div>
+                    </div>
+                    <strong>b.</strong> Préparer cette solution de jus de citron sucré en remuant à l’aide d’une spatule afin de dissoudre le sucre.
+                </li>
+            </ol>
+            <!-- Étape 7 -->
+            <ol class="step-list" start="7">
+                <li contenteditable="true">
+                    Mesurer le pH de la solution obtenue. pH&nbsp;=&nbsp;………………
+                    <span class="callout" contenteditable="true">Appel n°&nbsp;3</span>
+                </li>
+            </ol>
+            <!-- Étape 8 -->
+            <ol class="step-list" start="8">
+                <li contenteditable="true">
+                    Cochez les bonnes réponses :<br/>
+                    
+                    <table class="invisible-table">
+                        <tr>
+                            <td contenteditable="true"><label><input type="checkbox">L’ajout de sucre ne change pas le pH</label></td>
+                            <td contenteditable="true"><label><input type="checkbox">L’ajout de sucre entraîne une augmentation du pH</label></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true"><label><input type="checkbox">L’ajout de sucre ne change pas l’acidité</label></td>
+                            <td contenteditable="true"><label><input type="checkbox">L’ajout de sucre provoque une diminution du pH</label></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" contenteditable="true"><label><input type="checkbox">L’ajout de sucre permet de diminuer l’acidité</label></td>
+                        </tr>
+                    </table>
+    
+                </li>
+            </ol>
+        </div>
+
+        <!-- Section Conclusion -->
+        <div class="section">
+            <div class="section-header" contenteditable="true">Conclusion</div>
+            <ol class="step-list" start="9">
+                <li contenteditable="true">
+                    En déduire le(s) facteur(s) qui diminue(nt) l’acidité.
+                    <div class="blank-line"></div>
+                </li>
+                <li contenteditable="true">
+                    La proposition faite à Paul est‑elle adaptée&nbsp;?
+                    <div class="blank-line"></div>
+                </li>
+            </ol>
+            <div contenteditable="true">
+                Remise en état du poste de travail.
+                <span class="callout" contenteditable="true">Appel n°&nbsp;4</span>
+            </div>
+        </div>
+
+        <!-- Section Évaluation -->
+        <div class="section">
+            <h2 style="font-size: 20px; margin-bottom: 8px;" contenteditable="true">Évaluation</h2>
+            <table class="evaluation-table">
+                                <thead>
+                    <tr>
+                        <th style="width: 15%;" contenteditable="true">Catégorie</th>
+                        <th style="width: 20%;" contenteditable="true">Compétence</th>
+                        <th style="width: 35%;" contenteditable="true">Capacités à vérifier</th>
+                        <th style="width: 15%;" contenteditable="true">Questions</th>
+                        <th style="width: 15%;" contenteditable="true">Appréciation du niveau d’acquisition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="category" rowspan="3" contenteditable="true">Activité expérimentale</td>
+                        <td class="sub-category" contenteditable="true">S’approprier</td>
+                        <td contenteditable="true">
+                            – Rechercher, extraire et organiser l’information utile.<br/>
+                            – Comprendre le travail à réaliser.<br/>
+                            – Montrer qu’on connaît le vocabulaire, les symboles, les grandeurs, les unités mises en œuvre.
+                        </td>
+                        <td class="appreciation" contenteditable="true">6.</td>
+                        <td class="appreciation" contenteditable="true">★★</td>
+                    </tr>
+                    <tr>
+                        <td class="sub-category" contenteditable="true">Réaliser</td>
+                        <td contenteditable="true">
+                            – Organiser son poste de travail.<br/>
+                            – Mettre en œuvre un protocole expérimental.<br/>
+                            – Utiliser le matériel choisi ou mis à disposition.<br/>
+                            – Manipuler avec assurance dans le respect des règles élémentaires de sécurité.<br/>
+                            – Utiliser une ou plusieurs relations données.
+                        </td>
+                        <td class="appreciation" contenteditable="true">1, 3, 4 et 7</td>
+                        <td class="appreciation" contenteditable="true">★★</td>
+                    </tr>
+                    <tr>
+                        <td class="sub-category" contenteditable="true">Valider</td>
+                        <td contenteditable="true">
+                            – Exploiter et interpréter des observations, des mesures.<br/>
+                            – Vérifier les résultats obtenus.<br/>
+                            – Valider une information, une propriété, une loi.
+                        </td>
+                        <td class="appreciation" contenteditable="true">2</td>
+                        <td class="appreciation" contenteditable="true">★★</td>
+                    </tr>
+                    <tr>
+                        <td class="category" contenteditable="true">Compte rendu écrit</td>
+                        <td class="sub-category" contenteditable="true">Communiquer</td>
+                        <td contenteditable="true">
+                            – Rendre compte d’observations et des résultats des travaux réalisés.<br/>
+                            – Présenter, formuler une conclusion.
+                        </td>
+                        <td class="appreciation" contenteditable="true">5, 8, 10</td>
+                        <td class="appreciation" contenteditable="true">★★</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size:12px; margin-top:8px;" contenteditable="true">Note sur 10 = … × 0,5</p>
+        </div>
+
+<!-- Pied de page -->
+        <div class="footer" contenteditable="true">Préparation au CCF</div>
+    </div>
+</body>
+</html>
