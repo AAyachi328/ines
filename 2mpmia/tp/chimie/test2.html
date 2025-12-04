@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Préparation au CCF 1</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f1eb; /* fond général légèrement beige */
+            color: #3a2a1b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 32px auto 40px;
+            padding: 32px 40px 40px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        /* En-tête */
+        .header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background-color: #f7f3ee;
+            border: 1px solid #d3c3b0;
+            border-radius: 6px;
+            padding: 18px 20px 14px;
+        }
+
+        .header-left h1 {
+            margin: 0;
+            font-size: 22px;
+            background-color: #b57a45;
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 4px;
+            letter-spacing: 0.02em;
+        }
+
+        .header-left .subtitle {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            padding: 4px 14px;
+            background-color: #d0a66a;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 999px;
+        }
+
+        .header-right table {
+            font-size: 13px;
+            border-collapse: collapse;
+        }
+
+        .header-right td {
+            padding: 2px 4px;
+            vertical-align: top;
+        }
+
+        .header-right .line {
+            width: 180px;
+            border-bottom: 1px solid #c9b79f;
+        }
+
+        /* Titre principal */
+        .title {
+            text-align: center;
+            margin: 26px 0 18px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #5a3b21;
+        }
+
+        /* Section header */
+        .section-header {
+            display: inline-block;
+            background-color: #b57a45;
+            color: #ffffff;
+            padding: 6px 18px;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 999px;
+            margin-bottom: 6px;
+        }
+
+        /* Liste matériel */
+        .material-list {
+            background-color: #f8f2e9;
+            border: 1px solid #d1bda4;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 4px;
+        }
+
+        .material-columns {
+            display: flex;
+            gap: 40px;
+        }
+
+        .material-columns ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .material-columns li {
+            padding: 4px 0;
+        }
+
+        /* Problématique */
+        .problematic {
+            background-color: #f8f2e9;
+            border: 1px solid #d1bda4;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .problematic img {
+            width: 120px;
+            height: auto;
+            margin-left: 24px;
+            border-radius: 6px;
+        }
+
+        /* Étapes */
+        .step {
+            background-color: #ffffff;
+            border-left: 6px solid #b57a45;
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-top: 12px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background-color: #b57a45;
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            text-align: center;
+            line-height: 26px;
+            margin-right: 8px;
+        }
+
+        /* Callouts (Appels n°) */
+        .callout {
+            display: inline-block;
+            background-color: #f9e6b3;
+            border: 1px solid #d4b47a;
+            border-radius: 999px;
+            color: #6b4a1f;
+            font-weight: bold;
+            padding: 3px 10px;
+            margin-right: 8px;
+            font-size: 13px;
+        }
+
+        /* Tableau évaluation */
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .evaluation-table th,
+        .evaluation-table td {
+            border: 1px solid #999;
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+
+        .evaluation-table th {
+            background-color: #f0e3d2;
+            color: #5a3b21;
+            text-align: left;
+        }
+
+        .evaluation-table .category {
+            background-color: #f8f2e9;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Pied de page */
+        .footer {
+            text-align: right;
+            font-size: 12px;
+            color: #8b7966;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- En-tête -->
+        <div class="header">
+            <div class="header-left">
+                <h1 contenteditable="true">Préparation au CCF 1</h1>
+                <div class="subtitle" contenteditable="true">Chimie 1 et Chimie 2</div>
+            </div>
+
+            <div class="header-right">
+                <table>
+                    <tr>
+                        <td>Nom :</td>
+                        <td class="line" contenteditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td>Prénom :</td>
+                        <td class="line" contenteditable="true"></td>
+                    </tr>
+                    <tr>
+                        <td>Date :</td>
+                        <td class="line" contenteditable="true"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Titre principal -->
+        <div class="title" contenteditable="true">
+            Comment diminuer l’acidité d’une boisson ?
+        </div>
+
+        <!-- Matériel -->
+        <div>
+            <div class="section-header" contenteditable="true">MATÉRIEL</div>
+
+            <div class="material-list">
+                <div class="material-columns">
+                    <ul>
+                        <li contenteditable="true">✔ Jus de citron</li>
+                        <li contenteditable="true">✔ Stylo-pH</li>
+                        <li contenteditable="true">✔ Sucre en poudre</li>
+                        <li contenteditable="true">✔ Fiole jaugée de 100 mL</li>
+                        <li contenteditable="true">✔ Éprouvette graduée</li>
+                        <li contenteditable="true">✔ Pissette d’eau distillée</li>
+                    </ul>
+
+                    <ul>
+                        <li contenteditable="true">✔ Pipette jaugée 10 mL</li>
+                        <li contenteditable="true">✔ Dynamomètre</li>
+                        <li contenteditable="true">✔ Bécher ①, bécher ②</li>
+                        <li contenteditable="true">✔ Spatule</li>
+                        <li contenteditable="true">✔ Balance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Problématique -->
+            <div class="section-header" contenteditable="true">Problématique</div>
+
+            <div class="problematic">
+                <div class="problematic-text">
+                    <p contenteditable="true">
+                        Paul, sujet aux brûlures d’estomac, trouve que son cocktail à base de jus de citron est trop acide.
+                        Son amie Alice lui propose de rajouter du sucre. A-t-elle raison ?
+                    </p>
+                </div>
+
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." alt="Verre de citron" />
+            </div>
+
+        </div>
+
+
+        <!-- … (le reste du TP continue ici, identique à ton fichier) … -->
+
+        <!-- Pied de page -->
+        <div class="footer" contenteditable="true">Préparation au CCF</div>
+
+    </div>
+</body>
+</html>
