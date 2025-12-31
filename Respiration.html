@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiration Guidée 3D - Audio Séparé</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #a8c0ff;
+            --text-color: #ffffff;
+            --ui-bg: rgba(20, 20, 20, 0.6);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505; 
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Interface Principale (Centre) */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #instruction-text {
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 5px;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        #timer-display {
+            font-size: 1.5rem;
+            font-weight: 500;
+            opacity: 0.8;
+            font-variant-numeric: tabular-nums;
+            margin-top: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Panneau de Réglages (Haut Droite) */
+        #settings-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--ui-bg);
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            border-radius: 12px;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Switch Toggle Design */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin-left: 15px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        #start-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+            transition: opacity 0.8s ease;
+        }
+
+        h1 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 300;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        p.subtitle {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        .btn-start {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-start:hover {
+            background: var(--primary-color);
+            color: #050505;
+            box-shadow: 0 0 30px rgba(168, 192, 255, 0.4);
+        }
+
+        #loader { position: absolute; bottom: 20px; font-size: 0.8rem; opacity: 0.5; }
+
+        @media (max-width: 768px) {
+            #instruction-text { font-size: 3.5rem; }
+            h1 { font-size: 2rem; }
+            #settings-panel { top: 10px; right: 10px; padding: 10px; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <!-- Overlay de démarrage -->
+    <div id="start-overlay">
+        <h1>Respiration Guidée</h1>
+        <p class="subtitle">Contrôlez indépendamment l'ambiance et les signaux sonores.</p>
+        <button class="btn-start" id="btn-start">Commencer</button>
+        <div id="loader">Chargement...</div>
+    </div>
+
+    <!-- Panneau de réglages -->
+    <div id="settings-panel">
+        <label class="toggle-row">
+            <span>Afficher Texte</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-text" checked>
+                <span class="slider"></span>
+            </label>
+        </label>
+        <label class="toggle-row">
+            <span>Afficher Chrono</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-timer" checked>
+                <span class="slider"></span>
+            </label>
+        </label>
+        <label class="toggle-row">
+            <span>Ambiance</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-drone" checked>
+                <span class="slider"></span>
+            </label>
+        </label>
+        <label class="toggle-row">
+            <span>Cloche</span>
+            <label class="switch">
+                <input type="checkbox" id="toggle-chime" checked>
+                <span class="slider"></span>
+            </label>
+        </label>
+    </div>
+
+    <!-- Interface Centrale -->
+    <div id="ui-layer">
+        <div id="instruction-text">Prêt</div>
+        <div id="timer-display"></div>
+    </div>
+
+    <!-- Canvas 3D -->
+    <div id="canvas-container"></div>
+
+    <script>
+        const CYCLE_DURATION = 11;
+        const INHALE_DURATION = 5.5;
+        const EXHALE_DURATION = 5.5;
+        const TEXT_DELAY = 0.5; // Décalage en secondes
+        
+        let isRunning = false;
+        let audioContext = null;
+        let gainNode = null;
+        let oscillators = [];
+
+        // --- GESTION UI TOGGLES ---
+        const uiState = {
+            showText: true,
+            showTimer: true,
+            droneEnabled: true,
+            chimeEnabled: true
+        };
+
+        document.getElementById('toggle-text').addEventListener('change', (e) => {
+            uiState.showText = e.target.checked;
+            updateUIDisplay();
+        });
+
+        document.getElementById('toggle-timer').addEventListener('change', (e) => {
+            uiState.showTimer = e.target.checked;
+            updateUIDisplay();
+        });
+
+        // Toggle Ambiance (Drone)
+        document.getElementById('toggle-drone').addEventListener('change', (e) => {
+            uiState.droneEnabled = e.target.checked;
+            // Ajuster le volume en douceur si l'audio est déjà démarré
+            if (audioContext && gainNode) {
+                const targetVol = uiState.droneEnabled ? 0.1 : 0;
+                gainNode.gain.setTargetAtTime(targetVol, audioContext.currentTime, 0.5);
+            }
+        });
+
+        // Toggle Cloche (Chime)
+        document.getElementById('toggle-chime').addEventListener('change', (e) => {
+            uiState.chimeEnabled = e.target.checked;
+        });
+
+        function updateUIDisplay() {
+            const textEl = document.getElementById('instruction-text');
+            const timerEl = document.getElementById('timer-display');
+            
+            textEl.style.display = uiState.showText ? 'block' : 'none';
+            timerEl.style.display = uiState.showTimer ? 'block' : 'none';
+        }
+
+        // --- SETUP THREE.JS ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x050505, 0.03);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        container.appendChild(renderer.domElement);
+
+        // --- OBJETS ---
+        const mainGroup = new THREE.Group();
+        scene.add(mainGroup);
+
+        const geometry = new THREE.IcosahedronGeometry(1.5, 60);
+        const material = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            roughness: 0.3,
+            metalness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1,
+            flatShading: false,
+            side: THREE.DoubleSide
+        });
+
+        const sphere = new THREE.Mesh(geometry, material);
+        mainGroup.add(sphere);
+
+        const originalPositions = geometry.attributes.position.array.slice();
+        
+        const wireGeo = new THREE.IcosahedronGeometry(2.2, 2);
+        const wireMat = new THREE.MeshBasicMaterial({ 
+            color: 0x333333, wireframe: true, transparent: true, opacity: 0.05 
+        });
+        const wireSphere = new THREE.Mesh(wireGeo, wireMat);
+        mainGroup.add(wireSphere);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 700;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 20;
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.03, color: 0xffffff, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // --- LUMIÈRES ---
+        const ambientLight = new THREE.AmbientLight(0x222222, 2);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0xffffff, 2, 100);
+        pointLight1.position.set(5, 5, 5);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xffffff, 1.5, 100);
+        pointLight2.position.set(-5, -2, -5);
+        scene.add(pointLight2);
+
+        // --- AUDIO ---
+        function initAudio() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+            
+            gainNode = audioContext.createGain();
+            // Volume initial basé sur l'état du toggle drone
+            const initialVol = uiState.droneEnabled ? 0.1 : 0;
+            gainNode.gain.value = initialVol;
+            gainNode.connect(audioContext.destination);
+
+            const frequencies = [110, 112];
+            frequencies.forEach(freq => {
+                const osc = audioContext.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const lfo = audioContext.createOscillator();
+                lfo.type = 'sine';
+                lfo.frequency.value = 0.1 + Math.random() * 0.1;
+                const lfoGain = audioContext.createGain();
+                lfoGain.gain.value = 0.05;
+                lfo.connect(lfoGain.gain);
+                osc.connect(lfoGain);
+                lfoGain.connect(gainNode);
+                osc.start();
+                lfo.start();
+                oscillators.push(osc);
+            });
+        }
+
+        function playChime() {
+            // On vérifie UNIQUEMENT le toggle cloche ici
+            if (!audioContext || !uiState.chimeEnabled) return;
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioContext.currentTime);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 1.5);
+        }
+
+        // --- ANIMATION ---
+        const instructionEl = document.getElementById('instruction-text');
+        const timerEl = document.getElementById('timer-display');
+        const clock = new THREE.Clock();
+        let noiseOffset = 0;
+        let lastTextTriggerState = null;
+
+        function noise(x, y, z, time) {
+            return Math.sin(x * 2 + time) * Math.cos(y * 1.5 + time) * Math.sin(z * 3 + time);
+        }
+
+        function mod(n, m) {
+            return ((n % m) + m) % m;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (!isRunning) {
+                mainGroup.rotation.y += 0.002;
+                particlesMesh.rotation.y -= 0.0005;
+                renderer.render(scene, camera);
+                return;
+            }
+
+            const t = clock.getElapsedTime(); // Temps écoulé depuis le start
+
+            // --- 1. LOGIQUE VISUELLE (SYNC ACTION) ---
+            const visualCycleTime = t % CYCLE_DURATION;
+            const isInhaleVisual = visualCycleTime < INHALE_DURATION;
+            
+            const phaseTime = isInhaleVisual ? visualCycleTime : (visualCycleTime - INHALE_DURATION);
+            const phaseDuration = isInhaleVisual ? INHALE_DURATION : EXHALE_DURATION;
+            const progress = (Math.sin(phaseTime / phaseDuration * Math.PI - Math.PI / 2) + 1) / 2;
+
+            // Échelle
+            const minScale = 1.0;
+            const maxScale = 1.6;
+            const targetScale = isInhaleVisual 
+                ? minScale + (maxScale - minScale) * progress 
+                : maxScale - (maxScale - minScale) * progress;
+            sphere.scale.setScalar(targetScale);
+
+            // Rotation
+            mainGroup.rotation.y += 0.003;
+            mainGroup.rotation.z = Math.sin(t * 0.2) * 0.1;
+            wireSphere.rotation.x -= 0.002;
+            wireSphere.rotation.y -= 0.002;
+            particlesMesh.rotation.y = t * 0.05;
+
+            // Déformation
+            const positions = geometry.attributes.position.array;
+            noiseOffset += 0.01;
+            const distortionStrength = 0.02 + (targetScale - 1.0) * 0.04;
+            for (let i = 0; i < positions.length; i += 3) {
+                const ox = originalPositions[i];
+                const oy = originalPositions[i + 1];
+                const oz = originalPositions[i + 2];
+                const n = noise(ox, oy, oz, noiseOffset);
+                positions[i]     = ox + ox * n * distortionStrength;
+                positions[i + 1] = oy + oy * n * distortionStrength;
+                positions[i + 2] = oz + oz * n * distortionStrength;
+            }
+            geometry.attributes.position.needsUpdate = true;
+            geometry.computeVertexNormals();
+
+            // Couleurs
+            let hue, lightness, saturation = 0.8;
+            if (isInhaleVisual) {
+                hue = 0.35; 
+                lightness = 0.4 + (progress * 0.45); // Moyen -> Très Lumineux
+            } else {
+                hue = 0.0; 
+                lightness = 0.6 - (progress * 0.45); // Clair -> Foncé
+            }
+            const targetColor = new THREE.Color();
+            targetColor.setHSL(hue, saturation, lightness);
+            material.color.lerp(targetColor, 0.1);
+            pointLight1.color.setHSL(hue, saturation, lightness * 0.8);
+
+            // --- 2. CHRONO (SYNC ACTION) ---
+            if (uiState.showTimer) {
+                if (isInhaleVisual) {
+                    timerEl.textContent = (INHALE_DURATION - phaseTime).toFixed(1) + "s";
+                } else {
+                    timerEl.textContent = (EXHALE_DURATION - phaseTime).toFixed(1) + "s";
+                }
+            }
+
+            // --- 3. TEXTE & SON (DÉCALÉ DE 0.5s) ---
+            const textTimeOffset = t - TEXT_DELAY;
+            const textCycleTime = mod(textTimeOffset, CYCLE_DURATION);
+            const isInhaleText = textCycleTime < INHALE_DURATION;
+            
+            const currentTextState = isInhaleText ? "INHALE" : "EXHALE";
+
+            if (currentTextState !== lastTextTriggerState) {
+                lastTextTriggerState = currentTextState;
+                
+                const textToShow = isInhaleText ? "Inspirez" : "Expirez";
+                
+                if (uiState.showText) {
+                    instructionEl.style.opacity = '0';
+                    instructionEl.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        instructionEl.innerText = textToShow;
+                        instructionEl.style.opacity = '1';
+                        instructionEl.style.transform = 'scale(1)';
+                    }, 400);
+                }
+                
+                // Son joue à chaque changement d'état texte
+                if (textTimeOffset > 0) {
+                    playChime();
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) - 0.5;
+            mouseY = (event.clientY / window.innerHeight) - 0.5;
+        });
+
+        const originalAnimate = animate;
+        animate = function() {
+            if (isRunning) {
+                mainGroup.rotation.x += (mouseY * 0.5 - mainGroup.rotation.x) * 0.05;
+                mainGroup.rotation.y += (mouseX * 0.5 - mainGroup.rotation.y) * 0.05;
+            }
+            originalAnimate();
+        };
+
+        const startBtn = document.getElementById('btn-start');
+        const overlay = document.getElementById('start-overlay');
+        document.getElementById('loader').style.display = 'none';
+
+        startBtn.addEventListener('click', () => {
+            initAudio();
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 800);
+            isRunning = true;
+            clock.start();
+            
+            // Initialiser l'état texte pour éviter un son/click immédiat
+            lastTextTriggerState = "EXHALE"; 
+            
+            if(uiState.showText) {
+                instructionEl.innerText = "Expirez";
+                instructionEl.style.opacity = '1';
+            }
+        });
+
+        animate();
+
+    </script>
+</body>
+</html>
