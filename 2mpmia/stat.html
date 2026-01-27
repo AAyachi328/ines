@@ -3,107 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Statistiques – Immobilier (classes) – Seconde</title>
+  <title>Seconde – Immobilier (classes) – Éditable en ligne</title>
   <style>
     body{font-family:Arial, sans-serif; margin:24px; line-height:1.5; color:#111;}
-    h1{font-size:22px; margin:0 0 10px;}
-    h2{margin-top:18px;}
-    .box{border:1px solid #ccc; border-radius:10px; padding:16px; margin-top:14px; background:#fafafa;}
-    .data{font-family:"Courier New", monospace; background:#fff; border:1px dashed #bbb; padding:10px; border-radius:8px;}
+    h1{font-size:22px; margin:0 0 12px;}
+    h2{margin:18px 0 8px;}
+    .box{border:1px solid #ccc; border-radius:12px; padding:16px; margin-top:14px; background:#fafafa;}
+    .note{font-size:13px; color:#444; margin-bottom:10px;}
+    .editable{outline:none; border-radius:8px;}
+    .data{
+      font-family:"Courier New", monospace;
+      background:#fff; border:1px dashed #bbb; padding:10px; border-radius:10px;
+      min-height:70px;
+    }
     table{border-collapse:collapse; width:100%; margin-top:10px; background:#fff;}
     th, td{border:1px solid #ccc; padding:8px; text-align:center;}
     th{background:#eee;}
-    .excel{background:#e6f3ff; border-left:4px solid #3399ff; padding:10px; margin-top:12px;}
+    td.edit, th.edit{background:#fffef2;}
     .hint{background:#fff4cc; border-left:4px solid #f0b400; padding:10px; margin-top:12px;}
+    .excel{background:#e6f3ff; border-left:4px solid #3399ff; padding:10px; margin-top:12px;}
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin:10px 0 0;
+    }
+    button{
+      border:1px solid #bbb; background:#fff; padding:8px 10px; border-radius:10px;
+      cursor:pointer;
+    }
+    button:hover{background:#f3f3f3;}
+    @media print {
+      .toolbar, .note {display:none;}
+      body{margin:10mm;}
+      .box{background:#fff;}
+      td.edit, th.edit{background:#fff;}
+    }
   </style>
 </head>
 <body>
 
-<h1>Seconde – Statistiques : Immobilier (données groupées en classes)</h1>
-
-<div class="box">
-  <h2>🏠 Exercice – Surfaces d’appartements</h2>
-
-  <p>
-    On a relevé la <strong>surface (en m²)</strong> de <strong>25 appartements</strong> vendus dans un quartier.
-  </p>
-
-  <div class="data">
-    45 ; 50 ; 55 ; 60 ; 45 ; 70 ; 65 ; 50 ; 55 ; 60 ;<br>
-    45 ; 50 ; 55 ; 65 ; 70 ; 60 ; 55 ; 50 ; 45 ; 60 ;<br>
-    65 ; 70 ; 55 ; 50 ; 60
+  <h1 class="editable" contenteditable="true">Seconde – Statistiques : Immobilier (données groupées en classes)</h1>
+  <div class="note">
+    💡 Tout ce qui est sur fond jaune pâle est <strong>éditable</strong> : clique et modifie.  
+    Tu peux aussi imprimer (Ctrl+P) ou exporter en PDF.
   </div>
 
-  <h3>Travail demandé</h3>
-  <ol>
-    <li>Entrer les données dans Excel (une colonne).</li>
-    <li>
-      Regrouper les surfaces en <strong>3 classes</strong> :
-      <ul>
-        <li><strong>Classe 1 :</strong> 40 ≤ S &lt; 55</li>
-        <li><strong>Classe 2 :</strong> 55 ≤ S &lt; 65</li>
-        <li><strong>Classe 3 :</strong> 65 ≤ S ≤ 75</li>
-      </ul>
-    </li>
-    <li>
-      Compléter le <strong>tableau des effectifs</strong> et des <strong>fréquences</strong> (en %).
-    </li>
-    <li>
-      Calculer la <strong>moyenne</strong> et la <strong>médiane</strong> des surfaces (à partir des données brutes).
-    </li>
-    <li>
-      Indiquer le <strong>mode</strong> (valeur la plus fréquente) à partir des données brutes.
-    </li>
-  </ol>
+  <div class="box">
+    <h2 class="editable" contenteditable="true">🏠 Exercice – Surfaces d’appartements</h2>
 
-  <div class="hint">
-    <strong>Attention :</strong> les classes doivent être <em>sans chevauchement</em> : un appartement appartient à une seule classe.
+    <p class="editable" contenteditable="true">
+      On a relevé la <strong>surface (en m²)</strong> de <strong>25 appartements</strong> vendus dans un quartier.
+    </p>
+
+    <h3 class="editable" contenteditable="true">Données brutes</h3>
+    <div class="data editable" contenteditable="true" aria-label="Données brutes">
+45 ; 50 ; 55 ; 60 ; 45 ; 70 ; 65 ; 50 ; 55 ; 60 ;
+45 ; 50 ; 55 ; 65 ; 70 ; 60 ; 55 ; 50 ; 45 ; 60 ;
+65 ; 70 ; 55 ; 50 ; 60
+    </div>
+
+    <h3 class="editable" contenteditable="true">Travail demandé</h3>
+    <ol class="editable" contenteditable="true">
+      <li>Entrer les données dans Excel (une colonne).</li>
+      <li>Regrouper les surfaces en <strong>3 classes</strong>.</li>
+      <li>Compléter le tableau des <strong>effectifs</strong> et des <strong>fréquences</strong> (en %).</li>
+      <li>Calculer la <strong>moyenne</strong> et la <strong>médiane</strong> (à partir des données brutes).</li>
+      <li>Donner le <strong>mode</strong> (valeur la plus fréquente) à partir des données brutes.</li>
+    </ol>
+
+    <div class="hint editable" contenteditable="true">
+      <strong>Attention :</strong> les classes doivent être <em>sans chevauchement</em> : une valeur appartient à une seule classe.
+    </div>
+
+    <h3 class="editable" contenteditable="true">Tableau statistique (classes)</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Classe de surface (m²)</th>
+          <th>Effectif</th>
+          <th>Fréquence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="edit editable" contenteditable="true">40 ≤ S &lt; 55</td>
+          <td class="edit editable" contenteditable="true"></td>
+          <td class="edit editable" contenteditable="true"></td>
+        </tr>
+        <tr>
+          <td class="edit editable" contenteditable="true">55 ≤ S &lt; 65</td>
+          <td class="edit editable" contenteditable="true"></td>
+          <td class="edit editable" contenteditable="true"></td>
+        </tr>
+        <tr>
+          <td class="edit editable" contenteditable="true">65 ≤ S ≤ 75</td>
+          <td class="edit editable" contenteditable="true"></td>
+          <td class="edit editable" contenteditable="true"></td>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <th class="edit editable" contenteditable="true">25</th>
+          <th class="edit editable" contenteditable="true">100 %</th>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="excel editable" contenteditable="true">
+      <strong>Aide Excel :</strong><br>
+      • Effectif d’une classe : utiliser <code>NB.SI.ENS</code><br>
+      Exemple pour 40 ≤ S &lt; 55 : <code>=NB.SI.ENS(A:A;">=40";A:A;"&lt;55")</code><br>
+      • Fréquence : <code>=effectif/25</code> puis format en %<br>
+      • Moyenne : <code>=MOYENNE(A:A)</code> • Médiane : <code>=MEDIANE(A:A)</code> • Mode : <code>=MODE(A:A)</code>
+    </div>
+
+    <div class="toolbar">
+      <button type="button" onclick="window.print()">Imprimer / Export PDF</button>
+      <button type="button" onclick="selectAllEditable()">Sélectionner tout (zones éditables)</button>
+    </div>
   </div>
 
-  <h3>Tableau statistique (classes)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Classe de surface (m²)</th>
-        <th>Effectif</th>
-        <th>Fréquence</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>40 ≤ S &lt; 55</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>55 ≤ S &lt; 65</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>65 ≤ S ≤ 75</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <th>Total</th>
-        <th>25</th>
-        <th>100 %</th>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="excel">
-    <strong>Aide Excel :</strong><br>
-    • Effectif d’une classe : utiliser <code>NB.SI.ENS</code><br>
-    Exemple pour 40 ≤ S &lt; 55 : <code>=NB.SI.ENS(A:A;">=40";A:A;"<55")</code><br><br>
-    • Fréquence : <code>=effectif/25</code> puis format en %<br>
-    • Moyenne : <code>=MOYENNE(A:A)</code><br>
-    • Médiane : <code>=MEDIANE(A:A)</code><br>
-    • Mode : <code>=MODE(A:A)</code>
-  </div>
-
-</div>
+  <script>
+    function selectAllEditable(){
+      const editables = document.querySelectorAll('[contenteditable="true"]');
+      if(!editables.length) return;
+      const range = document.createRange();
+      range.setStart(editables[0], 0);
+      const last = editables[editables.length - 1];
+      range.setEnd(last, last.childNodes.length);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  </script>
 
 </body>
 </html>
