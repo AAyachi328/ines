@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Statistiques – Immobilier (classes) – Seconde</title>
+  <style>
+    body{font-family:Arial, sans-serif; margin:24px; line-height:1.5; color:#111;}
+    h1{font-size:22px; margin:0 0 10px;}
+    h2{margin-top:18px;}
+    .box{border:1px solid #ccc; border-radius:10px; padding:16px; margin-top:14px; background:#fafafa;}
+    .data{font-family:"Courier New", monospace; background:#fff; border:1px dashed #bbb; padding:10px; border-radius:8px;}
+    table{border-collapse:collapse; width:100%; margin-top:10px; background:#fff;}
+    th, td{border:1px solid #ccc; padding:8px; text-align:center;}
+    th{background:#eee;}
+    .excel{background:#e6f3ff; border-left:4px solid #3399ff; padding:10px; margin-top:12px;}
+    .hint{background:#fff4cc; border-left:4px solid #f0b400; padding:10px; margin-top:12px;}
+  </style>
+</head>
+<body>
+
+<h1>Seconde – Statistiques : Immobilier (données groupées en classes)</h1>
+
+<div class="box">
+  <h2>🏠 Exercice – Surfaces d’appartements</h2>
+
+  <p>
+    On a relevé la <strong>surface (en m²)</strong> de <strong>25 appartements</strong> vendus dans un quartier.
+  </p>
+
+  <div class="data">
+    45 ; 50 ; 55 ; 60 ; 45 ; 70 ; 65 ; 50 ; 55 ; 60 ;<br>
+    45 ; 50 ; 55 ; 65 ; 70 ; 60 ; 55 ; 50 ; 45 ; 60 ;<br>
+    65 ; 70 ; 55 ; 50 ; 60
+  </div>
+
+  <h3>Travail demandé</h3>
+  <ol>
+    <li>Entrer les données dans Excel (une colonne).</li>
+    <li>
+      Regrouper les surfaces en <strong>3 classes</strong> :
+      <ul>
+        <li><strong>Classe 1 :</strong> 40 ≤ S &lt; 55</li>
+        <li><strong>Classe 2 :</strong> 55 ≤ S &lt; 65</li>
+        <li><strong>Classe 3 :</strong> 65 ≤ S ≤ 75</li>
+      </ul>
+    </li>
+    <li>
+      Compléter le <strong>tableau des effectifs</strong> et des <strong>fréquences</strong> (en %).
+    </li>
+    <li>
+      Calculer la <strong>moyenne</strong> et la <strong>médiane</strong> des surfaces (à partir des données brutes).
+    </li>
+    <li>
+      Indiquer le <strong>mode</strong> (valeur la plus fréquente) à partir des données brutes.
+    </li>
+  </ol>
+
+  <div class="hint">
+    <strong>Attention :</strong> les classes doivent être <em>sans chevauchement</em> : un appartement appartient à une seule classe.
+  </div>
+
+  <h3>Tableau statistique (classes)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Classe de surface (m²)</th>
+        <th>Effectif</th>
+        <th>Fréquence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>40 ≤ S &lt; 55</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>55 ≤ S &lt; 65</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>65 ≤ S ≤ 75</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>Total</th>
+        <th>25</th>
+        <th>100 %</th>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="excel">
+    <strong>Aide Excel :</strong><br>
+    • Effectif d’une classe : utiliser <code>NB.SI.ENS</code><br>
+    Exemple pour 40 ≤ S &lt; 55 : <code>=NB.SI.ENS(A:A;">=40";A:A;"<55")</code><br><br>
+    • Fréquence : <code>=effectif/25</code> puis format en %<br>
+    • Moyenne : <code>=MOYENNE(A:A)</code><br>
+    • Médiane : <code>=MEDIANE(A:A)</code><br>
+    • Mode : <code>=MODE(A:A)</code>
+  </div>
+
+</div>
+
+</body>
+</html>
