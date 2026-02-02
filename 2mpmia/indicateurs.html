@@ -2,99 +2,263 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <title>Statistiques – Définitions (éditable)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Étendue • Quartiles • Écart-type — Définitions + exemple (éditable)</title>
   <style>
-    body{
-      font-family: Arial, sans-serif;
-      margin: 24px;
-      line-height: 1.6;
-      max-width: 900px;
-    }
-    h1, h2, h3{
-      color: #222;
-    }
-    .box{
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-      background: #fafafa;
-    }
-    .editable{
-      outline: none;
-    }
-    .hint{
-      font-size: 0.9em;
-      color: #555;
-      font-style: italic;
-    }
+    :root{--b:#ddd;--bg:#f7f7f7}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5;margin:24px;max-width:980px}
+    h1{font-size:1.6rem;margin:0 0 12px}
+    h2{font-size:1.2rem;margin:22px 0 8px}
+    h3{margin:0 0 8px}
+    .card{border:1px solid var(--b);border-radius:12px;padding:14px 16px;margin:12px 0}
+    .k{display:inline-block;padding:2px 8px;border-radius:999px;background:#f2f2f2;font-size:.9rem}
+    pre, code{background:var(--bg);border-radius:10px;padding:10px;display:block;overflow:auto}
+    ul{margin:8px 0 0 20px}
+    table{border-collapse:collapse;width:100%;margin-top:10px}
+    th,td{border:1px solid var(--b);padding:8px;text-align:left;vertical-align:top}
+    th{background:#fafafa}
+    .mini{font-size:.95rem;color:#333}
+    .note{font-size:.92rem;color:#444}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width: 820px){ .grid{grid-template-columns:1.2fr .8fr;} }
+    label{display:block;font-weight:600;margin:0 0 6px}
+    input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--b);border-radius:10px;font-size:1rem}
+    .btn{border:1px solid var(--b);background:white;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .err{color:#b00020;font-weight:600}
+    .ok{color:#0a7a0a;font-weight:600}
+    .pill{display:inline-block;padding:2px 10px;border-radius:999px;background:#eef6ff;border:1px solid #cfe6ff;font-size:.9rem}
   </style>
 </head>
-
 <body>
 
-<h1 contenteditable="true" class="editable">
-📊 Étendue – Quartiles – Écart-type
-</h1>
-<p class="hint">✏️ Clique n’importe où pour modifier le texte</p>
+  <h1>📌 Étendue • Quartiles • Écart-type — définitions + intuition + exemple (éditable)</h1>
 
-<div class="box editable" contenteditable="true">
-  <h2>📏 Étendue</h2>
-  <p>
-    L’étendue d’une série statistique est la différence entre la valeur maximale
-    et la valeur minimale.
-  </p>
-  <p>
-    <strong>Formule :</strong><br>
-    Étendue = valeur maximale − valeur minimale
-  </p>
-  <p>
-    L’étendue donne une idée de la dispersion globale de la série,
-    mais ne tient pas compte des valeurs intermédiaires.
-  </p>
-</div>
+  <!-- =======================
+       ✅ ZONE À ÉDITER
+       Modifie seulement ici :
+       - la série de nombres
+       - (optionnel) la méthode des quartiles
+       ======================= -->
 
-<div class="box editable" contenteditable="true">
-  <h2>📊 Quartiles</h2>
-  <p>
-    Les quartiles sont des valeurs qui partagent une série statistique ordonnée
-    en quatre parts.
-  </p>
-  <ul>
-    <li><strong>Premier quartile (Q1)</strong> : 25 % des valeurs sont inférieures ou égales à Q1.</li>
-    <li><strong>Deuxième quartile (Q2)</strong> : 50 % des valeurs sont inférieures ou égales à Q2 (médiane).</li>
-    <li><strong>Troisième quartile (Q3)</strong> : 75 % des valeurs sont inférieures ou égales à Q3.</li>
-  </ul>
-  <p>
-    Les quartiles permettent de décrire la répartition des données
-    et sont utilisés pour construire une boîte à moustaches.
-  </p>
-</div>
+  <div class="card">
+    <div class="grid">
+      <div>
+        <span class="k">Données à éditer</span>
+        <p class="mini">
+          Écris ta série (nombres séparés par des virgules ou des espaces).
+          Exemple : <code style="display:inline;padding:2px 6px">2, 4, 5, 7, 9, 12, 15</code>
+        </p>
 
-<div class="box editable" contenteditable="true">
-  <h2>📐 Écart-type</h2>
-  <p>
-    L’écart-type est un indicateur de dispersion qui mesure l’éloignement
-    des valeurs par rapport à la moyenne.
-  </p>
-  <ul>
-    <li>Un écart-type faible signifie que les valeurs sont proches de la moyenne.</li>
-    <li>Un écart-type élevé signifie que les valeurs sont très dispersées.</li>
-  </ul>
-  <p>
-    Contrairement à l’étendue, l’écart-type prend en compte toutes les valeurs
-    de la série.
-  </p>
-</div>
+        <label for="dataInput">Série :</label>
+        <input id="dataInput" type="text" value="2, 4, 5, 7, 9, 12, 15" />
 
-<div class="box editable" contenteditable="true">
-  <h2>🧠 Résumé rapide</h2>
-  <ul>
-    <li><strong>Étendue</strong> : max − min</li>
-    <li><strong>Quartiles</strong> : répartition en 4 groupes (25 %, 50 %, 75 %)</li>
-    <li><strong>Écart-type</strong> : dispersion autour de la moyenne</li>
-  </ul>
-</div>
+        <p class="mini">
+          Méthode de quartiles (courante en collège/lycée en France) :
+          <span class="pill">Q1 au rang ⌈n/4⌉</span> et <span class="pill">Q3 au rang ⌈3n/4⌉</span>.
+        </p>
+
+        <button class="btn" id="btnUpdate">Mettre à jour</button>
+        <span id="status" class="mini"></span>
+      </div>
+
+      <div>
+        <span class="k">Rappel ultra-court</span>
+        <ul class="mini">
+          <li><strong>Étendue</strong> : max − min</li>
+          <li><strong>Quartiles</strong> : 25% (Q1), 50% (médiane), 75% (Q3)</li>
+          <li><strong>Écart-type</strong> : dispersion autour de la moyenne</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEFINITIONS -->
+  <h2>1) Définitions (à apprendre)</h2>
+
+  <div class="card">
+    <h3>📏 Étendue</h3>
+    <p><strong>Définition :</strong> l’étendue d’une série statistique est la différence entre la valeur maximale et la valeur minimale.</p>
+    <pre>Étendue = max − min</pre>
+    <p class="note">➡️ Donne “la largeur totale” des valeurs, sans décrire la répartition interne.</p>
+  </div>
+
+  <div class="card">
+    <h3>📊 Quartiles</h3>
+    <p><strong>Définition :</strong> les quartiles découpent une série ordonnée en 4 parts.</p>
+    <ul>
+      <li><strong>Q1</strong> : valeur en dessous de laquelle se trouvent <strong>au moins 25%</strong> des données.</li>
+      <li><strong>Q2</strong> (= médiane) : valeur en dessous de laquelle se trouvent <strong>50%</strong> des données.</li>
+      <li><strong>Q3</strong> : valeur en dessous de laquelle se trouvent <strong>au moins 75%</strong> des données.</li>
+    </ul>
+    <p class="note">➡️ Sert à décrire la <strong>répartition</strong> et à construire une <strong>boîte à moustaches</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h3>📐 Écart-type</h3>
+    <p><strong>Définition intuitive :</strong> l’écart-type mesure l’écart “typique” des valeurs par rapport à la moyenne.</p>
+    <ul>
+      <li><strong>Petit</strong> écart-type → valeurs proches de la moyenne.</li>
+      <li><strong>Grand</strong> écart-type → valeurs très dispersées.</li>
+    </ul>
+    <p class="note">➡️ Contrairement à l’étendue, l’écart-type tient compte de <strong>toutes</strong> les valeurs.</p>
+  </div>
+
+  <!-- EXEMPLE AUTO -->
+  <h2>2) Exemple (calculé automatiquement)</h2>
+
+  <div class="card">
+    <p><strong>Série (ordonnée) :</strong></p>
+    <pre id="sortedSeries">—</pre>
+
+    <h4>✅ Étendue</h4>
+    <pre id="rangeBlock">—</pre>
+
+    <h4>✅ Quartiles (rangs ⌈n/4⌉ et ⌈3n/4⌉)</h4>
+    <div id="quartileBlock" class="mini">—</div>
+
+    <h4>✅ Moyenne & écart-type</h4>
+    <pre id="sdBlock">—</pre>
+    <p class="note">
+      Remarque : ici on affiche l’écart-type “population” (division par n). En cours, parfois on utilise une autre convention selon le niveau.
+    </p>
+  </div>
+
+  <!-- COMPARAISON -->
+  <h2>3) Intuition (table)</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Indicateur</th>
+          <th>Question à se poser</th>
+          <th>Image mentale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Étendue</strong></td>
+          <td>“Entre le plus petit et le plus grand, ça va jusqu’où ?”</td>
+          <td>La largeur totale</td>
+        </tr>
+        <tr>
+          <td><strong>Quartiles</strong></td>
+          <td>“Où se trouvent 25%, 50%, 75% des valeurs ?”</td>
+          <td>On coupe en 4 zones</td>
+        </tr>
+        <tr>
+          <td><strong>Écart-type</strong></td>
+          <td>“Les valeurs sont-elles proches de la moyenne ?”</td>
+          <td>Serrées vs éparpillées</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // ===== Helpers =====
+    function parseNumbers(str){
+      // accepte virgules, espaces, points-virgules
+      const cleaned = str
+        .replace(/\s+/g, " ")
+        .replace(/;/g, ",")
+        .trim();
+
+      if(!cleaned) return [];
+
+      const parts = cleaned.split(/[,\s]+/).filter(Boolean);
+      const nums = parts.map(p => Number(String(p).replace(",", ".")));
+      if(nums.some(n => Number.isNaN(n))) return null;
+      return nums;
+    }
+
+    function ceilDiv(a,b){ return Math.ceil(a/b); }
+
+    function formatList(arr){
+      return arr.map(x => Number.isInteger(x) ? String(x) : String(+x.toFixed(4))).join(" ; ");
+    }
+
+    function mean(arr){
+      return arr.reduce((s,x)=>s+x,0)/arr.length;
+    }
+
+    // Écart-type "population" (division par n)
+    function stdDevPopulation(arr){
+      const m = mean(arr);
+      const v = arr.reduce((s,x)=>s+(x-m)*(x-m),0)/arr.length;
+      return Math.sqrt(v);
+    }
+
+    // Quartiles au sens "rangs ⌈n/4⌉, ⌈3n/4⌉" sur série ordonnée
+    function quartilesFR(sorted){
+      const n = sorted.length;
+      const r1 = ceilDiv(n,4);
+      const r3 = ceilDiv(3*n,4);
+      const q1 = sorted[r1-1];
+      const q3 = sorted[r3-1];
+
+      let median;
+      if(n%2===1){
+        median = sorted[(n-1)/2];
+      }else{
+        median = (sorted[n/2 - 1] + sorted[n/2]) / 2;
+      }
+
+      return {n, r1, r3, q1, q3, median};
+    }
+
+    function update(){
+      const input = document.getElementById("dataInput").value;
+      const status = document.getElementById("status");
+
+      const nums = parseNumbers(input);
+
+      if(nums === null){
+        status.className = "mini err";
+        status.textContent = "❌ Erreur : vérifie qu’il n’y a que des nombres.";
+        return;
+      }
+
+      if(nums.length < 2){
+        status.className = "mini err";
+        status.textContent = "❌ Mets au moins 2 valeurs.";
+        return;
+      }
+
+      const sorted = [...nums].sort((a,b)=>a-b);
+      const min = sorted[0];
+      const max = sorted[sorted.length-1];
+      const range = max - min;
+
+      const q = quartilesFR(sorted);
+      const m = mean(sorted);
+      const sd = stdDevPopulation(sorted);
+
+      // Affichages
+      document.getElementById("sortedSeries").textContent = formatList(sorted);
+
+      document.getElementById("rangeBlock").textContent =
+        `min = ${min}\nmax = ${max}\nÉtendue = max − min = ${max} − ${min} = ${Number.isInteger(range) ? range : +range.toFixed(4)}`;
+
+      document.getElementById("quartileBlock").innerHTML =
+        `<ul>
+          <li>Effectif n = <strong>${q.n}</strong></li>
+          <li>Rang de Q1 : ⌈n/4⌉ = ⌈${q.n}/4⌉ = <strong>${q.r1}</strong> → Q1 = <strong>${q.q1}</strong></li>
+          <li>Médiane (Q2) : <strong>${q.median}</strong></li>
+          <li>Rang de Q3 : ⌈3n/4⌉ = ⌈${3*q.n}/4⌉ = <strong>${q.r3}</strong> → Q3 = <strong>${q.q3}</strong></li>
+        </ul>`;
+
+      document.getElementById("sdBlock").textContent =
+        `Moyenne ≈ ${+m.toFixed(4)}\nÉcart-type (population) ≈ ${+sd.toFixed(4)}\n(Plus l’écart-type est grand, plus les valeurs sont dispersées.)`;
+
+      status.className = "mini ok";
+      status.textContent = "✅ Mis à jour.";
+    }
+
+    document.getElementById("btnUpdate").addEventListener("click", update);
+    // Mise à jour automatique au chargement
+    update();
+  </script>
 
 </body>
 </html>
