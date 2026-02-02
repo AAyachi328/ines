@@ -2,135 +2,99 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Étendue • Quartiles • Écart-type — Définitions + intuition + exemple</title>
+  <title>Statistiques – Définitions (éditable)</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5;margin:24px;max-width:980px}
-    h1{font-size:1.6rem;margin:0 0 12px}
-    h2{font-size:1.2rem;margin:22px 0 8px}
-    .card{border:1px solid #ddd;border-radius:12px;padding:14px 16px;margin:12px 0}
-    .k{display:inline-block;padding:2px 8px;border-radius:999px;background:#f2f2f2;font-size:.9rem}
-    code, pre{background:#f7f7f7;border-radius:10px;padding:10px;display:block;overflow:auto}
-    ul{margin:8px 0 0 20px}
-    table{border-collapse:collapse;width:100%;margin-top:10px}
-    th,td{border:1px solid #ddd;padding:8px;text-align:left}
-    th{background:#fafafa}
-    .mini{font-size:.95rem;color:#333}
-    .note{font-size:.92rem;color:#444}
+    body{
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      line-height: 1.6;
+      max-width: 900px;
+    }
+    h1, h2, h3{
+      color: #222;
+    }
+    .box{
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #fafafa;
+    }
+    .editable{
+      outline: none;
+    }
+    .hint{
+      font-size: 0.9em;
+      color: #555;
+      font-style: italic;
+    }
   </style>
 </head>
+
 <body>
 
-  <h1>📌 Étendue • Quartiles • Écart-type — définitions + intuition + exemple concret</h1>
+<h1 contenteditable="true" class="editable">
+📊 Étendue – Quartiles – Écart-type
+</h1>
+<p class="hint">✏️ Clique n’importe où pour modifier le texte</p>
 
-  <div class="card">
-    <div class="mini">
-      <span class="k">Objectif</span>
-      Comprendre ce que mesure chaque indicateur (dispersion / répartition) + voir un exemple chiffré.
-    </div>
-  </div>
+<div class="box editable" contenteditable="true">
+  <h2>📏 Étendue</h2>
+  <p>
+    L’étendue d’une série statistique est la différence entre la valeur maximale
+    et la valeur minimale.
+  </p>
+  <p>
+    <strong>Formule :</strong><br>
+    Étendue = valeur maximale − valeur minimale
+  </p>
+  <p>
+    L’étendue donne une idée de la dispersion globale de la série,
+    mais ne tient pas compte des valeurs intermédiaires.
+  </p>
+</div>
 
-  <!-- DEFINITIONS -->
-  <h2>1) Définitions (à apprendre)</h2>
+<div class="box editable" contenteditable="true">
+  <h2>📊 Quartiles</h2>
+  <p>
+    Les quartiles sont des valeurs qui partagent une série statistique ordonnée
+    en quatre parts.
+  </p>
+  <ul>
+    <li><strong>Premier quartile (Q1)</strong> : 25 % des valeurs sont inférieures ou égales à Q1.</li>
+    <li><strong>Deuxième quartile (Q2)</strong> : 50 % des valeurs sont inférieures ou égales à Q2 (médiane).</li>
+    <li><strong>Troisième quartile (Q3)</strong> : 75 % des valeurs sont inférieures ou égales à Q3.</li>
+  </ul>
+  <p>
+    Les quartiles permettent de décrire la répartition des données
+    et sont utilisés pour construire une boîte à moustaches.
+  </p>
+</div>
 
-  <div class="card">
-    <h3>📏 Étendue</h3>
-    <p><strong>Définition :</strong> l’étendue d’une série statistique est la différence entre la valeur maximale et la valeur minimale.</p>
-    <pre>Étendue = max − min</pre>
-    <p class="note">➡️ Ça donne “la largeur totale” des valeurs, mais ne regarde pas comment les valeurs sont réparties entre min et max.</p>
-  </div>
+<div class="box editable" contenteditable="true">
+  <h2>📐 Écart-type</h2>
+  <p>
+    L’écart-type est un indicateur de dispersion qui mesure l’éloignement
+    des valeurs par rapport à la moyenne.
+  </p>
+  <ul>
+    <li>Un écart-type faible signifie que les valeurs sont proches de la moyenne.</li>
+    <li>Un écart-type élevé signifie que les valeurs sont très dispersées.</li>
+  </ul>
+  <p>
+    Contrairement à l’étendue, l’écart-type prend en compte toutes les valeurs
+    de la série.
+  </p>
+</div>
 
-  <div class="card">
-    <h3>📊 Quartiles</h3>
-    <p><strong>Définition :</strong> les quartiles découpent une série ordonnée en 4 parts.</p>
-    <ul>
-      <li><strong>Q1</strong> : valeur en dessous de laquelle se trouvent <strong>au moins 25%</strong> des données.</li>
-      <li><strong>Q2</strong> (= médiane) : valeur en dessous de laquelle se trouvent <strong>50%</strong> des données.</li>
-      <li><strong>Q3</strong> : valeur en dessous de laquelle se trouvent <strong>au moins 75%</strong> des données.</li>
-    </ul>
-    <p class="note">➡️ Ils servent à décrire la <strong>répartition</strong> et à faire une <strong>boîte à moustaches</strong>.</p>
-  </div>
-
-  <div class="card">
-    <h3>📐 Écart-type</h3>
-    <p><strong>Définition intuitive :</strong> l’écart-type mesure si les valeurs sont plutôt <strong>regroupées</strong> près de la moyenne ou <strong>éparpillées</strong>.</p>
-    <ul>
-      <li><strong>Petit</strong> écart-type → valeurs proches de la moyenne.</li>
-      <li><strong>Grand</strong> écart-type → valeurs très dispersées.</li>
-    </ul>
-    <p class="note">
-      ➡️ Contrairement à l’étendue, l’écart-type utilise <strong>toutes</strong> les valeurs.
-      <br/>
-      (Formule exacte souvent vue plus tard : racine de la moyenne des carrés des écarts à la moyenne.)
-    </p>
-  </div>
-
-  <!-- VERSION ULTRA-COURTE -->
-  <h2>2) Version ultra-courte (révision express)</h2>
-  <div class="card">
-    <ul>
-      <li><strong>Étendue</strong> : <em>max − min</em> (largeur totale).</li>
-      <li><strong>Quartiles</strong> : 25% (Q1), 50% (médiane), 75% (Q3).</li>
-      <li><strong>Écart-type</strong> : dispersion autour de la moyenne (regroupé vs éparpillé).</li>
-    </ul>
-  </div>
-
-  <!-- EXEMPLE CONCRET -->
-  <h2>3) Exemple concret (même série pour tout)</h2>
-  <div class="card">
-    <p><strong>Série (ordonnée) :</strong></p>
-    <pre>2 ; 4 ; 5 ; 7 ; 9 ; 12 ; 15</pre>
-
-    <h4>✅ Étendue</h4>
-    <p>min = 2, max = 15</p>
-    <pre>Étendue = 15 − 2 = 13</pre>
-
-    <h4>✅ Quartiles (définition collège/lycée : rangs ⌈n/4⌉ et ⌈3n/4⌉)</h4>
-    <p>n = 7</p>
-    <ul>
-      <li>Rang de Q1 : ⌈7/4⌉ = ⌈1,75⌉ = 2 → <strong>Q1 = 4</strong></li>
-      <li>Médiane (Q2) : valeur centrale (rang 4) → <strong>7</strong></li>
-      <li>Rang de Q3 : ⌈3×7/4⌉ = ⌈5,25⌉ = 6 → <strong>Q3 = 12</strong></li>
-    </ul>
-
-    <h4>✅ Écart-type (intuition sur cette série)</h4>
-    <p class="note">
-      La moyenne est proche de 7–8. Les valeurs ne sont pas toutes collées à la moyenne :
-      on a aussi 2 et 15 qui sont loin → l’écart-type est <strong>modéré</strong> (ni très petit, ni énorme).
-    </p>
-  </div>
-
-  <!-- COMPARAISON INTUITIVE -->
-  <h2>4) Intuition “images mentales”</h2>
-  <div class="card">
-    <table>
-      <thead>
-        <tr>
-          <th>Indicateur</th>
-          <th>Question à se poser</th>
-          <th>Image mentale</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Étendue</strong></td>
-          <td>“Entre le plus petit et le plus grand, ça va jusqu’où ?”</td>
-          <td>La largeur totale de l’intervalle</td>
-        </tr>
-        <tr>
-          <td><strong>Quartiles</strong></td>
-          <td>“Où se trouvent les 25%, 50%, 75% des valeurs ?”</td>
-          <td>On coupe la série en 4 zones</td>
-        </tr>
-        <tr>
-          <td><strong>Écart-type</strong></td>
-          <td>“Les valeurs sont-elles proches de la moyenne ?”</td>
-          <td>Valeurs serrées vs valeurs éparpillées</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+<div class="box editable" contenteditable="true">
+  <h2>🧠 Résumé rapide</h2>
+  <ul>
+    <li><strong>Étendue</strong> : max − min</li>
+    <li><strong>Quartiles</strong> : répartition en 4 groupes (25 %, 50 %, 75 %)</li>
+    <li><strong>Écart-type</strong> : dispersion autour de la moyenne</li>
+  </ul>
+</div>
 
 </body>
 </html>
