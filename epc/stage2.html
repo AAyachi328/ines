@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire de stage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 20px;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .radio-group label {
+            font-weight: normal;
+            display: inline-block;
+            margin-right: 15px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <h1>Questionnaire de retour de stage</h1>
+
+    <h2>1. Informations générales</h2>
+
+    <label>Nom et prénom</label>
+    <input type="text" name="nom">
+
+    <label>Classe / Formation</label>
+    <input type="text" name="classe">
+
+    <label>Nom de l’entreprise</label>
+    <input type="text" name="entreprise">
+
+    <label>Secteur d’activité</label>
+    <input type="text" name="secteur">
+
+    <label>Durée du stage</label>
+    <input type="text" name="duree">
+
+    <h2>2. Accueil et intégration</h2>
+
+    <label>Comment s’est passé votre accueil dans l’entreprise ?</label>
+    <textarea rows="4"></textarea>
+
+    <label>Avez-vous été bien encadré(e) pendant votre stage ?</label>
+    <div class="radio-group">
+        <label><input type="radio" name="encadrement" value="oui"> Oui</label>
+        <label><input type="radio" name="encadrement" value="plutot_oui"> Plutôt oui</label>
+        <label><input type="radio" name="encadrement" value="plutot_non"> Plutôt non</label>
+        <label><input type="radio" name="encadrement" value="non"> Non</label>
+    </div>
+
+    <h2>3. Activités réalisées</h2>
+
+    <label>Quelles tâches ou missions avez-vous réalisées ?</label>
+    <textarea rows="5"></textarea>
+
+    <label>Ces activités correspondaient-elles à votre formation ?</label>
+    <select>
+        <option>Oui totalement</option>
+        <option>Oui en partie</option>
+        <option>Peu</option>
+        <option>Pas du tout</option>
+    </select>
+
+    <h2>4. Compétences et apprentissages</h2>
+
+    <label>Quelles compétences avez-vous développées ?</label>
+    <textarea rows="4"></textarea>
+
+    <label>Avez-vous appris de nouvelles choses ? Si oui, lesquelles ?</label>
+    <textarea rows="4"></textarea>
+
+    <h2>5. Conditions de travail</h2>
+
+    <label>Les conditions de travail étaient-elles satisfaisantes ?</label>
+    <select>
+        <option>Très satisfaisantes</option>
+        <option>Satisfaisantes</option>
+        <option>Peu satisfaisantes</option>
+        <option>Insatisfaisantes</option>
+    </select>
+
+    <label>Commentaires sur l’ambiance, les horaires, le matériel, la sécurité…</label>
+    <textarea rows="4"></textarea>
+
+    <h2>6. Bilan personnel</h2>
+
+    <label>Qu’avez-vous le plus apprécié durant ce stage ?</label>
+    <textarea rows="4"></textarea>
+
+    <label>Qu’avez-vous le moins apprécié ?</label>
+    <textarea rows="4"></textarea>
+
+    <label>Recommanderiez-vous cette entreprise à d’autres élèves ? Pourquoi ?</label>
+    <textarea rows="4"></textarea>
+
+    <label>Ce stage vous a-t-il aidé à mieux définir votre projet professionnel ?</label>
+    <select>
+        <option>Oui</option>
+        <option>Un peu</option>
+        <option>Non</option>
+    </select>
+
+    <button type="submit">Envoyer le questionnaire</button>
+</form>
+
+</body>
+</html>
