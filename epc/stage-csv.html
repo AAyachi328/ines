@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire de retour de stage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 20px;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .radio-group label {
+            font-weight: normal;
+            display: inline-block;
+            margin-right: 15px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .primary { background-color: #007BFF; color: white; }
+        .danger { background-color: #dc3545; color: white; }
+        .success { background-color: #28a745; color: white; }
+    </style>
+</head>
+<body>
+
+<form id="questionnaire">
+    <h1>Questionnaire de retour de stage</h1>
+
+    <h2>1. Informations générales</h2>
+
+    <label>Nom et prénom</label>
+    <input type="text" name="nom">
+
+    <label>Classe</label>
+    <input type="text" name="classe">
+
+    <label>Entreprise</label>
+    <input type="text" name="entreprise">
+
+    <label>Secteur d’activité</label>
+    <input type="text" name="secteur">
+
+    <label>Durée du stage</label>
+    <input type="text" name="duree">
+
+    <h2>2. Accueil et intégration</h2>
+
+    <label>Comment s’est passé l’accueil ?</label>
+    <textarea name="accueil" rows="4"></textarea>
+
+    <label>Encadrement</label>
+    <div class="radio-group">
+        <label><input type="radio" name="encadrement" value="Oui"> Oui</label>
+        <label><input type="radio" name="encadrement" value="Plutôt oui"> Plutôt oui</label>
+        <label><input type="radio" name="encadrement" value="Plutôt non"> Plutôt non</label>
+        <label><input type="radio" name="encadrement" value="Non"> Non</label>
+    </div>
+
+    <h2>3. Activités</h2>
+
+    <label>Missions réalisées</label>
+    <textarea name="missions" rows="4"></textarea>
+
+    <label>Correspondance avec la formation</label>
+    <select name="correspondance">
+        <option value="">-- Choisir --</option>
+        <option>Oui totalement</option>
+        <option>Oui en partie</option>
+        <option>Peu</option>
+        <option>Pas du tout</option>
+    </select>
+
+    <h2>4. Bilan</h2>
+
+    <label>Compétences développées</label>
+    <textarea name="competences" rows="4"></textarea>
+
+    <label>Ce que vous avez le plus apprécié</label>
+    <textarea name="plus" rows="3"></textarea>
+
+    <label>Ce que vous avez le moins apprécié</label>
+    <textarea name="moins" rows="3"></textarea>
+
+    <label>Impact sur votre orientation</label>
+    <select name="orientation">
+        <option value="">-- Choisir --</option>
+        <option>Oui</option>
+        <option>Un peu</option>
+        <option>Non</option>
+    </select>
+
+    <button type="button" class="success" id="exportCsv">Exporter en CSV</button>
+    <button type="button" class="danger" id="reset">Réinitialiser</button>
+</form>
+
+<script>
+    const form = document.getElementById("questionnaire");
+    const STORAGE_KEY = "questionnaire_stage";
+
+    // Charger les données
+    window.addEventListener("load", () => {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!data) return;
+
+        for (let el of form.elements) {
+            if (el.name && data[el.name] !== undefined) {
+                if (el.type === "radio") {
+                    el.checked = el.value === data[el.name];
+                } else {
+                    el.value = data[el.name];
+                }
+            }
+        }
+    });
+
+    // Sauvegarde automatique
+    form.addEventListener("input", () => {
+        const data = {};
+        for (let el of form.elements) {
+            if (!el.name) continue;
+            if (el.type === "radio") {
+                if (el.checked) data[el.name] = el.value;
+            } else {
+                data[el.name] = el.value;
+            }
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    });
+
+    // Export CSV
+    document.getElementById("exportCsv").addEventListener("click", () => {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!data) {
+            alert("Aucune donnée à exporter.");
+            return;
+        }
+
+        const headers = Object.keys(data);
+        const values = headers.map(h =>
+            `"${String(data[h]).replace(/"/g, '""')}"`
+        );
+
+        const csv = headers.join(";") + "\n" + values.join(";");
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "questionnaire_stage.csv";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    });
+
+    // Reset
+    document.getElementById("reset").addEventListener("click", () => {
+        if (confirm("Supprimer toutes les réponses enregistrées ?")) {
+            localStorage.removeItem(STORAGE_KEY);
+            form.reset();
+        }
+    });
+</script>
+
+</body>
+</html>
