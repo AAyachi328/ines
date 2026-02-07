@@ -4,226 +4,390 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Répartition aléatoire en groupes</title>
+
   <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { max-width: 900px; margin: 24px auto; padding: 0 16px; }
-    h1 { margin: 0 0 16px; font-size: 22px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin: 12px 0; }
-    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-    .inputs { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 10px; }
-    label { font-size: 13px; color: #333; display: block; margin-bottom: 4px; }
-    input[type="text"], select {
-      width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 10px;
-      font-size: 14px;
+    :root{
+      --main:#4f46e5;
+      --bg:#f5f7ff;
+      --card:#ffffff;
+      --muted:#64748b;
+      --danger:#ef4444;
+      --ring: rgba(79,70,229,.25);
     }
-    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
-    button {
-      border: 0; border-radius: 10px; padding: 10px 14px; font-size: 14px;
-      cursor: pointer;
+    *{ box-sizing:border-box; }
+    body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      margin:0;
+      padding:16px;
+      color:#111;
     }
-    button.primary { background: #111; color: #fff; }
-    button.secondary { background: #eee; }
-    button:disabled { opacity: .5; cursor: not-allowed; }
-    .hint { font-size: 13px; color: #555; margin-top: 8px; }
-    .error { color: #b00020; font-size: 13px; margin-top: 8px; }
-    .groups { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 12px; }
-    @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } .inputs { grid-template-columns: 1fr; } }
-    .group {
-      border: 1px solid #ddd; border-radius: 12px; padding: 12px;
-      background: #fafafa;
+    .wrap{ max-width:980px; margin:0 auto; }
+    h1{
+      text-align:center;
+      color:var(--main);
+      margin:8px 0 16px;
+      font-size:22px;
     }
-    .group h3 { margin: 0 0 8px; font-size: 16px; }
-    ul { margin: 0; padding-left: 18px; }
-    .meta { font-size: 12px; color: #666; margin-top: 6px; }
-    .footer { font-size: 12px; color: #666; margin-top: 16px; }
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+
+    /* top controls */
+    .top{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .control{
+      min-width: 180px;
+      flex: 1 1 200px;
+    }
+    label{
+      font-size:12px;
+      font-weight:700;
+      color:#1f2937;
+      display:block;
+      margin-bottom:6px;
+    }
+    input, select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid #d7dbe7;
+      font-size:15px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus, select:focus{
+      border-color: var(--main);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      flex: 1 1 260px;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      color:#fff;
+      flex: 1 1 120px; /* mobile: boutons "larges" */
+      min-width:120px;
+      transition: transform .04s ease, opacity .2s ease;
+    }
+    button:active{ transform: translateY(1px); }
+    .primary{ background:var(--main); }
+    .secondary{ background:var(--muted); }
+    .danger{ background:var(--danger); }
+    button:hover{ opacity:.92; }
+
+    .hint{
+      font-size:12px;
+      color:#6b7280;
+      margin-top:8px;
+    }
+    .error{
+      margin-top:10px;
+      color:var(--danger);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    /* inputs grid */
+    .inputs{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+    @media (max-width:640px){
+      body{ padding:12px; }
+      .inputs{ grid-template-columns: 1fr; }
+      .btns{ justify-content:stretch; }
+      button{ flex: 1 1 100%; min-width: 0; }
+      h1{ font-size:20px; }
+    }
+
+    /* results */
+    .resultsTop{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .resultsTop h2{
+      margin:0;
+      font-size:16px;
+      color:#111;
+    }
+    .meta{
+      font-size:12px;
+      color:#6b7280;
+      font-weight:600;
+    }
+    .groups{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width:640px){
+      .groups{ grid-template-columns: 1fr; }
+    }
+    .group{
+      border-radius:16px;
+      padding:12px 12px 10px;
+      background: #eef2ff;
+      border: 1px solid #dbe2ff;
+    }
+    .group h3{
+      margin:0 0 8px;
+      color:var(--main);
+      font-size:15px;
+    }
+    ul{ margin:0; padding-left:18px; }
+    li{ margin:3px 0; }
   </style>
 </head>
+
 <body>
-  <h1>Répartition aléatoire en groupes</h1>
+  <div class="wrap">
+    <h1>🎲 Répartition en groupes</h1>
 
-  <div class="card">
-    <div class="row" style="justify-content: space-between;">
-      <div style="min-width:240px; flex:1;">
-        <label for="nbGroupes">Nombre de groupes (1 à 4)</label>
-        <select id="nbGroupes">
-          <option value="1">1 groupe</option>
-          <option value="2" selected>2 groupes</option>
-          <option value="3">3 groupes</option>
-          <option value="4">4 groupes</option>
-        </select>
-        <div class="hint">Entre 1 et 8 prénoms (vides ignorés).</div>
-      </div>
+    <div class="card">
+      <div class="top">
+        <div class="control">
+          <label for="nbGroupes">Nombre de groupes</label>
+          <select id="nbGroupes">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          <div class="hint">Jusqu’à 8 prénoms • sauvegarde auto</div>
+        </div>
 
-      <div class="btns">
-        <button class="primary" id="btnTirer">Tirer au sort</button>
-        <button class="secondary" id="btnRetirer">Retirer vides</button>
-        <button class="secondary" id="btnReset">Réinitialiser</button>
+        <div class="btns">
+          <button class="primary" id="tirer">Tirer au sort</button>
+          <button class="secondary" id="remelanger" disabled>Re-mélanger</button>
+          <button class="secondary" id="nettoyer">Nettoyer</button>
+          <button class="danger" id="reset">Reset</button>
+        </div>
       </div>
+      <div class="error" id="error"></div>
+    </div>
+
+    <div class="card">
+      <div class="inputs" id="inputs"></div>
+    </div>
+
+    <div class="card" id="resultat" style="display:none;">
+      <div class="resultsTop">
+        <h2>Résultat</h2>
+        <div class="meta" id="meta"></div>
+      </div>
+      <div class="groups" id="groups"></div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="inputs" id="inputs"></div>
-    <div class="error" id="error" style="display:none;"></div>
-  </div>
+<script>
+  const MAX = 8;
+  const LS_KEY_NAMES = "names_v1";
+  const LS_KEY_K = "nbGroupes_v1";
 
-  <div class="card" id="resultCard" style="display:none;">
-    <div class="row" style="justify-content: space-between; align-items: baseline;">
-      <h2 style="margin:0; font-size:18px;">Résultat</h2>
-      <div class="meta" id="meta"></div>
-    </div>
-    <div class="groups" id="groups"></div>
-  </div>
+  const inputsDiv = document.getElementById("inputs");
+  const nbGroupesEl = document.getElementById("nbGroupes");
+  const errorEl = document.getElementById("error");
+  const resultatEl = document.getElementById("resultat");
+  const groupsDiv = document.getElementById("groups");
+  const metaEl = document.getElementById("meta");
+  const btnRemelanger = document.getElementById("remelanger");
 
-  <div class="footer">Astuce : tu peux relancer “Tirer au sort” autant de fois que tu veux.</div>
+  let lastNames = [];
+  let lastK = 2;
+  let hasResult = false;
 
-  <script>
-    const MAX = 8;
-
-    const inputsWrap = document.getElementById('inputs');
-    const nbGroupesEl = document.getElementById('nbGroupes');
-    const btnTirer = document.getElementById('btnTirer');
-    const btnRetirer = document.getElementById('btnRetirer');
-    const btnReset = document.getElementById('btnReset');
-    const errorEl = document.getElementById('error');
-    const resultCard = document.getElementById('resultCard');
-    const groupsEl = document.getElementById('groups');
-    const metaEl = document.getElementById('meta');
-
-    function makeInputs() {
-      inputsWrap.innerHTML = '';
-      for (let i = 0; i < MAX; i++) {
-        const div = document.createElement('div');
-        const label = document.createElement('label');
-        label.textContent = `Prénom ${i + 1}`;
-        label.setAttribute('for', `name_${i}`);
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = `name_${i}`;
-        input.placeholder = 'Ex: Alex';
-        input.autocomplete = 'off';
-        div.appendChild(label);
-        div.appendChild(input);
-        inputsWrap.appendChild(div);
-      }
+  function loadNames() {
+    try {
+      const raw = localStorage.getItem(LS_KEY_NAMES);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr.slice(0, MAX).map(x => ("" + x)) : [];
+    } catch {
+      return [];
     }
+  }
 
-    function showError(msg) {
-      if (!msg) {
-        errorEl.style.display = 'none';
-        errorEl.textContent = '';
-        return;
-      }
-      errorEl.style.display = 'block';
-      errorEl.textContent = msg;
-    }
+  function saveNames(arr) {
+    localStorage.setItem(LS_KEY_NAMES, JSON.stringify(arr.slice(0, MAX)));
+  }
 
-    function getNames() {
-      const names = [];
-      for (let i = 0; i < MAX; i++) {
-        const v = document.getElementById(`name_${i}`).value.trim();
-        if (v) names.push(v);
-      }
-      return names;
-    }
+  function loadK() {
+    const k = parseInt(localStorage.getItem(LS_KEY_K) || "2", 10);
+    return (k >= 1 && k <= 4) ? k : 2;
+  }
 
-    // Fisher-Yates shuffle
-    function shuffle(arr) {
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
+  function saveK(k) {
+    localStorage.setItem(LS_KEY_K, String(k));
+  }
 
-    // Répartition équilibrée (différence max 1)
-    function splitIntoGroups(names, k) {
-      const shuffled = shuffle(names);
-      const groups = Array.from({ length: k }, () => []);
-      for (let i = 0; i < shuffled.length; i++) {
-        groups[i % k].push(shuffled[i]);
-      }
-      return groups;
-    }
+  function normalizeNames(arr) {
+    return arr.map(v => (v || "").trim()).filter(Boolean).slice(0, MAX);
+  }
 
-    function renderGroups(groups) {
-      groupsEl.innerHTML = '';
-      groups.forEach((g, idx) => {
-        const card = document.createElement('div');
-        card.className = 'group';
-        const h = document.createElement('h3');
-        h.textContent = `Groupe ${idx + 1}`;
-        const ul = document.createElement('ul');
-        if (g.length === 0) {
-          const li = document.createElement('li');
-          li.textContent = '(vide)';
-          ul.appendChild(li);
-        } else {
-          g.forEach(name => {
-            const li = document.createElement('li');
-            li.textContent = name;
-            ul.appendChild(li);
-          });
-        }
-        card.appendChild(h);
-        card.appendChild(ul);
-        groupsEl.appendChild(card);
+  function renderInputs() {
+    const saved = loadNames();
+    inputsDiv.innerHTML = "";
+
+    for (let i = 0; i < MAX; i++) {
+      const div = document.createElement("div");
+
+      const label = document.createElement("label");
+      label.textContent = `Prénom ${i + 1}`;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "Ex: Alex";
+      input.value = saved[i] || "";
+
+      input.addEventListener("input", () => {
+        const current = loadNames();
+        // assure taille MAX
+        while (current.length < MAX) current.push("");
+        current[i] = input.value;
+        saveNames(current);
+        // si on modifie, on désactive re-mélanger tant qu'on n'a pas relancé
+        hasResult = false;
+        btnRemelanger.disabled = true;
       });
+
+      div.appendChild(label);
+      div.appendChild(input);
+      inputsDiv.appendChild(div);
+    }
+  }
+
+  // Fisher-Yates
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+  }
+
+  function splitIntoGroups(names, k) {
+    const arr = names.slice();
+    shuffle(arr);
+    const groups = Array.from({ length: k }, () => []);
+    arr.forEach((n, i) => groups[i % k].push(n));
+    return groups;
+  }
+
+  function renderGroups(groups) {
+    groupsDiv.innerHTML = "";
+    groups.forEach((g, idx) => {
+      const card = document.createElement("div");
+      card.className = "group";
+      const title = document.createElement("h3");
+      title.textContent = `Groupe ${idx + 1}`;
+
+      const ul = document.createElement("ul");
+      if (g.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "(vide)";
+        ul.appendChild(li);
+      } else {
+        g.forEach(n => {
+          const li = document.createElement("li");
+          li.textContent = n;
+          ul.appendChild(li);
+        });
+      }
+
+      card.appendChild(title);
+      card.appendChild(ul);
+      groupsDiv.appendChild(card);
+    });
+  }
+
+  function doDraw() {
+    errorEl.textContent = "";
+
+    const names = normalizeNames(loadNames());
+    const k = parseInt(nbGroupesEl.value, 10);
+
+    if (names.length === 0) {
+      resultatEl.style.display = "none";
+      btnRemelanger.disabled = true;
+      hasResult = false;
+      errorEl.textContent = "Ajoute au moins un prénom.";
+      return;
     }
 
-    function removeEmptyRows() {
-      // optionnel : remonte les prénoms en haut et vide le reste
-      const names = getNames();
-      for (let i = 0; i < MAX; i++) {
-        document.getElementById(`name_${i}`).value = names[i] ?? '';
-      }
-    }
+    const groups = splitIntoGroups(names, k);
+    renderGroups(groups);
 
-    btnTirer.addEventListener('click', () => {
-      showError('');
-      const names = getNames();
-      const k = parseInt(nbGroupesEl.value, 10);
+    const now = new Date();
+    metaEl.textContent = `${names.length} prénom(s) • ${k} groupe(s) • ${now.toLocaleString('fr-FR')}`;
 
-      if (names.length === 0) {
-        resultCard.style.display = 'none';
-        showError('Ajoute au moins 1 prénom.');
-        return;
-      }
-      if (names.length > MAX) {
-        resultCard.style.display = 'none';
-        showError(`Maximum ${MAX} prénoms.`);
-        return;
-      }
-      if (k < 1 || k > 4) {
-        resultCard.style.display = 'none';
-        showError('Choisis entre 1 et 4 groupes.');
-        return;
-      }
-      if (k > names.length) {
-        // On autorise quand même, mais on prévient.
-        showError(`Attention : ${k} groupes pour ${names.length} prénom(s) → certains groupes seront vides.`);
-      }
+    resultatEl.style.display = "block";
+    lastNames = names;
+    lastK = k;
+    hasResult = true;
+    btnRemelanger.disabled = false;
+  }
 
-      const groups = splitIntoGroups(names, k);
-      renderGroups(groups);
-      metaEl.textContent = `${names.length} prénom(s) • ${k} groupe(s) • tirage ${new Date().toLocaleString('fr-FR')}`;
-      resultCard.style.display = 'block';
-    });
+  // --- boutons ---
+  document.getElementById("tirer").addEventListener("click", doDraw);
 
-    btnRetirer.addEventListener('click', () => {
-      showError('');
-      removeEmptyRows();
-    });
+  document.getElementById("remelanger").addEventListener("click", () => {
+    // Re-mélange SANS changer les prénoms en stockage
+    if (!hasResult) return;
+    errorEl.textContent = "";
+    const groups = splitIntoGroups(lastNames, lastK);
+    renderGroups(groups);
 
-    btnReset.addEventListener('click', () => {
-      showError('');
-      for (let i = 0; i < MAX; i++) document.getElementById(`name_${i}`).value = '';
-      nbGroupesEl.value = '2';
-      resultCard.style.display = 'none';
-    });
+    const now = new Date();
+    metaEl.textContent = `${lastNames.length} prénom(s) • ${lastK} groupe(s) • re-mélange ${now.toLocaleString('fr-FR')}`;
+  });
 
-    makeInputs();
-  </script>
+  document.getElementById("nettoyer").addEventListener("click", () => {
+    // remonte les prénoms remplis et nettoie le reste
+    const names = normalizeNames(loadNames());
+    const arr = names.concat(Array(MAX - names.length).fill(""));
+    saveNames(arr);
+    renderInputs();
+  });
+
+  document.getElementById("reset").addEventListener("click", () => {
+    localStorage.removeItem(LS_KEY_NAMES);
+    localStorage.removeItem(LS_KEY_K);
+    location.reload();
+  });
+
+  // init
+  const k0 = loadK();
+  nbGroupesEl.value = String(k0);
+  nbGroupesEl.addEventListener("change", () => {
+    saveK(parseInt(nbGroupesEl.value, 10));
+    hasResult = false;
+    btnRemelanger.disabled = true;
+  });
+
+  renderInputs();
+</script>
 </body>
 </html>
