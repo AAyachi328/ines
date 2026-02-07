@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Combinaisons de groupes</title>
+  <style>
+    :root{
+      --main:#4f46e5; --bg:#f5f7ff; --card:#fff; --muted:#64748b; --danger:#ef4444;
+      --ring: rgba(79,70,229,.25);
+    }
+    *{ box-sizing:border-box; }
+    body{ font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); margin:0; padding:16px; color:#111; }
+    .wrap{ max-width:1100px; margin:0 auto; }
+    h1{ text-align:center; color:var(--main); margin:8px 0 16px; font-size:22px; }
+    .card{ background:var(--card); border-radius:16px; padding:14px; margin-bottom:14px; box-shadow:0 10px 24px rgba(0,0,0,.06); }
+    .top{ display:flex; gap:12px; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; }
+    .control{ min-width:180px; flex:1 1 220px; }
+    label{ font-size:12px; font-weight:800; color:#1f2937; display:block; margin-bottom:6px; }
+    input, select{
+      width:100%; padding:11px 12px; border-radius:12px; border:1px solid #d7dbe7; font-size:15px; outline:none; background:#fff;
+    }
+    input:focus, select:focus{ border-color:var(--main); box-shadow:0 0 0 4px var(--ring); }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; flex:1 1 320px; }
+    button{
+      border:none; border-radius:12px; padding:11px 14px; font-size:14px; font-weight:800; cursor:pointer; color:#fff;
+      flex:1 1 140px; min-width:140px;
+    }
+    button:hover{ opacity:.92; }
+    .primary{ background:var(--main); }
+    .secondary{ background:var(--muted); }
+    .danger{ background:var(--danger); }
+
+    .hint{ font-size:12px; color:#6b7280; margin-top:8px; }
+    .error{ margin-top:10px; color:var(--danger); font-size:13px; font-weight:800; }
+
+    .inputs{ display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px; }
+    @media (max-width:640px){
+      .inputs{ grid-template-columns: 1fr; }
+      button{ flex:1 1 100%; min-width:0; }
+      h1{ font-size:20px; }
+    }
+
+    .meta{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .pill{ background:#eef2ff; border:1px solid #dbe2ff; color:#1f2a6b; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:800; }
+
+    .list{ margin-top:12px; display:flex; flex-direction:column; gap:10px; }
+    .sol{
+      background:#ffffff; border:1px solid #e5e7eb; border-radius:14px; padding:10px 12px;
+    }
+    .sol .title{ font-weight:900; color:#111; margin-bottom:6px; font-size:13px; }
+    .sol .groups{ color:#111; font-size:14px; line-height:1.35; }
+    code{ background:#f3f4f6; padding:2px 6px; border-radius:8px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🧩 Toutes les combinaisons de groupes</h1>
+
+  <div class="card">
+    <div class="top">
+      <div class="control">
+        <label for="k">Nombre de groupes</label>
+        <select id="k">
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+        <div class="hint">Groupes non vides • ordre des groupes ignoré (pas de doublons).</div>
+      </div>
+
+      <div class="control">
+        <label for="limit">Limiter l’affichage</label>
+        <select id="limit">
+          <option value="100" selected>100</option>
+          <option value="250">250</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+        <div class="hint">Le total est calculé, mais on n’affiche que les premiers.</div>
+      </div>
+
+      <div class="btns">
+        <button class="primary" id="go">Générer</button>
+        <button class="secondary" id="ex">Exemple</button>
+        <button class="danger" id="reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="error" id="error"></div>
+  </div>
+
+  <div class="card">
+    <div class="inputs" id="inputs"></div>
+    <div class="hint">Astuce : évite 8 prénoms en 4 groupes si tu veux tout afficher 😉</div>
+  </div>
+
+  <div class="card" id="out" style="display:none;">
+    <div class="meta">
+      <div class="pill" id="pillTotal">Total: —</div>
+      <div class="pill" id="pillShown">Affiché: —</div>
+      <div class="pill" id="pillNames">Noms: —</div>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+  const MAX = 8;
+
+  const inputsEl = document.getElementById('inputs');
+  const kEl = document.getElementById('k');
+  const limitEl = document.getElementById('limit');
+  const errorEl = document.getElementById('error');
+
+  const outEl = document.getElementById('out');
+  const listEl = document.getElementById('list');
+
+  const pillTotal = document.getElementById('pillTotal');
+  const pillShown = document.getElementById('pillShown');
+  const pillNames = document.getElementById('pillNames');
+
+  function makeInputs(){
+    inputsEl.innerHTML = '';
+    for (let i=0;i<MAX;i++){
+      const d = document.createElement('div');
+      const lab = document.createElement('label');
+      lab.textContent = `Prénom ${i+1}`;
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.placeholder = 'Ex: Alex';
+      inp.id = 'n' + i;
+      d.appendChild(lab);
+      d.appendChild(inp);
+      inputsEl.appendChild(d);
+    }
+  }
+
+  function getNames(){
+    const arr = [];
+    for (let i=0;i<MAX;i++){
+      const v = document.getElementById('n'+i).value.trim();
+      if (v) arr.push(v);
+    }
+    // dédoublonnage léger (sinon combinatoires ambiguës)
+    const seen = new Set();
+    const uniq = [];
+    for (const n of arr){
+      const key = n.toLowerCase();
+      if (!seen.has(key)){
+        seen.add(key);
+        uniq.push(n);
+      }
+    }
+    return uniq;
+  }
+
+  function showError(msg){
+    errorEl.textContent = msg || '';
+  }
+
+  // Génère toutes les partitions en k groupes non vides, sans ordre de groupes (set partitions)
+  // Représentation: groups = array de arrays d'indices
+  function* partitionsK(n, k){
+    const groups = Array.from({length:k}, ()=>[]);
+    groups[0].push(0);
+
+    function* rec(i, used){
+      if (i === n){
+        if (used === k) yield groups.map(g => g.slice());
+        return;
+      }
+      // placer i dans un groupe existant (0..used-1)
+      for (let g=0; g<used; g++){
+        groups[g].push(i);
+        yield* rec(i+1, used);
+        groups[g].pop();
+      }
+      // ou ouvrir un nouveau groupe (si on en a encore)
+      if (used < k){
+        groups[used].push(i);
+        yield* rec(i+1, used+1);
+        groups[used].pop();
+      }
+    }
+    yield* rec(1, 1);
+  }
+
+  function formatSolution(sol, names){
+    // sol = [[idx...],[idx...],...]
+    // On affiche les groupes triés par première apparition (déjà canonique)
+    return sol.map(g => g.map(i => names[i]).join(', '));
+  }
+
+  // --- calcul du nombre total de partitions en k groupes: Stirling S(n,k)
+  function stirling(n, k){
+    // DP: S(n,k) = k*S(n-1,k) + S(n-1,k-1)
+    const dp = Array.from({length:n+1}, ()=>Array(k+1).fill(0));
+    dp[0][0]=1;
+    for (let i=1;i<=n;i++){
+      for (let j=1;j<=Math.min(i,k);j++){
+        dp[i][j] = j*dp[i-1][j] + dp[i-1][j-1];
+      }
+    }
+    return dp[n][k];
+  }
+
+  function clearOutput(){
+    outEl.style.display = 'none';
+    listEl.innerHTML = '';
+    pillTotal.textContent = 'Total: —';
+    pillShown.textContent = 'Affiché: —';
+    pillNames.textContent = 'Noms: —';
+  }
+
+  document.getElementById('go').addEventListener('click', () => {
+    showError('');
+    clearOutput();
+
+    const names = getNames();
+    const n = names.length;
+    const k = parseInt(kEl.value, 10);
+    const limit = parseInt(limitEl.value, 10);
+
+    if (n === 0){
+      showError('Ajoute au moins 1 prénom.');
+      return;
+    }
+    if (n < k){
+      showError(`Il faut au moins ${k} prénoms pour faire ${k} groupes non vides.`);
+      return;
+    }
+
+    const total = stirling(n, k);
+    pillTotal.textContent = `Total: ${total.toLocaleString('fr-FR')}`;
+    pillNames.textContent = `Noms: ${n}`;
+    outEl.style.display = 'block';
+
+    let shown = 0;
+    let idx = 0;
+
+    for (const sol of partitionsK(n, k)){
+      if (shown >= limit) break;
+
+      const groupsTxt = formatSolution(sol, names);
+      const div = document.createElement('div');
+      div.className = 'sol';
+      div.innerHTML = `
+        <div class="title">Combinaison ${(++idx).toLocaleString('fr-FR')}</div>
+        <div class="groups">${groupsTxt.map((t,i)=>`<div><code>G${i+1}</code> ${t}</div>`).join('')}</div>
+      `;
+      listEl.appendChild(div);
+      shown++;
+    }
+
+    pillShown.textContent = `Affiché: ${shown.toLocaleString('fr-FR')} / ${total.toLocaleString('fr-FR')}`;
+
+    if (total > limit){
+      showError(`Il y a ${total.toLocaleString('fr-FR')} combinaisons. J'affiche seulement les ${limit.toLocaleString('fr-FR')} premières.`);
+    }
+  });
+
+  document.getElementById('ex').addEventListener('click', () => {
+    const ex = ["Alice","Benoît","Chloé","Dylan","Emma"];
+    for (let i=0;i<MAX;i++){
+      document.getElementById('n'+i).value = ex[i] || '';
+    }
+    kEl.value = "2";
+    limitEl.value = "250";
+    showError('');
+    clearOutput();
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    for (let i=0;i<MAX;i++) document.getElementById('n'+i).value = '';
+    kEl.value = "2";
+    limitEl.value = "100";
+    showError('');
+    clearOutput();
+  });
+
+  makeInputs();
+</script>
+</body>
+</html>
