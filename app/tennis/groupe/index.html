@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Répartition aléatoire en groupes</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    h1 { margin: 0 0 16px; font-size: 22px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin: 12px 0; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .inputs { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 10px; }
+    label { font-size: 13px; color: #333; display: block; margin-bottom: 4px; }
+    input[type="text"], select {
+      width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 10px;
+      font-size: 14px;
+    }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    button {
+      border: 0; border-radius: 10px; padding: 10px 14px; font-size: 14px;
+      cursor: pointer;
+    }
+    button.primary { background: #111; color: #fff; }
+    button.secondary { background: #eee; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .hint { font-size: 13px; color: #555; margin-top: 8px; }
+    .error { color: #b00020; font-size: 13px; margin-top: 8px; }
+    .groups { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 12px; }
+    @media (max-width: 640px) { .groups { grid-template-columns: 1fr; } .inputs { grid-template-columns: 1fr; } }
+    .group {
+      border: 1px solid #ddd; border-radius: 12px; padding: 12px;
+      background: #fafafa;
+    }
+    .group h3 { margin: 0 0 8px; font-size: 16px; }
+    ul { margin: 0; padding-left: 18px; }
+    .meta { font-size: 12px; color: #666; margin-top: 6px; }
+    .footer { font-size: 12px; color: #666; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Répartition aléatoire en groupes</h1>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between;">
+      <div style="min-width:240px; flex:1;">
+        <label for="nbGroupes">Nombre de groupes (1 à 4)</label>
+        <select id="nbGroupes">
+          <option value="1">1 groupe</option>
+          <option value="2" selected>2 groupes</option>
+          <option value="3">3 groupes</option>
+          <option value="4">4 groupes</option>
+        </select>
+        <div class="hint">Entre 1 et 8 prénoms (vides ignorés).</div>
+      </div>
+
+      <div class="btns">
+        <button class="primary" id="btnTirer">Tirer au sort</button>
+        <button class="secondary" id="btnRetirer">Retirer vides</button>
+        <button class="secondary" id="btnReset">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="inputs" id="inputs"></div>
+    <div class="error" id="error" style="display:none;"></div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="row" style="justify-content: space-between; align-items: baseline;">
+      <h2 style="margin:0; font-size:18px;">Résultat</h2>
+      <div class="meta" id="meta"></div>
+    </div>
+    <div class="groups" id="groups"></div>
+  </div>
+
+  <div class="footer">Astuce : tu peux relancer “Tirer au sort” autant de fois que tu veux.</div>
+
+  <script>
+    const MAX = 8;
+
+    const inputsWrap = document.getElementById('inputs');
+    const nbGroupesEl = document.getElementById('nbGroupes');
+    const btnTirer = document.getElementById('btnTirer');
+    const btnRetirer = document.getElementById('btnRetirer');
+    const btnReset = document.getElementById('btnReset');
+    const errorEl = document.getElementById('error');
+    const resultCard = document.getElementById('resultCard');
+    const groupsEl = document.getElementById('groups');
+    const metaEl = document.getElementById('meta');
+
+    function makeInputs() {
+      inputsWrap.innerHTML = '';
+      for (let i = 0; i < MAX; i++) {
+        const div = document.createElement('div');
+        const label = document.createElement('label');
+        label.textContent = `Prénom ${i + 1}`;
+        label.setAttribute('for', `name_${i}`);
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `name_${i}`;
+        input.placeholder = 'Ex: Alex';
+        input.autocomplete = 'off';
+        div.appendChild(label);
+        div.appendChild(input);
+        inputsWrap.appendChild(div);
+      }
+    }
+
+    function showError(msg) {
+      if (!msg) {
+        errorEl.style.display = 'none';
+        errorEl.textContent = '';
+        return;
+      }
+      errorEl.style.display = 'block';
+      errorEl.textContent = msg;
+    }
+
+    function getNames() {
+      const names = [];
+      for (let i = 0; i < MAX; i++) {
+        const v = document.getElementById(`name_${i}`).value.trim();
+        if (v) names.push(v);
+      }
+      return names;
+    }
+
+    // Fisher-Yates shuffle
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // Répartition équilibrée (différence max 1)
+    function splitIntoGroups(names, k) {
+      const shuffled = shuffle(names);
+      const groups = Array.from({ length: k }, () => []);
+      for (let i = 0; i < shuffled.length; i++) {
+        groups[i % k].push(shuffled[i]);
+      }
+      return groups;
+    }
+
+    function renderGroups(groups) {
+      groupsEl.innerHTML = '';
+      groups.forEach((g, idx) => {
+        const card = document.createElement('div');
+        card.className = 'group';
+        const h = document.createElement('h3');
+        h.textContent = `Groupe ${idx + 1}`;
+        const ul = document.createElement('ul');
+        if (g.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = '(vide)';
+          ul.appendChild(li);
+        } else {
+          g.forEach(name => {
+            const li = document.createElement('li');
+            li.textContent = name;
+            ul.appendChild(li);
+          });
+        }
+        card.appendChild(h);
+        card.appendChild(ul);
+        groupsEl.appendChild(card);
+      });
+    }
+
+    function removeEmptyRows() {
+      // optionnel : remonte les prénoms en haut et vide le reste
+      const names = getNames();
+      for (let i = 0; i < MAX; i++) {
+        document.getElementById(`name_${i}`).value = names[i] ?? '';
+      }
+    }
+
+    btnTirer.addEventListener('click', () => {
+      showError('');
+      const names = getNames();
+      const k = parseInt(nbGroupesEl.value, 10);
+
+      if (names.length === 0) {
+        resultCard.style.display = 'none';
+        showError('Ajoute au moins 1 prénom.');
+        return;
+      }
+      if (names.length > MAX) {
+        resultCard.style.display = 'none';
+        showError(`Maximum ${MAX} prénoms.`);
+        return;
+      }
+      if (k < 1 || k > 4) {
+        resultCard.style.display = 'none';
+        showError('Choisis entre 1 et 4 groupes.');
+        return;
+      }
+      if (k > names.length) {
+        // On autorise quand même, mais on prévient.
+        showError(`Attention : ${k} groupes pour ${names.length} prénom(s) → certains groupes seront vides.`);
+      }
+
+      const groups = splitIntoGroups(names, k);
+      renderGroups(groups);
+      metaEl.textContent = `${names.length} prénom(s) • ${k} groupe(s) • tirage ${new Date().toLocaleString('fr-FR')}`;
+      resultCard.style.display = 'block';
+    });
+
+    btnRetirer.addEventListener('click', () => {
+      showError('');
+      removeEmptyRows();
+    });
+
+    btnReset.addEventListener('click', () => {
+      showError('');
+      for (let i = 0; i < MAX; i++) document.getElementById(`name_${i}`).value = '';
+      nbGroupesEl.value = '2';
+      resultCard.style.display = 'none';
+    });
+
+    makeInputs();
+  </script>
+</body>
+</html>
