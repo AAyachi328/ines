@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Statistiques descriptives – Seconde</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      line-height: 1.4;
+    }
+    h1{ font-size: 22px; }
+    h2{ font-size: 18px; margin-top: 30px; }
+    .bloc{
+      border: 1px solid #000;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .series{
+      font-family: "Courier New", monospace;
+      margin: 10px 0;
+    }
+    .reponse{
+      border: 1px dashed #999;
+      height: 90px;
+      margin-top: 8px;
+    }
+    .reponse-large{
+      border: 1px dashed #999;
+      height: 130px;
+      margin-top: 8px;
+    }
+    table{
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+    }
+    th, td{
+      border: 1px solid #000;
+      padding: 8px;
+      height: 40px;
+    }
+    .dessin{
+      border: 1px dashed #000;
+      height: 160px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Statistiques descriptives – Niveau Seconde</h1>
+
+<div class="bloc">
+  <h2>1) Données</h2>
+
+  <p>On étudie le <b>temps (en minutes)</b> mis par des élèves pour réaliser un exercice.</p>
+
+  <p><b>Série A</b> (12 valeurs, rangées dans l’ordre croissant) :</p>
+  <div class="series">8 ; 12 ; 16 ; 20 ; 24 ; 28 ; 32 ; 36 ; 40 ; 44 ; 48 ; 52</div>
+
+  <p><b>Série B</b> (12 valeurs, rangées dans l’ordre croissant) :</p>
+  <div class="series">20 ; 24 ; 26 ; 28 ; 30 ; 30 ; 30 ; 32 ; 34 ; 36 ; 38 ; 40</div>
+</div>
+
+<div class="bloc">
+  <h2>2) Indicateurs statistiques</h2>
+
+  <p>Compléter le tableau suivant.</p>
+
+  <table>
+    <tr>
+      <th>Indicateur</th>
+      <th>Série A</th>
+      <th>Série B</th>
+    </tr>
+    <tr>
+      <td>Minimum</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Q<sub>1</sub></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Médiane</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Q<sub>3</sub></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Maximum</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Étendue</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Écart interquartile</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+<div class="bloc">
+  <h2>3) Boîtes à moustaches</h2>
+
+  <p>
+    Tracer sur le <b>même axe</b> les boîtes à moustaches des séries A et B.
+    <br>L’axe est gradué de 0 à 60, avec un pas de 5.
+  </p>
+
+  <!-- Axe gradué -->
+  <svg width="100%" height="100" viewBox="0 0 900 100">
+    <line x1="50" y1="50" x2="850" y2="50" stroke="black" stroke-width="2"/>
+
+    <!-- graduations -->
+    <g font-size="14" text-anchor="middle">
+      <line x1="50" y1="40" x2="50" y2="60" stroke="black"/><text x="50" y="80">0</text>
+      <line x1="183" y1="40" x2="183" y2="60" stroke="black"/><text x="183" y="80">10</text>
+      <line x1="317" y1="40" x2="317" y2="60" stroke="black"/><text x="317" y="80">20</text>
+      <line x1="450" y1="40" x2="450" y2="60" stroke="black"/><text x="450" y="80">30</text>
+      <line x1="583" y1="40" x2="583" y2="60" stroke="black"/><text x="583" y="80">40</text>
+      <line x1="717" y1="40" x2="717" y2="60" stroke="black"/><text x="717" y="80">50</text>
+      <line x1="850" y1="40" x2="850" y2="60" stroke="black"/><text x="850" y="80">60</text>
+    </g>
+  </svg>
+
+  <div class="dessin"></div>
+</div>
+
+<div class="bloc">
+  <h2>4) Questions d’interprétation</h2>
+
+  <p><b>Question 1.</b> Quelle série est la plus dispersée ? Justifier avec un ou deux indicateurs.</p>
+  <div class="reponse-large"></div>
+
+  <p><b>Question 2.</b> Quelle série est la plus homogène ? Pourquoi ?</p>
+  <div class="reponse-large"></div>
+
+  <p><b>Question 3.</b> Les deux séries ont-elles le même temps « typique » ? Justifier à l’aide de la médiane.</p>
+  <div class="reponse-large"></div>
+
+  <p><b>Question 4.</b> En observant les boîtes à moustaches, que peut-on dire des valeurs extrêmes des deux séries ?</p>
+  <div class="reponse-large"></div>
+</div>
+
+</body>
+</html>
