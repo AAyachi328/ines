@@ -19,6 +19,26 @@
       --present:#dcfce7;
       --present-border:#86efac;
       --absent:#f8fafc;
+
+      --g1-bg:#dbeafe;
+      --g1-bd:#93c5fd;
+      --g1-tx:#1d4ed8;
+
+      --g2-bg:#dcfce7;
+      --g2-bd:#86efac;
+      --g2-tx:#15803d;
+
+      --g3-bg:#fef3c7;
+      --g3-bd:#fcd34d;
+      --g3-tx:#b45309;
+
+      --g4-bg:#fce7f3;
+      --g4-bd:#f9a8d4;
+      --g4-tx:#be185d;
+
+      --pool-bg:#f8fafc;
+      --pool-bd:#cbd5e1;
+      --pool-tx:#334155;
     }
     *{box-sizing:border-box}
     body{
@@ -74,7 +94,7 @@
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      flex:1 1 460px;
+      flex:1 1 560px;
       justify-content:flex-end;
     }
     button{
@@ -207,6 +227,25 @@
       color:var(--main);
       font-size:16px;
     }
+
+    .dropZone.g1{ background:var(--g1-bg); border-color:var(--g1-bd); }
+    .dropZone.g1 h3{ color:var(--g1-tx); }
+
+    .dropZone.g2{ background:var(--g2-bg); border-color:var(--g2-bd); }
+    .dropZone.g2 h3{ color:var(--g2-tx); }
+
+    .dropZone.g3{ background:var(--g3-bg); border-color:var(--g3-bd); }
+    .dropZone.g3 h3{ color:var(--g3-tx); }
+
+    .dropZone.g4{ background:var(--g4-bg); border-color:var(--g4-bd); }
+    .dropZone.g4 h3{ color:var(--g4-tx); }
+
+    .dropZone.pool{
+      background:var(--pool-bg);
+      border-color:var(--pool-bd);
+    }
+    .dropZone.pool h3{ color:var(--pool-tx); }
+
     .chips{
       display:flex;
       flex-wrap:wrap;
@@ -217,17 +256,42 @@
     .chip{
       padding:10px 12px;
       border-radius:999px;
-      background:var(--soft);
-      color:#1e293b;
       font-weight:700;
-      border:1px solid #c7d2fe;
       cursor:grab;
       user-select:none;
       display:flex;
       gap:8px;
       align-items:center;
+      border:1px solid;
     }
     .chip:active{cursor:grabbing}
+
+    .chip.pool{
+      background:var(--pool-bg);
+      border-color:var(--pool-bd);
+      color:var(--pool-tx);
+    }
+    .chip.g1{
+      background:var(--g1-bg);
+      border-color:var(--g1-bd);
+      color:var(--g1-tx);
+    }
+    .chip.g2{
+      background:var(--g2-bg);
+      border-color:var(--g2-bd);
+      color:var(--g2-tx);
+    }
+    .chip.g3{
+      background:var(--g3-bg);
+      border-color:var(--g3-bd);
+      color:var(--g3-tx);
+    }
+    .chip.g4{
+      background:var(--g4-bg);
+      border-color:var(--g4-bd);
+      color:var(--g4-tx);
+    }
+
     .empty{
       color:#94a3b8;
       font-style:italic;
@@ -291,6 +355,26 @@
       color:#94a3b8;
       text-align:center;
     }
+    .bottomActions{
+      position:sticky;
+      bottom:10px;
+      z-index:5;
+    }
+    .bottomBar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      background:rgba(255,255,255,.95);
+      backdrop-filter:blur(8px);
+      border:1px solid #e5e7eb;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
+      border-radius:18px;
+      padding:12px;
+    }
+    .bottomBar button{
+      min-width:180px;
+    }
     @media (max-width:900px){
       .playersGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .groups,.matches{grid-template-columns:1fr}
@@ -298,7 +382,7 @@
     @media (max-width:640px){
       body{padding:12px}
       .playersGrid{grid-template-columns:1fr}
-      .btns{justify-content:stretch}
+      .btns,.bottomBar{justify-content:stretch}
       button{width:100%;min-width:0}
       h1{font-size:20px}
       .versus{grid-template-columns:1fr}
@@ -333,7 +417,6 @@
         </div>
 
         <div class="btns">
-          <button class="primary" id="generate">Générer</button>
           <button class="secondary" id="manual">Répartition manuelle</button>
           <button class="secondary" id="clearPresence">Effacer présences</button>
           <button class="danger" id="reset">Reset complet</button>
@@ -355,7 +438,7 @@
 
     <div class="card" id="groupsSection">
       <div class="layout">
-        <div class="dropZone" data-zone="pool">
+        <div class="dropZone pool" data-zone="pool">
           <h3>Présents non affectés</h3>
           <div class="hint">Glisse les joueurs ici puis dans les groupes</div>
           <div class="chips" id="pool"></div>
@@ -372,11 +455,18 @@
         Le mode mixte utilise le champ F / M quand il est renseigné.
       </div>
     </div>
+
+    <div class="bottomActions">
+      <div class="bottomBar">
+        <button class="secondary" id="reshuffle">Re-mélanger</button>
+        <button class="primary" id="generate">Générer</button>
+      </div>
+    </div>
   </div>
 
 <script>
   const MAX_PLAYERS = 8;
-  const STORAGE_KEY = "tennis_groups_html_v1";
+  const STORAGE_KEY = "tennis_groups_html_v2";
 
   const defaultState = {
     mode: "groups",
@@ -675,7 +765,7 @@
 
     activeGroupKeys().forEach((key, idx) => {
       const zone = document.createElement("div");
-      zone.className = "dropZone";
+      zone.className = "dropZone " + key;
       zone.dataset.zone = key;
 
       const titleRow = document.createElement("div");
@@ -726,7 +816,7 @@
       if(!player) return;
 
       const chip = document.createElement("div");
-      chip.className = "chip";
+      chip.className = "chip " + zoneKey;
       chip.draggable = true;
       chip.dataset.id = player.id;
       chip.innerHTML = `<span>${player.name}</span><span style="color:#f59e0b">${"★".repeat(player.rating)}</span>`;
@@ -848,6 +938,30 @@
     renderAll();
   }
 
+  function reshuffle(){
+    errorEl.textContent = "";
+    const present = getPresentPlayers();
+
+    if(present.length === 0){
+      errorEl.textContent = "Ajoute au moins un joueur présent.";
+      return;
+    }
+
+    if(state.mode === "groups"){
+      state.groups = rebalanceGroups(shuffle(present), state.groupCount);
+      state.matches = [];
+    }else{
+      if(present.length < 4){
+        errorEl.textContent = "Il faut au moins 4 joueurs présents.";
+        return;
+      }
+      state.matches = buildBalancedDoubles(shuffle(present), state.mode === "mixed-doubles");
+    }
+
+    saveState();
+    renderAll();
+  }
+
   function manualGroups(){
     const present = getPresentPlayers();
     state.groups = {
@@ -902,6 +1016,7 @@
   }
 
   document.getElementById("generate").addEventListener("click", generate);
+  document.getElementById("reshuffle").addEventListener("click", reshuffle);
   document.getElementById("manual").addEventListener("click", manualGroups);
   document.getElementById("clearPresence").addEventListener("click", clearPresence);
   document.getElementById("reset").addEventListener("click", resetAll);
