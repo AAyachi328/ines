@@ -40,7 +40,9 @@
       --pool-bd:#cbd5e1;
       --pool-tx:#334155;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -48,13 +50,16 @@
       color:#111827;
       padding:16px;
     }
+
     .wrap{max-width:1150px;margin:0 auto}
+
     h1{
       text-align:center;
       color:var(--main);
       margin:8px 0 16px;
       font-size:24px;
     }
+
     .card{
       background:var(--card);
       border-radius:18px;
@@ -62,6 +67,7 @@
       margin-bottom:14px;
       box-shadow:0 10px 24px rgba(0,0,0,.06);
     }
+
     .top{
       display:flex;
       gap:12px;
@@ -69,7 +75,9 @@
       align-items:end;
       justify-content:space-between;
     }
+
     .control{flex:1 1 220px;min-width:180px}
+
     label{
       display:block;
       font-size:12px;
@@ -77,6 +85,7 @@
       margin-bottom:6px;
       color:#1f2937;
     }
+
     select,input{
       width:100%;
       padding:11px 12px;
@@ -86,10 +95,12 @@
       font-size:15px;
       outline:none;
     }
+
     select:focus,input:focus{
       border-color:var(--main);
       box-shadow:0 0 0 4px var(--ring);
     }
+
     .btns{
       display:flex;
       gap:10px;
@@ -97,6 +108,7 @@
       flex:1 1 560px;
       justify-content:flex-end;
     }
+
     button{
       border:none;
       border-radius:12px;
@@ -108,17 +120,21 @@
       transition:.15s ease;
       min-width:130px;
     }
+
     button:hover{opacity:.92}
     button:active{transform:translateY(1px)}
     button:disabled{opacity:.55;cursor:not-allowed}
+
     .primary{background:var(--main)}
     .secondary{background:var(--muted)}
     .danger{background:var(--danger)}
     .success{background:var(--success)}
+
     .hint,.meta,.legend{
       font-size:12px;
       color:#6b7280;
     }
+
     .error{
       min-height:18px;
       margin-top:10px;
@@ -126,6 +142,7 @@
       font-size:13px;
       font-weight:700;
     }
+
     .metaRow{
       display:flex;
       flex-wrap:wrap;
@@ -133,12 +150,17 @@
       justify-content:space-between;
       align-items:center;
     }
+
     .playersGrid{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
       gap:12px;
     }
+
     .playerCard{
+      position:relative;
+      overflow:hidden;
+      transform:translateZ(0);
       border:2px solid #e5e7eb;
       border-radius:16px;
       padding:12px;
@@ -147,11 +169,38 @@
       cursor:pointer;
       user-select:none;
     }
+
+    .playerCard::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      transform:translateX(-120%);
+      pointer-events:none;
+    }
+
     .playerCard.present{
       background:var(--present);
       border-color:var(--present-border);
       box-shadow:0 0 0 4px rgba(34,197,94,.08);
     }
+
+    .playerCard.anim-in{
+      animation:cardIn .22s ease;
+    }
+
+    .playerCard.swiping{
+      transition:none !important;
+    }
+
+    .playerCard.snap{
+      transition:transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease;
+    }
+
+    .playerCard.flash::after{
+      animation:shine .35s ease;
+    }
+
     .playerTop{
       display:flex;
       justify-content:space-between;
@@ -159,6 +208,7 @@
       gap:8px;
       margin-bottom:10px;
     }
+
     .slotTitle{
       font-size:12px;
       font-weight:800;
@@ -166,6 +216,7 @@
       text-transform:uppercase;
       letter-spacing:.04em;
     }
+
     .status{
       font-size:12px;
       font-weight:800;
@@ -173,17 +224,22 @@
       border-radius:999px;
       background:#e5e7eb;
       color:#334155;
+      transition:background-color .18s ease, color .18s ease, transform .18s ease;
     }
+
     .playerCard.present .status{
       background:#22c55e;
       color:#fff;
+      transform:scale(1.03);
     }
+
     .stars{
       display:flex;
       gap:4px;
       margin-top:4px;
       flex-wrap:wrap;
     }
+
     .star{
       cursor:pointer;
       font-size:22px;
@@ -191,7 +247,9 @@
       color:#cbd5e1;
       user-select:none;
     }
+
     .star.active{color:#f59e0b}
+
     .smallLabel{
       display:block;
       font-size:12px;
@@ -199,29 +257,45 @@
       color:#475569;
       margin:8px 0 4px;
     }
+
+    .playerCard input,
+    .playerCard select{
+      transition:border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+    }
+
+    .playerCard input:focus,
+    .playerCard select:focus{
+      transform:translateY(-1px);
+    }
+
     .layout{
       display:grid;
       grid-template-columns:1fr;
       gap:14px;
     }
+
     .groups{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
       gap:14px;
     }
+
     .dropZone{
       border:2px dashed #cbd5e1;
       border-radius:18px;
       background:#fafbff;
       min-height:140px;
       padding:12px;
-      transition:.15s ease;
+      transition:transform .16s ease, box-shadow .16s ease, background-color .16s ease, border-color .16s ease;
     }
+
     .dropZone.dragover{
       border-color:var(--main);
       background:#eef2ff;
       box-shadow:0 0 0 4px rgba(79,70,229,.08);
+      transform:scale(1.01);
     }
+
     .dropZone h3{
       margin:0 0 8px;
       color:var(--main);
@@ -244,6 +318,7 @@
       background:var(--pool-bg);
       border-color:var(--pool-bd);
     }
+
     .dropZone.pool h3{ color:var(--pool-tx); }
 
     .chips{
@@ -253,6 +328,7 @@
       min-height:50px;
       align-items:flex-start;
     }
+
     .chip{
       padding:10px 12px;
       border-radius:999px;
@@ -263,29 +339,45 @@
       gap:8px;
       align-items:center;
       border:1px solid;
+      transition:transform .14s ease, box-shadow .14s ease, opacity .14s ease;
     }
+
+    .chip:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 16px rgba(0,0,0,.08);
+    }
+
     .chip:active{cursor:grabbing}
+
+    .chip.dragging{
+      opacity:.45;
+      transform:scale(.98);
+    }
 
     .chip.pool{
       background:var(--pool-bg);
       border-color:var(--pool-bd);
       color:var(--pool-tx);
     }
+
     .chip.g1{
       background:var(--g1-bg);
       border-color:var(--g1-bd);
       color:var(--g1-tx);
     }
+
     .chip.g2{
       background:var(--g2-bg);
       border-color:var(--g2-bd);
       color:var(--g2-tx);
     }
+
     .chip.g3{
       background:var(--g3-bg);
       border-color:var(--g3-bd);
       color:var(--g3-tx);
     }
+
     .chip.g4{
       background:var(--g4-bg);
       border-color:var(--g4-bd);
@@ -298,6 +390,7 @@
       font-size:14px;
       padding:6px 0;
     }
+
     .badge{
       display:inline-block;
       padding:6px 10px;
@@ -307,41 +400,48 @@
       font-size:12px;
       font-weight:800;
     }
+
     .matches{
       display:grid;
       gap:14px;
       grid-template-columns:repeat(2,minmax(0,1fr));
     }
+
     .match{
       background:#f8fafc;
       border-radius:18px;
       border:1px solid #e5e7eb;
       padding:14px;
     }
+
     .matchTitle{
       font-size:13px;
       font-weight:800;
       color:#64748b;
       margin-bottom:10px;
     }
+
     .versus{
       display:grid;
       grid-template-columns:1fr auto 1fr;
       gap:10px;
       align-items:center;
     }
+
     .team{
       background:#fff;
       border:1px solid #e5e7eb;
       border-radius:16px;
       padding:12px;
     }
+
     .teamTitle{
       color:var(--main);
       font-weight:800;
       font-size:13px;
       margin-bottom:8px;
     }
+
     .teamRow{
       display:flex;
       justify-content:space-between;
@@ -349,17 +449,20 @@
       font-size:14px;
       margin:4px 0;
     }
+
     .vs{
       font-size:22px;
       font-weight:900;
       color:#94a3b8;
       text-align:center;
     }
+
     .bottomActions{
       position:sticky;
       bottom:10px;
       z-index:5;
     }
+
     .bottomBar{
       display:flex;
       gap:10px;
@@ -371,14 +474,45 @@
       box-shadow:0 10px 24px rgba(0,0,0,.08);
       border-radius:18px;
       padding:12px;
+      animation:floatUp .25s ease;
     }
+
     .bottomBar button{
       min-width:180px;
     }
+
+    @keyframes cardIn{
+      from{
+        opacity:0;
+        transform:translateY(8px) scale(.99);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    @keyframes shine{
+      from{ transform:translateX(-120%); }
+      to{ transform:translateX(120%); }
+    }
+
+    @keyframes floatUp{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
     @media (max-width:900px){
       .playersGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .groups,.matches{grid-template-columns:1fr}
     }
+
     @media (max-width:640px){
       body{padding:12px}
       .playersGrid{grid-template-columns:1fr}
@@ -466,7 +600,7 @@
 
 <script>
   const MAX_PLAYERS = 8;
-  const STORAGE_KEY = "tennis_groups_html_v2";
+  const STORAGE_KEY = "tennis_groups_html_v3";
 
   const defaultState = {
     mode: "groups",
@@ -512,7 +646,15 @@
       return {
         mode: parsed.mode || "groups",
         groupCount: [2,3,4].includes(parsed.groupCount) ? parsed.groupCount : 2,
-        players: Array.isArray(parsed.players) ? parsed.players.slice(0,MAX_PLAYERS) : structuredClone(defaultState.players),
+        players: Array.isArray(parsed.players)
+          ? parsed.players.slice(0,MAX_PLAYERS).map((p, i) => ({
+              id: p.id || ("p" + (i + 1)),
+              name: typeof p.name === "string" ? p.name : "",
+              present: !!p.present,
+              rating: Math.max(1, Math.min(5, Number(p.rating) || 3)),
+              gender: typeof p.gender === "string" ? p.gender : ""
+            }))
+          : structuredClone(defaultState.players),
         groups: {
           pool: Array.isArray(parsed.groups?.pool) ? parsed.groups.pool : [],
           g1: Array.isArray(parsed.groups?.g1) ? parsed.groups.g1 : [],
@@ -659,16 +801,73 @@
     return matches;
   }
 
+  function updateTopMetaOnly(){
+    const present = getPresentPlayers();
+    presenceMetaEl.textContent = `${present.length} présent${present.length > 1 ? "s" : ""}`;
+    levelMetaEl.textContent = `Niveau total : ${totalStars(present)} ⭐`;
+  }
+
+  function attachSwipeToggle(card, playerId){
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let swiping = false;
+
+    card.addEventListener("touchstart", (e) => {
+      if(e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      currentX = startX;
+      swiping = true;
+      card.classList.add("swiping");
+    }, { passive:true });
+
+    card.addEventListener("touchmove", (e) => {
+      if(!swiping) return;
+      const t = e.touches[0];
+      currentX = t.clientX;
+      const dx = currentX - startX;
+      const dy = t.clientY - startY;
+
+      if(Math.abs(dy) > Math.abs(dx)) return;
+
+      const limited = Math.max(-70, Math.min(70, dx));
+      card.style.transform = `translateX(${limited}px)`;
+    }, { passive:true });
+
+    card.addEventListener("touchend", () => {
+      if(!swiping) return;
+      swiping = false;
+
+      const dx = currentX - startX;
+      card.classList.remove("swiping");
+      card.style.transform = "translateX(0px)";
+
+      if(Math.abs(dx) > 55){
+        togglePresence(playerId, card);
+      }
+    });
+
+    card.addEventListener("touchcancel", () => {
+      swiping = false;
+      card.classList.remove("swiping");
+      card.style.transform = "translateX(0px)";
+    });
+  }
+
   function renderPlayers(){
+    const activeEl = document.activeElement;
+    const activePlayerId = activeEl?.dataset?.playerId || null;
+    const activeField = activeEl?.dataset?.field || null;
+    const activePos = typeof activeEl?.selectionStart === "number" ? activeEl.selectionStart : null;
+
     playersGrid.innerHTML = "";
+
     state.players.forEach((player, index) => {
       const card = document.createElement("div");
-      card.className = "playerCard" + (player.present ? " present" : "");
-      card.addEventListener("click", (e) => {
-        if(["INPUT","SELECT"].includes(e.target.tagName)) return;
-        if(e.target.classList.contains("star")) return;
-        togglePresence(player.id);
-      });
+      card.className = "playerCard snap anim-in" + (player.present ? " present" : "");
+      card.dataset.playerId = player.id;
 
       const top = document.createElement("div");
       top.className = "playerTop";
@@ -688,14 +887,25 @@
       input.type = "text";
       input.placeholder = "Prénom";
       input.value = player.name;
+      input.dataset.playerId = player.id;
+      input.dataset.field = "name";
+
       input.addEventListener("click", e => e.stopPropagation());
+
       input.addEventListener("input", (e) => {
         player.name = e.target.value;
+
         if(!player.name.trim()){
           player.present = false;
           clearPlayerFromAllZones(player.id);
         }
+
         state.matches = [];
+        saveState();
+        updateTopMetaOnly();
+      });
+
+      input.addEventListener("blur", () => {
         syncGroupsWithPresence();
         saveState();
         renderAll();
@@ -707,10 +917,12 @@
 
       const stars = document.createElement("div");
       stars.className = "stars";
+
       [1,2,3,4,5].forEach(n => {
         const star = document.createElement("span");
         star.className = "star" + (n <= player.rating ? " active" : "");
         star.textContent = "★";
+
         star.addEventListener("click", (e) => {
           e.stopPropagation();
           player.rating = n;
@@ -718,6 +930,7 @@
           saveState();
           renderAll();
         });
+
         stars.appendChild(star);
       });
 
@@ -726,12 +939,15 @@
       genderLabel.textContent = "Genre (mixte)";
 
       const gender = document.createElement("select");
+      gender.dataset.playerId = player.id;
+      gender.dataset.field = "gender";
       gender.innerHTML = `
         <option value="">Non défini</option>
         <option value="F">F</option>
         <option value="M">M</option>
       `;
       gender.value = player.gender || "";
+
       gender.addEventListener("click", e => e.stopPropagation());
       gender.addEventListener("change", (e) => {
         player.gender = e.target.value;
@@ -739,6 +955,14 @@
         saveState();
         renderAll();
       });
+
+      card.addEventListener("click", (e) => {
+        if(["INPUT","SELECT"].includes(e.target.tagName)) return;
+        if(e.target.classList.contains("star")) return;
+        togglePresence(player.id, card);
+      });
+
+      attachSwipeToggle(card, player.id);
 
       card.appendChild(top);
       card.appendChild(input);
@@ -750,9 +974,18 @@
       playersGrid.appendChild(card);
     });
 
-    const present = getPresentPlayers();
-    presenceMetaEl.textContent = `${present.length} présent${present.length > 1 ? "s" : ""}`;
-    levelMetaEl.textContent = `Niveau total : ${totalStars(present)} ⭐`;
+    updateTopMetaOnly();
+
+    if(activePlayerId && activeField){
+      const selector = `[data-player-id="${activePlayerId}"][data-field="${activeField}"]`;
+      const nextEl = playersGrid.querySelector(selector);
+      if(nextEl){
+        nextEl.focus();
+        if(activeField === "name" && activePos !== null){
+          try { nextEl.setSelectionRange(activePos, activePos); } catch {}
+        }
+      }
+    }
   }
 
   function renderGroups(){
@@ -823,10 +1056,12 @@
 
       chip.addEventListener("dragstart", () => {
         draggedPlayerId = player.id;
+        chip.classList.add("dragging");
       });
 
       chip.addEventListener("dragend", () => {
         draggedPlayerId = null;
+        chip.classList.remove("dragging");
         document.querySelectorAll(".dropZone").forEach(z => z.classList.remove("dragover"));
       });
 
@@ -840,9 +1075,11 @@
         e.preventDefault();
         zone.classList.add("dragover");
       });
+
       zone.addEventListener("dragleave", () => {
         zone.classList.remove("dragover");
       });
+
       zone.addEventListener("drop", (e) => {
         e.preventDefault();
         zone.classList.remove("dragover");
@@ -864,6 +1101,7 @@
   function renderMatches(){
     matchesEl.innerHTML = "";
     const matches = state.matches || [];
+
     if(matches.length === 0){
       matchesEl.innerHTML = `<div class="empty">Clique sur "Générer" pour proposer des équipes équilibrées.</div>`;
       return;
@@ -898,19 +1136,32 @@
     });
   }
 
-  function togglePresence(playerId){
+  function togglePresence(playerId, cardEl = null){
     const player = getPlayerById(playerId);
     if(!player) return;
+
     if(!player.name.trim()){
       errorEl.textContent = "Entre d'abord un prénom.";
       return;
     }
+
     errorEl.textContent = "";
     player.present = !player.present;
-    if(!player.present) clearPlayerFromAllZones(player.id);
+
+    if(!player.present){
+      clearPlayerFromAllZones(player.id);
+    }
+
     state.matches = [];
     syncGroupsWithPresence();
     saveState();
+
+    if(cardEl){
+      cardEl.classList.remove("flash");
+      void cardEl.offsetWidth;
+      cardEl.classList.add("flash");
+    }
+
     renderAll();
   }
 
