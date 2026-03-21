@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Répartition tennis</title>
+
+  <style>
+    :root{
+      --main:#4f46e5;
+      --bg:#f5f7ff;
+      --card:#ffffff;
+      --muted:#64748b;
+      --danger:#ef4444;
+      --success:#16a34a;
+      --ring: rgba(79,70,229,.20);
+      --soft:#eef2ff;
+      --border:#d7dbe7;
+      --present:#dcfce7;
+      --present-border:#86efac;
+      --absent:#f8fafc;
+      --drag:#fef3c7;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      margin:0;
+      padding:16px;
+      color:#111827;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    h1{
+      text-align:center;
+      color:var(--main);
+      margin:8px 0 16px;
+      font-size:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:14px;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+
+    .top{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .control{
+      min-width: 180px;
+      flex:1 1 200px;
+    }
+
+    label{
+      font-size:12px;
+      font-weight:700;
+      color:#1f2937;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    select, input{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:15px;
+      outline:none;
+      background:#fff;
+    }
+
+    select:focus, input:focus{
+      border-color: var(--main);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      flex:1 1 420px;
+    }
+
+    button{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      color:#fff;
+      min-width:130px;
+      transition:transform .05s ease, opacity .2s ease;
+    }
+
+    button:active{ transform:translateY(1px); }
+
+    .primary{ background:var(--main); }
+    .secondary{ background:var(--muted); }
+    .danger{ background:var(--danger); }
+    .success{ background:var(--success); }
+
+    button:hover{ opacity:.92; }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .hint{
+      font-size:12px;
+      color:#6b7280;
+      margin-top:8px;
+    }
+
+    .error{
+      margin-top:10px;
+      color:var(--danger);
+      font-size:13px;
+      font-weight:700;
+      min-height:18px;
+    }
+
+    .playersGrid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    @media (max-width:900px){
+      .playersGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width:640px){
+      body{ padding:12px; }
+      .playersGrid{ grid-template-columns: 1fr; }
+      .groups{ grid-template-columns: 1fr; }
+      .btns{ justify-content:stretch; }
+      button{ width:100%; min-width:0; }
+      h1{ font-size:20px; }
+    }
+
+    .playerCard{
+      border:2px solid #e5e7eb;
+      border-radius:16px;
+      padding:12px;
+      background:var(--absent);
+      transition:.18s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .playerCard.present{
+      background:var(--present);
+      border-color:var(--present-border);
+      box-shadow:0 0 0 4px rgba(34,197,94,.08);
+    }
+
+    .playerTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .slotTitle{
+      font-size:12px;
+      font-weight:800;
+      color:#475569;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .status{
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#e5e7eb;
+      color:#334155;
+    }
+
+    .playerCard.present .status{
+      background:#22c55e;
+      color:white;
+    }
+
+    .playerCard input{
+      background:#fff;
+      cursor:text;
+    }
+
+    .metaBar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .meta{
+      font-size:13px;
+      color:#475569;
+      font-weight:700;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    .groups{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .dropZone{
+      border:2px dashed #cbd5e1;
+      border-radius:18px;
+      background:#fafbff;
+      min-height:130px;
+      padding:12px;
+      transition:.15s ease;
+    }
+
+    .dropZone.dragover{
+      border-color:var(--main);
+      background:#eef2ff;
+      box-shadow:0 0 0 4px rgba(79,70,229,.08);
+    }
+
+    .dropZone h3{
+      margin:0 0 10px;
+      color:var(--main);
+      font-size:16px;
+    }
+
+    .dropHint{
+      font-size:12px;
+      color:#64748b;
+      margin-top:-4px;
+      margin-bottom:10px;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      min-height:50px;
+      align-items:flex-start;
+    }
+
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      background:var(--soft);
+      color:#1e293b;
+      font-weight:700;
+      border:1px solid #c7d2fe;
+      cursor:grab;
+      user-select:none;
+    }
+
+    .chip:active{
+      cursor:grabbing;
+    }
+
+    .chip.dragging{
+      opacity:.45;
+      background:var(--drag);
+    }
+
+    .empty{
+      color:#94a3b8;
+      font-style:italic;
+      font-size:14px;
+      padding:6px 0;
+    }
+
+    .legend{
+      margin-top:8px;
+      font-size:12px;
+      color:#64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🎾 Répartition des groupes</h1>
+
+    <div class="card">
+      <div class="top">
+        <div class="control">
+          <label for="nbGroupes">Nombre de groupes</label>
+          <select id="nbGroupes">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          <div class="hint">Prénoms sauvegardés automatiquement • clic sur une case = présent/absent</div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="tirer">Tirer au sort</button>
+          <button class="secondary" id="remelanger" disabled>Re-mélanger</button>
+          <button class="success" id="viderGroupes">Vider groupes</button>
+          <button class="secondary" id="toutAbsent">Tous absents</button>
+          <button class="danger" id="reset">Reset complet</button>
+        </div>
+      </div>
+      <div class="error" id="error"></div>
+    </div>
+
+    <div class="card">
+      <div class="metaBar">
+        <div class="meta" id="presenceMeta">0 présent • 8 absents</div>
+        <div class="meta">Clique sur la carte pour changer la présence</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="playersGrid" id="playersGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="layout">
+        <div class="dropZone" data-group="unassigned">
+          <h3>Présents non affectés</h3>
+          <div class="dropHint">Tu peux glisser les joueurs ici puis les répartir manuellement</div>
+          <div class="chips" id="unassigned"></div>
+        </div>
+
+        <div class="groups" id="groups"></div>
+      </div>
+      <div class="legend">Glisser-déposer actif entre les groupes et la zone “Présents non affectés”.</div>
+    </div>
+  </div>
+
+<script>
+  const MAX = 8;
+  const LS_KEY_STATE = "tennis_group_app_v2_state";
+
+  const defaultState = {
+    groupCount: 2,
+    players: Array.from({ length: MAX }, (_, i) => ({
+      id: "p" + (i + 1),
+      name: "",
+      present: false
+    })),
+    groups: {
+      unassigned: [],
+      g1: [],
+      g2: [],
+      g3: [],
+      g4: []
+    },
+    hasDraw: false
+  };
+
+  const playersGrid = document.getElementById("playersGrid");
+  const groupsEl = document.getElementById("groups");
+  const unassignedEl = document.getElementById("unassigned");
+  const errorEl = document.getElementById("error");
+  const presenceMetaEl = document.getElementById("presenceMeta");
+  const nbGroupesEl = document.getElementById("nbGroupes");
+  const btnRemelanger = document.getElementById("remelanger");
+
+  let state = loadState();
+  let draggedPlayerId = null;
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(LS_KEY_STATE);
+      if (!raw) return structuredClone(defaultState);
+      const parsed = JSON.parse(raw);
+
+      const safePlayers = Array.from({ length: MAX }, (_, i) => {
+        const p = parsed.players && parsed.players[i] ? parsed.players[i] : {};
+        return {
+          id: p.id || ("p" + (i + 1)),
+          name: typeof p.name === "string" ? p.name : "",
+          present: !!p.present
+        };
+      });
+
+      const safeGroupCount = [1,2,3,4].includes(parsed.groupCount) ? parsed.groupCount : 2;
+      const safeGroups = {
+        unassigned: Array.isArray(parsed.groups?.unassigned) ? parsed.groups.unassigned : [],
+        g1: Array.isArray(parsed.groups?.g1) ? parsed.groups.g1 : [],
+        g2: Array.isArray(parsed.groups?.g2) ? parsed.groups.g2 : [],
+        g3: Array.isArray(parsed.groups?.g3) ? parsed.groups.g3 : [],
+        g4: Array.isArray(parsed.groups?.g4) ? parsed.groups.g4 : []
+      };
+
+      return {
+        groupCount: safeGroupCount,
+        players: safePlayers,
+        groups: safeGroups,
+        hasDraw: !!parsed.hasDraw
+      };
+    } catch {
+      return structuredClone(defaultState);
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(LS_KEY_STATE, JSON.stringify(state));
+  }
+
+  function getActiveGroupKeys() {
+    return Array.from({ length: state.groupCount }, (_, i) => "g" + (i + 1));
+  }
+
+  function getPresentPlayers() {
+    return state.players.filter(p => p.present && p.name.trim() !== "");
+  }
+
+  function getPlayerById(id) {
+    return state.players.find(p => p.id === id);
+  }
+
+  function unique(arr) {
+    return [...new Set(arr)];
+  }
+
+  function clearPlayerFromAllZones(playerId) {
+    state.groups.unassigned = state.groups.unassigned.filter(id => id !== playerId);
+    ["g1","g2","g3","g4"].forEach(key => {
+      state.groups[key] = state.groups[key].filter(id => id !== playerId);
+    });
+  }
+
+  function syncGroupsWithPresence() {
+    const presentIds = new Set(getPresentPlayers().map(p => p.id));
+
+    Object.keys(state.groups).forEach(key => {
+      state.groups[key] = unique(state.groups[key]).filter(id => presentIds.has(id));
+    });
+
+    const assignedIds = new Set(
+      Object.values(state.groups).flat()
+    );
+
+    getPresentPlayers().forEach(player => {
+      if (!assignedIds.has(player.id)) {
+        state.groups.unassigned.push(player.id);
+      }
+    });
+
+    state.groups.unassigned = unique(state.groups.unassigned);
+  }
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function randomizeGroups() {
+    errorEl.textContent = "";
+
+    const present = getPresentPlayers();
+    if (present.length === 0) {
+      errorEl.textContent = "Ajoute au moins un prénom présent.";
+      return;
+    }
+
+    const shuffledIds = shuffle(present.map(p => p.id));
+    const activeGroups = getActiveGroupKeys();
+
+    state.groups.unassigned = [];
+    ["g1","g2","g3","g4"].forEach(k => state.groups[k] = []);
+
+    shuffledIds.forEach((id, index) => {
+      const targetGroup = activeGroups[index % activeGroups.length];
+      state.groups[targetGroup].push(id);
+    });
+
+    state.hasDraw = true;
+    saveState();
+    renderAll();
+  }
+
+  function renderPlayers() {
+    playersGrid.innerHTML = "";
+
+    state.players.forEach((player, index) => {
+      const card = document.createElement("div");
+      card.className = "playerCard" + (player.present ? " present" : "");
+      card.dataset.id = player.id;
+
+      card.addEventListener("click", (e) => {
+        if (e.target.tagName.toLowerCase() === "input") return;
+        togglePresence(player.id);
+      });
+
+      const top = document.createElement("div");
+      top.className = "playerTop";
+
+      const slot = document.createElement("div");
+      slot.className = "slotTitle";
+      slot.textContent = `Joueur ${index + 1}`;
+
+      const status = document.createElement("div");
+      status.className = "status";
+      status.textContent = player.present ? "Présent" : "Absent";
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "Prénom";
+      input.value = player.name;
+
+      input.addEventListener("input", (e) => {
+        updateName(player.id, e.target.value);
+      });
+
+      input.addEventListener("click", (e) => e.stopPropagation());
+
+      top.appendChild(slot);
+      top.appendChild(status);
+      card.appendChild(top);
+      card.appendChild(input);
+      playersGrid.appendChild(card);
+    });
+
+    const presentCount = state.players.filter(p => p.present && p.name.trim() !== "").length;
+    const absentCount = MAX - presentCount;
+    presenceMetaEl.textContent = `${presentCount} présent${presentCount > 1 ? "s" : ""} • ${absentCount} absent${absentCount > 1 ? "s" : ""}`;
+  }
+
+  function renderGroups() {
+    groupsEl.innerHTML = "";
+    unassignedEl.innerHTML = "";
+
+    syncGroupsWithPresence();
+
+    renderZone("unassigned", unassignedEl);
+
+    getActiveGroupKeys().forEach((groupKey, idx) => {
+      const zone = document.createElement("div");
+      zone.className = "dropZone";
+      zone.dataset.group = groupKey;
+
+      const title = document.createElement("h3");
+      title.textContent = `Groupe ${idx + 1}`;
+
+      const hint = document.createElement("div");
+      hint.className = "dropHint";
+      hint.textContent = "Glisse les joueurs pour ajuster manuellement";
+
+      const chips = document.createElement("div");
+      chips.className = "chips";
+      chips.id = groupKey;
+
+      zone.appendChild(title);
+      zone.appendChild(hint);
+      zone.appendChild(chips);
+      groupsEl.appendChild(zone);
+
+      renderZone(groupKey, chips);
+    });
+
+    attachDropEvents();
+    btnRemelanger.disabled = !state.hasDraw;
+  }
+
+  function renderZone(groupKey, container) {
+    const ids = state.groups[groupKey] || [];
+
+    if (ids.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "(vide)";
+      container.appendChild(empty);
+      return;
+    }
+
+    ids.forEach(id => {
+      const player = getPlayerById(id);
+      if (!player) return;
+
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.draggable = true;
+      chip.textContent = player.name || "Sans prénom";
+      chip.dataset.id = player.id;
+
+      chip.addEventListener("dragstart", () => {
+        draggedPlayerId = player.id;
+        chip.classList.add("dragging");
+      });
+
+      chip.addEventListener("dragend", () => {
+        draggedPlayerId = null;
+        chip.classList.remove("dragging");
+        document.querySelectorAll(".dropZone").forEach(z => z.classList.remove("dragover"));
+      });
+
+      container.appendChild(chip);
+    });
+  }
+
+  function attachDropEvents() {
+    document.querySelectorAll(".dropZone").forEach(zone => {
+      zone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        zone.classList.add("dragover");
+      });
+
+      zone.addEventListener("dragleave", () => {
+        zone.classList.remove("dragover");
+      });
+
+      zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.classList.remove("dragover");
+        const targetGroup = zone.dataset.group;
+        if (!draggedPlayerId || !targetGroup) return;
+
+        movePlayerToGroup(draggedPlayerId, targetGroup);
+      });
+    });
+  }
+
+  function movePlayerToGroup(playerId, targetGroup) {
+    clearPlayerFromAllZones(playerId);
+    state.groups[targetGroup].push(playerId);
+    state.groups[targetGroup] = unique(state.groups[targetGroup]);
+    saveState();
+    renderAll();
+  }
+
+  function updateName(playerId, value) {
+    const player = getPlayerById(playerId);
+    if (!player) return;
+    player.name = value;
+
+    if (!value.trim()) {
+      player.present = false;
+      clearPlayerFromAllZones(playerId);
+    }
+
+    syncGroupsWithPresence();
+    state.hasDraw = false;
+    saveState();
+    renderAll();
+  }
+
+  function togglePresence(playerId) {
+    const player = getPlayerById(playerId);
+    if (!player) return;
+
+    if (!player.name.trim()) {
+      errorEl.textContent = "Entre d'abord un prénom dans la case.";
+      return;
+    }
+
+    errorEl.textContent = "";
+    player.present = !player.present;
+
+    if (!player.present) {
+      clearPlayerFromAllZones(playerId);
+    } else {
+      state.groups.unassigned.push(playerId);
+      state.groups.unassigned = unique(state.groups.unassigned);
+    }
+
+    state.hasDraw = false;
+    syncGroupsWithPresence();
+    saveState();
+    renderAll();
+  }
+
+  function emptyGroups() {
+    syncGroupsWithPresence();
+    state.groups.unassigned = getPresentPlayers().map(p => p.id);
+    ["g1","g2","g3","g4"].forEach(k => state.groups[k] = []);
+    state.hasDraw = false;
+    saveState();
+    renderAll();
+  }
+
+  function setAllAbsent() {
+    state.players.forEach(p => p.present = false);
+    state.groups = {
+      unassigned: [],
+      g1: [],
+      g2: [],
+      g3: [],
+      g4: []
+    };
+    state.hasDraw = false;
+    saveState();
+    renderAll();
+  }
+
+  function changeGroupCount(newCount) {
+    state.groupCount = newCount;
+    syncGroupsWithPresence();
+
+    const active = new Set(getActiveGroupKeys());
+    ["g1","g2","g3","g4"].forEach(key => {
+      if (!active.has(key)) {
+        state.groups.unassigned.push(...state.groups[key]);
+        state.groups[key] = [];
+      }
+    });
+
+    state.groups.unassigned = unique(state.groups.unassigned);
+    state.hasDraw = false;
+    saveState();
+    renderAll();
+  }
+
+  function renderAll() {
+    nbGroupesEl.value = String(state.groupCount);
+    renderPlayers();
+    renderGroups();
+  }
+
+  document.getElementById("tirer").addEventListener("click", randomizeGroups);
+
+  document.getElementById("remelanger").addEventListener("click", () => {
+    const present = getPresentPlayers();
+    if (present.length === 0) return;
+    randomizeGroups();
+  });
+
+  document.getElementById("viderGroupes").addEventListener("click", emptyGroups);
+
+  document.getElementById("toutAbsent").addEventListener("click", setAllAbsent);
+
+  document.getElementById("reset").addEventListener("click", () => {
+    localStorage.removeItem(LS_KEY_STATE);
+    state = structuredClone(defaultState);
+    renderAll();
+  });
+
+  nbGroupesEl.addEventListener("change", () => {
+    changeGroupCount(parseInt(nbGroupesEl.value, 10));
+  });
+
+  renderAll();
+</script>
+</body>
+</html>
