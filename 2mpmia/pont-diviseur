@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>TP Pont Diviseur</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body {font-family: Arial; margin: 20px;}
+textarea {width: 100%; margin-top: 5px;}
+table, th, td {border:1px solid black; border-collapse: collapse; padding:5px;}
+</style>
+</head>
+<body contenteditable="true">
+
+<p>
+Nom : <input type="text"> 
+Prénom : <input type="text"> 
+Classe : <input type="text"> 
+Date : <input type="text">
+</p>
+
+<h2>TP : Pont diviseur de tension</h2>
+
+<h3>Problématique</h3>
+<p>Comment obtenir une tension différente à partir d’une source unique ?</p>
+
+<h3>Question 1</h3>
+<p>Décrire le montage :</p>
+<textarea rows="3"></textarea>
+
+<h3>Question 2</h3>
+<p>Mesurer U2 :</p>
+<textarea rows="3"></textarea>
+
+<h3>Question 3</h3>
+<p>Calcul : \(U_2 = U \times \frac{R_2}{R_1 + R_2}\)</p>
+<textarea rows="3"></textarea>
+
+<h3>Question 4</h3>
+<p>Comparer résultats :</p>
+<textarea rows="3"></textarea>
+
+<h3>Question 5</h3>
+<p>Utilité :</p>
+<textarea rows="3"></textarea>
+
+<h3>Tableau d’évaluation</h3>
+<table>
+<tr><th>Compétences</th><th>Très bonne maîtrise</th><th>Maîtrise satisfaisante</th><th>Fragile</th><th>Insuffisant</th></tr>
+<tr><td>S’approprier</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Réaliser</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Analyser</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Valider</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Communiquer</td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+</body>
+</html>
