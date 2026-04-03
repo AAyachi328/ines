@@ -1,58 +1,324 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>TP Pont Diviseur</title>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-body {font-family: Arial; margin: 20px;}
-textarea {width: 100%; margin-top: 5px;}
-table, th, td {border:1px solid black; border-collapse: collapse; padding:5px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP - Pont diviseur de tension</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      line-height: 1.6;
+      color: #222;
+      background: #ffffff;
+    }
+    h1, h2, h3 {
+      color: #0b4f6c;
+    }
+    .top-fields {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    .top-fields label {
+      font-weight: bold;
+    }
+    .top-fields input {
+      padding: 6px;
+      border: 1px solid #999;
+      border-radius: 6px;
+      min-width: 150px;
+    }
+    .box {
+      background: #f4f9fc;
+      border-left: 5px solid #3aaed8;
+      padding: 12px;
+      margin: 16px 0;
+      border-radius: 8px;
+    }
+    .schema {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid #666;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #dff3ff;
+    }
+    .formula {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #0b4f6c;
+      margin: 10px 0;
+    }
+    .editable-note {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 18px;
+    }
+    .section {
+      margin-bottom: 28px;
+    }
+    @media print {
+      body {
+        margin: 12px;
+      }
+      textarea {
+        border: 1px solid #444;
+      }
+    }
+  </style>
 </head>
-<body contenteditable="true">
+<body>
 
-<p>
-Nom : <input type="text"> 
-Prénom : <input type="text"> 
-Classe : <input type="text"> 
-Date : <input type="text">
-</p>
+<div class="top-fields">
+  <label>Nom : <input type="text"></label>
+  <label>Prénom : <input type="text"></label>
+  <label>Classe : <input type="text"></label>
+  <label>Date : <input type="text"></label>
+</div>
 
-<h2>TP : Pont diviseur de tension</h2>
+<div class="editable-note">Cette page est éditable : cliquez dans les textes pour les modifier si besoin.</div>
 
-<h3>Problématique</h3>
-<p>Comment obtenir une tension différente à partir d’une source unique ?</p>
+<h1 contenteditable="true">🔬 TP : Étude du pont diviseur de tension</h1>
 
-<h3>Question 1</h3>
-<p>Décrire le montage :</p>
-<textarea rows="3"></textarea>
+<div class="section">
+  <h2 contenteditable="true">🎯 Problématique</h2>
+  <p contenteditable="true">Comment peut-on obtenir une tension différente à partir d’une source unique grâce à un montage simple ? ⚡</p>
+</div>
 
-<h3>Question 2</h3>
-<p>Mesurer U2 :</p>
-<textarea rows="3"></textarea>
+<div class="section">
+  <h2 contenteditable="true">🔧 Schéma du montage</h2>
+  <div class="schema">
+    <svg width="700" height="220" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="698" height="218" fill="white" stroke="none"/>
+      <line x1="80" y1="60" x2="180" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="320" y1="60" x2="420" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="560" y1="60" x2="620" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="60" x2="620" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="160" x2="80" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="80" y1="160" x2="80" y2="60" stroke="black" stroke-width="3"/>
 
-<h3>Question 3</h3>
-<p>Calcul : \(U_2 = U \times \frac{R_2}{R_1 + R_2}\)</p>
-<textarea rows="3"></textarea>
+      <rect x="180" y="45" width="140" height="30" fill="#ffe8a3" stroke="black" stroke-width="2"/>
+      <text x="250" y="65" text-anchor="middle" font-size="18" font-family="Arial">R1 = 100 Ω</text>
 
-<h3>Question 4</h3>
-<p>Comparer résultats :</p>
-<textarea rows="3"></textarea>
+      <rect x="420" y="45" width="140" height="30" fill="#cdeffd" stroke="black" stroke-width="2"/>
+      <text x="490" y="65" text-anchor="middle" font-size="18" font-family="Arial">R2 = 200 Ω</text>
 
-<h3>Question 5</h3>
-<p>Utilité :</p>
-<textarea rows="3"></textarea>
+      <line x1="80" y1="95" x2="80" y2="125" stroke="black" stroke-width="3"/>
+      <line x1="95" y1="88" x2="95" y2="132" stroke="black" stroke-width="3"/>
+      <text x="55" y="110" font-size="18" font-family="Arial">12 V</text>
+      <text x="72" y="48" font-size="18" font-family="Arial">+</text>
+      <text x="72" y="178" font-size="18" font-family="Arial">−</text>
 
-<h3>Tableau d’évaluation</h3>
-<table>
-<tr><th>Compétences</th><th>Très bonne maîtrise</th><th>Maîtrise satisfaisante</th><th>Fragile</th><th>Insuffisant</th></tr>
-<tr><td>S’approprier</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Réaliser</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Analyser</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Valider</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Communiquer</td><td></td><td></td><td></td><td></td></tr>
-</table>
+      <line x1="420" y1="100" x2="560" y2="100" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="420" y1="100" x2="420" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="560" y1="100" x2="560" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <circle cx="490" cy="100" r="22" fill="white" stroke="#0b4f6c" stroke-width="3"/>
+      <text x="490" y="106" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">V</text>
+      <text x="490" y="132" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">U₂</text>
+    </svg>
+  </div>
+  <div class="box" contenteditable="true">
+    📌 <strong>À retenir :</strong> R1 et R2 sont montées en série. La tension U2 se mesure aux bornes de R2 avec un voltmètre branché en dérivation.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🔎 Partie 1 : Observation du montage</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> S’approprier / Analyser</p>
+  <p contenteditable="true">On dispose d’un générateur de tension U = 12 V, de deux résistances R1 = 100 Ω et R2 = 200 Ω, et d’un voltmètre.</p>
+  <h3 contenteditable="true">❓ Question 1</h3>
+  <p contenteditable="true">Décris le montage électrique permettant de réaliser un pont diviseur de tension. ✍️</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Le montage est constitué de deux résistances montées en série avec un générateur. La tension du générateur se répartit entre les deux résistances. On mesure U2 aux bornes de R2.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Dans un circuit en série, les composants sont placés les uns à la suite des autres.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">⚙️ Partie 2 : Réalisation expérimentale</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Réaliser / Communiquer</p>
+  <h3 contenteditable="true">❓ Question 2</h3>
+  <p contenteditable="true">Réalise le montage puis mesure la tension U2 aux bornes de R2 avec le voltmètre. Note la valeur obtenue. 🧪</p>
+  <textarea placeholder="Écris ici ta mesure..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> La tension mesurée aux bornes de R2 est proche de 8 V.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Le voltmètre se branche en dérivation aux bornes de la résistance R2.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🧠 Partie 3 : Exploitation des résultats</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Analyser / Raisonner</p>
+  <h3 contenteditable="true">❓ Question 3</h3>
+  <p contenteditable="true">Calcule la tension U2 à l’aide de la formule du pont diviseur. 🧮</p>
+  <div class="formula">\(U_2 = U \times \dfrac{R_2}{R_1 + R_2}\)</div>
+  <textarea placeholder="Pose ici ton calcul..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong><br>
+    \(U_2 = 12 \times \dfrac{200}{100+200}\)<br>
+    \(U_2 = 12 \times \dfrac{200}{300}\)<br>
+    \(U_2 = 12 \times \dfrac{2}{3} = 8\text{ V}\)
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Commence par additionner les résistances, puis fais le quotient avant de multiplier par U.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">✔️ Partie 4 : Validation</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Valider / Analyser</p>
+  <h3 contenteditable="true">❓ Question 4</h3>
+  <p contenteditable="true">Compare la valeur mesurée et la valeur calculée. Que peux-tu conclure ? ✅</p>
+  <textarea placeholder="Écris ici ta conclusion..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> La tension calculée est de 8 V et la tension mesurée est très proche de cette valeur. Le modèle du pont diviseur de tension est donc validé expérimentalement.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Si les deux valeurs sont proches, la formule décrit bien le montage.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🗣️ Partie 5 : Communication</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Communiquer / S’approprier</p>
+  <h3 contenteditable="true">❓ Question 5</h3>
+  <p contenteditable="true">Explique avec tes mots à quoi sert un pont diviseur de tension dans un circuit électrique. 💬</p>
+  <textarea placeholder="Écris ici ton explication..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Un pont diviseur de tension permet d’obtenir une tension plus faible que celle fournie par le générateur. Il est utilisé pour alimenter correctement certains composants électroniques.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Tous les composants n’ont pas besoin de la même tension pour fonctionner.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">📘 Fiche de cours : Le pont diviseur de tension</h2>
+
+  <h3 contenteditable="true">1. Définition 📙</h3>
+  <p contenteditable="true">Un pont diviseur de tension est un montage électrique constitué de deux résistances en série branchées à un générateur. Il permet de récupérer une partie de la tension totale aux bornes de l’une des résistances.</p>
+
+  <h3 contenteditable="true">2. Formules à connaître ⭐</h3>
+  <div class="formula">\(U_2 = U \times \dfrac{R_2}{R_1 + R_2}\)</div>
+  <div class="formula">\(U_1 = U \times \dfrac{R_1}{R_1 + R_2}\)</div>
+  <div class="formula">\(U = U_1 + U_2\)</div>
+
+  <h3 contenteditable="true">3. Influence des résistances 🔍</h3>
+  <ul contenteditable="true">
+    <li>Si R2 augmente, alors U2 augmente.</li>
+    <li>Si R2 diminue, alors U2 diminue.</li>
+    <li>La tension se partage selon la valeur des résistances.</li>
+  </ul>
+
+  <h3 contenteditable="true">4. Exemple 🧮</h3>
+  <p contenteditable="true">Pour U = 12 V, R1 = 100 Ω et R2 = 200 Ω :</p>
+  <div class="formula">\(U_2 = 12 \times \dfrac{200}{100+200} = 8\text{ V}\)</div>
+
+  <h3 contenteditable="true">5. Applications 🌍</h3>
+  <ul contenteditable="true">
+    <li>Cartes électroniques</li>
+    <li>Capteurs</li>
+    <li>Circuits de mesure</li>
+    <li>Adaptation de tension</li>
+  </ul>
+
+  <h3 contenteditable="true">6. Méthode à retenir 📝</h3>
+  <ol contenteditable="true">
+    <li>Identifier les résistances en série.</li>
+    <li>Repérer la tension recherchée.</li>
+    <li>Appliquer la formule adaptée.</li>
+    <li>Vérifier la cohérence du résultat.</li>
+  </ol>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">📊 Tableau d’évaluation</h2>
+  <table>
+    <tr>
+      <th>Compétences / Questions</th>
+      <th>Très bonne maîtrise</th>
+      <th>Maîtrise satisfaisante</th>
+      <th>Fragile</th>
+      <th>Insuffisant</th>
+    </tr>
+    <tr>
+      <td>S’approprier (Q1, Q5)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Réaliser (Q2)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Analyser / Raisonner (Q1, Q3, Q4)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Valider (Q4)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Communiquer (Q2, Q5)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll('p, h1, h2, h3, li, .box, .editable-note').forEach(el => {
+    if (!el.hasAttribute('contenteditable')) {
+      el.setAttribute('contenteditable', 'true');
+    }
+  });
+</script>
 
 </body>
 </html>
