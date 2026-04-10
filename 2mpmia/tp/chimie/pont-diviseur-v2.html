@@ -1,41 +1,430 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>TP Pont Diviseur Défi</title>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-body{font-family:Arial;margin:20px;}
-textarea{width:100%;}
-table,th,td{border:1px solid black;border-collapse:collapse;padding:5px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP - Défi pont diviseur 4,5 V</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 24px;
+      line-height: 1.6;
+      color: #222;
+      background: #ffffff;
+    }
+    h1, h2, h3 {
+      color: #0b4f6c;
+    }
+    .top-fields {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    .top-fields label {
+      font-weight: bold;
+    }
+    .top-fields input {
+      padding: 6px;
+      border: 1px solid #999;
+      border-radius: 6px;
+      min-width: 150px;
+    }
+    .box {
+      background: #f4f9fc;
+      border-left: 5px solid #3aaed8;
+      padding: 12px;
+      margin: 16px 0;
+      border-radius: 8px;
+    }
+    .schema {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid #666;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #dff3ff;
+    }
+    .formula {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #0b4f6c;
+      margin: 10px 0;
+    }
+    .editable-note {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 18px;
+    }
+    .section {
+      margin-bottom: 28px;
+    }
+    ul, ol {
+      margin-top: 8px;
+    }
+    @media print {
+      body {
+        margin: 12px;
+      }
+      textarea {
+        border: 1px solid #444;
+      }
+    }
+  </style>
 </head>
-<body contenteditable="true">
+<body>
 
-<p>Nom : <input type="text"> Prénom : <input type="text"> Classe : <input type="text"> Date : <input type="text"></p>
+<div class="top-fields">
+  <label>Nom : <input type="text"></label>
+  <label>Prénom : <input type="text"></label>
+  <label>Classe : <input type="text"></label>
+  <label>Date : <input type="text"></label>
+</div>
 
-<h2>TP Défi : Obtenir 4,5V</h2>
+<div class="editable-note">Cette page est éditable : cliquez dans les textes pour les modifier si besoin.</div>
 
-<p>Principe : U1 = U × (R1 / (R1+R2))</p>
+<h1 contenteditable="true">🔬 TP Défi : Régler un pont diviseur pour obtenir U₁ = 4,5 V</h1>
 
-<h3>Q1</h3><textarea rows="3"></textarea>
-<h3>Q2</h3><textarea rows="3"></textarea>
-<h3>Q3</h3><textarea rows="3"></textarea>
-<h3>Q4</h3><textarea rows="3"></textarea>
-<h3>Q5</h3><textarea rows="3"></textarea>
-<h3>Q6</h3><textarea rows="3"></textarea>
-<h3>Q7</h3><textarea rows="3"></textarea>
-<h3>Q8</h3><textarea rows="3"></textarea>
+<div class="section">
+  <h2 contenteditable="true">🎯 Problématique</h2>
+  <p contenteditable="true">Comment obtenir précisément une tension U₁ = 4,5 V à partir d’une source de tension en utilisant une résistance fixe de 330 Ω et un potentiomètre de 1 kΩ ? ⚡</p>
+</div>
 
-<h3>Évaluation</h3>
-<table>
-<tr><th>Compétence</th><th>TBM</th><th>MS</th><th>F</th><th>I</th></tr>
-<tr><td>S’approprier</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Réaliser</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Analyser</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Valider</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>Communiquer</td><td></td><td></td><td></td><td></td></tr>
-</table>
+<div class="section">
+  <h2 contenteditable="true">📘 Rappel du principe</h2>
+  <p contenteditable="true">Un pont diviseur de tension est un montage constitué de deux résistances en série.</p>
+  <div class="formula">\(U = U_1 + U_2\)</div>
+  <div class="formula">\(U_1 = U \times \dfrac{R_1}{R_1 + R_2}\)</div>
+  <div class="formula">\(U_2 = U \times \dfrac{R_2}{R_1 + R_2}\)</div>
+  <div class="box" contenteditable="true">
+    📌 <strong>À retenir :</strong> plus la résistance est grande, plus la tension à ses bornes est grande.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🔧 Schéma 1 : montage avec deux résistances</h2>
+  <div class="schema">
+    <svg width="700" height="220" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="698" height="218" fill="white"/>
+      <line x1="80" y1="60" x2="180" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="320" y1="60" x2="420" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="560" y1="60" x2="620" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="60" x2="620" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="160" x2="80" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="80" y1="160" x2="80" y2="60" stroke="black" stroke-width="3"/>
+
+      <rect x="180" y="45" width="140" height="30" fill="#ffe8a3" stroke="black" stroke-width="2"/>
+      <text x="250" y="65" text-anchor="middle" font-size="18" font-family="Arial">R1</text>
+
+      <rect x="420" y="45" width="140" height="30" fill="#cdeffd" stroke="black" stroke-width="2"/>
+      <text x="490" y="65" text-anchor="middle" font-size="18" font-family="Arial">R2</text>
+
+      <line x1="80" y1="95" x2="80" y2="125" stroke="black" stroke-width="3"/>
+      <line x1="95" y1="88" x2="95" y2="132" stroke="black" stroke-width="3"/>
+      <text x="58" y="110" font-size="18" font-family="Arial">U</text>
+      <text x="72" y="48" font-size="18" font-family="Arial">+</text>
+      <text x="72" y="178" font-size="18" font-family="Arial">−</text>
+
+      <line x1="180" y1="100" x2="320" y2="100" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="180" y1="100" x2="180" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="320" y1="100" x2="320" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <circle cx="250" cy="100" r="22" fill="white" stroke="#0b4f6c" stroke-width="3"/>
+      <text x="250" y="106" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">V</text>
+      <text x="250" y="132" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">U₁</text>
+
+      <line x1="420" y1="100" x2="560" y2="100" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="420" y1="100" x2="420" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="560" y1="100" x2="560" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <circle cx="490" cy="100" r="22" fill="white" stroke="#0b4f6c" stroke-width="3"/>
+      <text x="490" y="106" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">V</text>
+      <text x="490" y="132" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">U₂</text>
+    </svg>
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🔧 Schéma 2 : résistance de 330 Ω et potentiomètre</h2>
+  <div class="schema">
+    <svg width="700" height="220" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="698" height="218" fill="white"/>
+      <line x1="80" y1="60" x2="180" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="320" y1="60" x2="420" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="560" y1="60" x2="620" y2="60" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="60" x2="620" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="620" y1="160" x2="80" y2="160" stroke="black" stroke-width="3"/>
+      <line x1="80" y1="160" x2="80" y2="60" stroke="black" stroke-width="3"/>
+
+      <rect x="180" y="45" width="140" height="30" fill="#ffe8a3" stroke="black" stroke-width="2"/>
+      <text x="250" y="65" text-anchor="middle" font-size="18" font-family="Arial">330 Ω</text>
+
+      <rect x="420" y="45" width="140" height="30" fill="#d9f7d6" stroke="black" stroke-width="2"/>
+      <text x="490" y="65" text-anchor="middle" font-size="18" font-family="Arial">Potar 1 kΩ</text>
+      <line x1="455" y1="30" x2="525" y2="80" stroke="#1a7f37" stroke-width="3"/>
+      <polygon points="525,80 515,78 520,70" fill="#1a7f37"/>
+
+      <line x1="80" y1="95" x2="80" y2="125" stroke="black" stroke-width="3"/>
+      <line x1="95" y1="88" x2="95" y2="132" stroke="black" stroke-width="3"/>
+      <text x="58" y="110" font-size="18" font-family="Arial">U</text>
+      <text x="72" y="48" font-size="18" font-family="Arial">+</text>
+      <text x="72" y="178" font-size="18" font-family="Arial">−</text>
+
+      <line x1="420" y1="100" x2="560" y2="100" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="420" y1="100" x2="420" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <line x1="560" y1="100" x2="560" y2="60" stroke="#0b4f6c" stroke-width="3"/>
+      <circle cx="490" cy="100" r="22" fill="white" stroke="#0b4f6c" stroke-width="3"/>
+      <text x="490" y="106" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">V</text>
+      <text x="490" y="132" text-anchor="middle" font-size="18" font-family="Arial" fill="#0b4f6c">U₁ = 4,5 V</text>
+    </svg>
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">🔎 Partie 1 : Vérifier le principe du pont diviseur</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> S’approprier / Réaliser</p>
+
+  <h3 contenteditable="true">❓ Question 1</h3>
+  <p contenteditable="true">Réalise un montage avec deux résistances en série. Fais le schéma du circuit et indique où sont U₁ et U₂. ✍️</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Le montage comporte deux résistances branchées en série sur un générateur. La tension U₁ est mesurée aux bornes de la première résistance et U₂ aux bornes de la seconde résistance.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Dans un montage en série, les composants sont placés les uns à la suite des autres.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 2</h3>
+  <p contenteditable="true">Mesure ou détermine les tensions U₁ et U₂. Que remarques-tu entre U, U₁ et U₂ ? 🔍</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> On remarque que la tension totale est égale à la somme des tensions partielles : \(U = U_1 + U_2\).
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Additionne les deux tensions mesurées.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 3</h3>
+  <p contenteditable="true">La tension est-elle plus élevée sur la petite résistance ou sur la grande résistance ? Justifie ta réponse. 🤔</p>
+  <textarea placeholder="Écris ici ta justification..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> La tension est plus élevée aux bornes de la plus grande résistance. Dans un pont diviseur, la tension se répartit proportionnellement aux valeurs des résistances.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Observe la formule : la résistance la plus grande reçoit la plus grande part de la tension.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">⚙️ Partie 2 : Défi avec une résistance de 330 Ω et un potentiomètre de 1 kΩ</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Réaliser / Analyser</p>
+  <p contenteditable="true">On dispose maintenant d’une résistance fixe de 330 Ω, d’un potentiomètre de 1 kΩ, d’un générateur et d’un voltmètre.</p>
+
+  <h3 contenteditable="true">❓ Question 4</h3>
+  <p contenteditable="true">Réalise un montage en série avec la résistance de 330 Ω et le potentiomètre. Fais le schéma du circuit. 🧪</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Le montage comporte la résistance de 330 Ω et le potentiomètre montés en série avec le générateur. La tension recherchée U₁ est mesurée aux bornes du dipôle choisi.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Le potentiomètre joue le rôle d’une résistance réglable.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 5</h3>
+  <p contenteditable="true">Fais varier le potentiomètre pour obtenir U₁ = 4,5 V. Indique où tu mesures cette tension et note le réglage obtenu. 🎯</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> On règle le potentiomètre jusqu’à lire 4,5 V au voltmètre aux bornes de la résistance ou du potentiomètre selon le choix du montage.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Le voltmètre se branche en dérivation aux bornes du composant étudié.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 6</h3>
+  <p contenteditable="true">Quand U₁ = 4,5 V, quelle vaut alors l’autre tension U₂ si la tension du générateur vaut 12 V ? 🧮</p>
+  <textarea placeholder="Pose ici ton calcul..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong><br>
+    \(U_2 = 12 - 4,5 = 7,5\text{ V}\)<br>
+    Donc \(U_2 = 7,5\text{ V}\).
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Soustrais simplement la tension connue à la tension totale.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 7</h3>
+  <p contenteditable="true">On suppose que U₁ = 4,5 V est la tension aux bornes de la résistance de 330 Ω. Calcule la valeur de l’autre résistance. 🧠</p>
+  <textarea placeholder="Pose ici ton calcul..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong><br>
+    \(4,5 = 12 \times \dfrac{330}{330 + R_2}\)<br>
+    \(\dfrac{4,5}{12} = \dfrac{330}{330 + R_2}\)<br>
+    \(0,375 = \dfrac{330}{330 + R_2}\)<br>
+    \(0,375(330 + R_2) = 330\)<br>
+    \(123,75 + 0,375R_2 = 330\)<br>
+    \(0,375R_2 = 206,25\)<br>
+    \(R_2 = 550\ \Omega\)
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Dans cette question, la résistance de 330 Ω correspond à la tension de 4,5 V.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 8</h3>
+  <p contenteditable="true">On suppose maintenant que U₁ = 4,5 V est la tension aux bornes du potentiomètre. Calcule alors la valeur réglée du potentiomètre. 🔄</p>
+  <textarea placeholder="Pose ici ton calcul..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong><br>
+    \(4,5 = 12 \times \dfrac{R_{pot}}{R_{pot} + 330}\)<br>
+    \(\dfrac{4,5}{12} = \dfrac{R_{pot}}{R_{pot} + 330}\)<br>
+    \(0,375 = \dfrac{R_{pot}}{R_{pot} + 330}\)<br>
+    \(0,375(R_{pot} + 330) = R_{pot}\)<br>
+    \(0,375R_{pot} + 123,75 = R_{pot}\)<br>
+    \(123,75 = 0,625R_{pot}\)<br>
+    \(R_{pot} = 198\ \Omega\)
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Cette fois, c’est le potentiomètre qui correspond à la tension de 4,5 V.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">✔️ Partie 3 : Validation</h2>
+  <p contenteditable="true"><strong>Compétences :</strong> Valider / Communiquer</p>
+
+  <h3 contenteditable="true">❓ Question 9</h3>
+  <p contenteditable="true">La valeur trouvée pour le potentiomètre est-elle possible avec un potentiomètre de 1 kΩ ? Justifie. ✅</p>
+  <textarea placeholder="Écris ici ta réponse..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Oui, cette valeur est possible car 198 Ω est inférieure à 1 000 Ω. Le potentiomètre de 1 kΩ permet donc ce réglage.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Compare simplement la valeur calculée à la valeur maximale du potentiomètre.
+  </div>
+
+  <h3 contenteditable="true">❓ Question 10</h3>
+  <p contenteditable="true">Explique pourquoi un potentiomètre est utile pour ce défi. 💬</p>
+  <textarea placeholder="Écris ici ton explication..."></textarea>
+  <div class="box" contenteditable="true">
+    ✅ <strong>Réponse complète :</strong> Le potentiomètre est utile car il permet de faire varier la résistance et donc d’ajuster précisément la tension de sortie jusqu’à obtenir 4,5 V.
+  </div>
+  <div class="box" contenteditable="true">
+    💡 <strong>Coup de pouce :</strong> Une résistance fixe ne peut pas être réglée, alors qu’un potentiomètre oui.
+  </div>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">📘 Fiche de cours : Pont diviseur et potentiomètre</h2>
+
+  <h3 contenteditable="true">1. Définition 📙</h3>
+  <p contenteditable="true">Un pont diviseur de tension est un montage composé de deux résistances en série. Il permet d’obtenir une partie de la tension fournie par le générateur.</p>
+
+  <h3 contenteditable="true">2. Formules à connaître ⭐</h3>
+  <div class="formula">\(U = U_1 + U_2\)</div>
+  <div class="formula">\(U_1 = U \times \dfrac{R_1}{R_1 + R_2}\)</div>
+  <div class="formula">\(U_2 = U \times \dfrac{R_2}{R_1 + R_2}\)</div>
+
+  <h3 contenteditable="true">3. Idée essentielle 📌</h3>
+  <p contenteditable="true">La tension est plus grande aux bornes de la résistance la plus grande.</p>
+
+  <h3 contenteditable="true">4. Potentiomètre 🔧</h3>
+  <p contenteditable="true">Un potentiomètre est une résistance réglable. Il permet de faire varier la tension dans un pont diviseur.</p>
+
+  <h3 contenteditable="true">5. Exemple 🧮</h3>
+  <p contenteditable="true">Si \(U = 12\text{ V}\), \(R_1 = 330\ \Omega\) et \(U_1 = 4,5\text{ V}\), alors :</p>
+  <div class="formula">\(4,5 = 12 \times \dfrac{330}{330 + R_2}\)</div>
+  <p contenteditable="true">on trouve :</p>
+  <div class="formula">\(R_2 = 550\ \Omega\)</div>
+  <p contenteditable="true">Si la tension de 4,5 V est aux bornes du potentiomètre, alors :</p>
+  <div class="formula">\(R_{pot} \approx 198\ \Omega\)</div>
+
+  <h3 contenteditable="true">6. Applications 🌍</h3>
+  <ul contenteditable="true">
+    <li>Montages électroniques</li>
+    <li>Capteurs</li>
+    <li>Circuits de commande</li>
+    <li>Adaptation de tension</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2 contenteditable="true">📊 Tableau d’évaluation</h2>
+  <table>
+    <tr>
+      <th>Compétences / Questions</th>
+      <th>Très bonne maîtrise</th>
+      <th>Maîtrise satisfaisante</th>
+      <th>Fragile</th>
+      <th>Insuffisant</th>
+    </tr>
+    <tr>
+      <td>S’approprier (Q1, Q2)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Réaliser (Q1, Q4, Q5)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Analyser / Raisonner (Q3, Q6, Q7, Q8)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Valider (Q9)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Communiquer (Q10)</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll('p, h1, h2, h3, li, .box, .editable-note').forEach(el => {
+    if (!el.hasAttribute('contenteditable')) {
+      el.setAttribute('contenteditable', 'true');
+    }
+  });
+</script>
 
 </body>
 </html>
