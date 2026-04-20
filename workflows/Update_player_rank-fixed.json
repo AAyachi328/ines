@@ -1,0 +1,495 @@
+{
+  "name": "Update player rank",
+  "nodes": [
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "gridUrl",
+              "value": "https://www.atptour.com/en/rankings/singles?rankDate={{$now.toFormat('yyyy-MM-dd')}}&rankRange=1-100"
+            },
+            {
+              "name": "wikipediaUrl",
+              "value": "=https://en.wikipedia.org/wiki/{{ $json.player.replace(/\s+/g, '_') }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "rank",
+              "value": 1
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -1300,
+        160
+      ],
+      "id": "b4ed65c8-5dbf-4d2d-a780-fbf4e305d736",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.gridUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept-language",
+              "value": "en-US,en;q=0.9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1080,
+        160
+      ],
+      "id": "d658bd80-faf2-48f0-a312-4e56ca0c9d69",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "rows",
+              "cssSelector": "table.mega-table tbody tr",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -860,
+        160
+      ],
+      "id": "af66a8d8-31c9-49be-9f6d-73c1c29dd9bb",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $json.rows || [];\nreturn html.map((row, index) => {\n  const rankMatch = row.match(/<td[^>]*class=\"rank-cell[^\"]*\"[^>]*>\\s*<span[^>]*>(\\d+)<\\/span>/i);\n  const playerMatch = row.match(/<a[^>]*href=\"[^\"]*\/player\/[^\"]*\"[^>]*>([^<]+)<\\/a>/i);\n  const pointsMatch = row.match(/<td[^>]*class=\"points-cell[^\"]*\"[^>]*>.*?<span[^>]*>([\\d,]+)<\\/span>/is);\n  return {\n    json: {\n      rank: rankMatch ? Number(rankMatch[1]) : index + 1,\n      player: playerMatch ? playerMatch[1].trim() : null,\n      points: pointsMatch ? Number(pointsMatch[1].replace(/,/g, '')) : null,\n      wikipediaUrl: playerMatch ? `https://en.wikipedia.org/wiki/${playerMatch[1].trim().replace(/\\s+/g, '_')}` : null\n    }\n  };\n}).filter(item => item.json.player);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -640,
+        160
+      ],
+      "id": "dc8e45b4-69b9-4f8d-b61c-cdb81768184d",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -420,
+        160
+      ],
+      "id": "7307b162-263b-4f98-9bde-f0dd4257c3f2",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3000/json/version",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -200,
+        160
+      ],
+      "id": "6fdb10fb-a7eb-4408-b64e-4eb16667f55e",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.webSocketDebuggerUrl }}/json/new?{{ encodeURIComponent($json.wikipediaUrl) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        20,
+        160
+      ],
+      "id": "fe59c533-038c-44fc-b4f6-47efe80c1257",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        160
+      ],
+      "id": "4f4bb013-7a4d-413e-a0cb-bb816a76291c",
+      "name": "Wait",
+      "webhookId": "c35a5244-5378-4708-92a5-22e1fb2fa184"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url.replace(/\/$/, '') }}/source",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        160
+      ],
+      "id": "51e6d0f5-22fc-4f2a-ad3b-ab8e85240d62",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $json || {};\nconst source = html.data || html.html || html.content || JSON.stringify(html);\n\nfunction pick(regex) {\n  const m = source.match(regex);\n  return m ? m[1] : null;\n}\n\nlet imageUrl = pick(/<meta[^>]+property=\"og:image\"[^>]+content=\"([^\"]+)\"/i)\n  || pick(/<table[^>]*class=\"[^\"]*infobox[^\"]*\"[\\s\\S]*?<img[^>]+src=\"([^\"]+)\"/i)\n  || pick(/<img[^>]+src=\"([^\"]+)\"[^>]*>/i);\n\nif (imageUrl) {\n  if (imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;\n  if (imageUrl.startsWith('/')) imageUrl = 'https://en.wikipedia.org' + imageUrl;\n  imageUrl = imageUrl.replace(/\\/thumb(\\/[^?]+?)\\/[^/]+$/, '$1');\n}\n\nreturn [{ json: { ...$json, imageUrl } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        160
+      ],
+      "id": "7cab9175-aea0-416f-85a0-af3ffc2101a7",
+      "name": "Parse Wikipedia image"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bdfd30cc-1a5d-4df7-a124-5da2f4cf3fd9",
+              "leftValue": "={{ $json.imageUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        900,
+        160
+      ],
+      "id": "10d34d9c-9b7e-4ca5-a573-248ad4fd0c53",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.imageUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        80
+      ],
+      "id": "9f849ec2-0720-492c-8dd8-2d972fd06ab1",
+      "name": "HTTP Request8"
+    },
+    {
+      "parameters": {
+        "resource": "mediaImage",
+        "operation": "upload",
+        "title": "={{ $json.player }}",
+        "additionalFields": {
+          "alt": "={{ $json.player }}"
+        }
+      },
+      "type": "n8n-nodes-base.drupal",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        80
+      ],
+      "id": "8d2b0c37-566d-4bb5-8be8-910e909b85e1",
+      "name": "Upload Data to Media image",
+      "credentials": {
+        "drupalApi": {
+          "id": "6lQ6G2P5HLLQWg5j",
+          "name": "Drupal account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "node",
+        "contentType": "player",
+        "operation": "create",
+        "title": "={{ $json.player }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "name": "field_rank",
+              "value": "={{ $json.rank }}"
+            },
+            {
+              "name": "field_points",
+              "value": "={{ $json.points }}"
+            },
+            {
+              "name": "field_media_image",
+              "value": "={{ $json.id || $node[\"Upload Data to Media image\"].json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.drupal",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        80
+      ],
+      "id": "52a29038-c224-47d5-8e5e-2331811dfe51",
+      "name": "Create a node",
+      "credentials": {
+        "drupalApi": {
+          "id": "6lQ6G2P5HLLQWg5j",
+          "name": "Drupal account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        240
+      ],
+      "id": "f6e55d6f-e335-4fe6-a3c5-bcc77c163aca",
+      "name": "No Image"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Parse Wikipedia image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Wikipedia image": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "Upload Data to Media image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Data to Media image": {
+      "main": [
+        [
+          {
+            "node": "Create a node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Image": {
+      "main": [
+        [
+          {
+            "node": "Create a node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a node": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c0b1f75d-f3cc-4a4d-98fd-dcff9914dfd0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fcb61fbec55f0dd5076cf10494df0b8dd60f56b77c73ef7a67ddc2e1d8f3d1b5"
+  },
+  "id": "78P4QafS6D26Kq6I",
+  "tags": []
+}
