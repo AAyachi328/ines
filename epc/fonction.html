@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cours simplifié - Représentation graphique d’une fonction</title>
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7fbff;
+      color: #1f2937;
+      margin: 0;
+      padding: 25px;
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      color: #1d4ed8;
+      text-align: center;
+      font-size: 2em;
+    }
+
+    h2 {
+      color: #2563eb;
+      border-bottom: 3px solid #bfdbfe;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      color: #0f766e;
+    }
+
+    .identity {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: nowrap;
+      margin-bottom: 20px;
+      background: #eff6ff;
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .identity label {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    input[type="text"] {
+      border: 1px solid #93c5fd;
+      border-radius: 6px;
+      padding: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      border: 2px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 1em;
+      box-sizing: border-box;
+      background: #f8fafc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #94a3b8;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #dbeafe;
+    }
+
+    .formula {
+      font-weight: bold;
+      font-size: 1.15em;
+      color: #7c2d12;
+    }
+
+    .box {
+      background: #ecfeff;
+      border-left: 6px solid #06b6d4;
+      padding: 14px;
+      margin: 14px 0;
+      border-radius: 10px;
+    }
+
+    .help {
+      background: #fef9c3;
+      border-left: 6px solid #facc15;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .answer {
+      background: #dcfce7;
+      border-left: 6px solid #22c55e;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .question {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 18px;
+      border-radius: 16px;
+      margin: 25px 0;
+    }
+
+    .competence {
+      display: inline-block;
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .illustration {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: center;
+      background: linear-gradient(135deg, #eff6ff, #ecfeff);
+      border-radius: 18px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+
+    .photo-style {
+      min-height: 260px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), transparent 20%),
+        linear-gradient(135deg, #60a5fa, #22c55e);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 35px rgba(255,255,255,0.45);
+    }
+
+    .axis-x, .axis-y {
+      position: absolute;
+      background: white;
+      opacity: 0.9;
+    }
+
+    .axis-x {
+      height: 4px;
+      width: 80%;
+      left: 10%;
+      top: 72%;
+    }
+
+    .axis-y {
+      width: 4px;
+      height: 75%;
+      left: 18%;
+      top: 10%;
+    }
+
+    .line {
+      position: absolute;
+      width: 75%;
+      height: 5px;
+      background: #f97316;
+      left: 15%;
+      top: 48%;
+      transform: rotate(-28deg);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(249,115,22,0.7);
+    }
+
+    .point {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ef4444;
+      border: 3px solid white;
+    }
+
+    .p1 { left: 25%; top: 63%; }
+    .p2 { left: 42%; top: 55%; }
+    .p3 { left: 59%; top: 46%; }
+    .p4 { left: 75%; top: 38%; }
+
+    .caption {
+      font-style: italic;
+      color: #475569;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .editable-note {
+      font-size: 0.9em;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .page {
+        box-shadow: none;
+      }
+      button {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="page" contenteditable="false">
+
+  <div class="identity">
+    <label>Nom : <input type="text"></label>
+    <label>Prénom : <input type="text"></label>
+    <label>Classe : <input type="text"></label>
+    <label>Date : <input type="text"></label>
+  </div>
+
+  <button onclick="toggleEdit()">✏️ Rendre la page éditable</button>
+  <p class="editable-note">Clique sur le bouton pour modifier directement les textes de la page.</p>
+
+  <h1>Cours simplifié — Représentation graphique d’une fonction et tableau de valeurs 📈🧮</h1>
+
+  <section class="illustration">
+    <div>
+      <h2>Illustration visuelle 🌟</h2>
+      <p><strong>📊 Tableau de valeurs → 🧩 Points → 📈 Graphique de la fonction</strong></p>
+      <p>Un tableau de valeurs aide à construire un graphique étape par étape.</p>
+    </div>
+
+    <div>
+      <div class="photo-style">
+        <div class="axis-x"></div>
+        <div class="axis-y"></div>
+        <div class="line"></div>
+        <div class="point p1"></div>
+        <div class="point p2"></div>
+        <div class="point p3"></div>
+        <div class="point p4"></div>
+      </div>
+      <p class="caption">Illustration photo stylisée : passage du tableau au graphique.</p>
+    </div>
+  </section>
+
+  <h2>1. Fiche récapitulative du cours 📘</h2>
+
+  <div class="box">
+    <p>Une <strong>fonction</strong> associe à chaque nombre choisi, appelé <strong>antécédent</strong>, un seul nombre appelé <strong>image</strong>.</p>
+
+    <p>Exemple : si <span class="formula">\( f(x)=2x+1 \)</span>, alors pour calculer l’image de 3 :</p>
+
+    <p><span class="formula">\( f(3)=2\times3+1=7 \)</span></p>
+
+    <p>Donc l’image de 3 est 7.</p>
+  </div>
+
+  <h3>Tableau de valeurs 🧮</h3>
+
+  <p>Un tableau de valeurs permet d’organiser les calculs.</p>
+
+  <table>
+    <tr>
+      <th>\(x\)</th>
+      <td>-2</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>\(f(x)\)</th>
+      <td>-3</td>
+      <td>-1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>5</td>
+    </tr>
+  </table>
+
+  <p>Chaque colonne donne un point du graphique :</p>
+  <p><span class="formula">\( (x\,;\,f(x)) \)</span></p>
+
+  <p>Par exemple, si \(x=2\) et \(f(x)=5\), le point est <span class="formula">\( (2\,;\,5) \)</span>.</p>
+
+  <h3>Représentation graphique 📈</h3>
+
+  <ol>
+    <li>On choisit plusieurs valeurs de \(x\).</li>
+    <li>On calcule les images \(f(x)\).</li>
+    <li>On place les points <span class="formula">\( (x\,;\,f(x)) \)</span> dans un repère.</li>
+    <li>On relie les points si la situation le permet.</li>
+  </ol>
+
+  <p>Le programme de mathématiques demande notamment de savoir représenter sous forme de tableau ou de graphique, changer de registre, calculer et communiquer une démarche. :contentReference[oaicite:1]{index=1}</p>
+
+  <h2>Activité d’investigation 🌟</h2>
+  <h3>Problème : comment passer d’une formule à un graphique ?</h3>
+
+  <p>On étudie la fonction :</p>
+  <p><span class="formula">\( f(x)=2x+1 \)</span></p>
+
+  <div class="question">
+    <h3>Question 1 — Comprendre la situation 🔎</h3>
+    <p class="competence">Compétence : S’approprier</p>
+
+    <p>Complète la phrase suivante :</p>
+    <p>La fonction \(f\) permet de calculer une valeur \(f(x)\) à partir d’une valeur de \(x\). Dans la formule <span class="formula">\( f(x)=2x+1 \)</span>, il faut multiplier \(x\) par … puis ajouter …</p>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Regarde la formule : le nombre devant \(x\) indique la multiplication.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+      <p>Il faut multiplier \(x\) par <strong>2</strong>, puis ajouter <strong>1</strong>.</p>
+    </div>
+  </div>
+
+  <div class="question">
+    <h3>Question 2 — Calculer une image 🧮</h3>
+    <p class="competence">Compétence : Réaliser</p>
+
+    <p>Calcule \(f(0)\), \(f(1)\) et \(f(2)\).</p>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Remplace \(x\) par le nombre demandé dans la formule.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+      <p><span class="formula">\( f(0)=2\times0+1=1 \)</span></p>
+      <p><span class="formula">\( f(1)=2\times1+1=3 \)</span></p>
+      <p><span class="formula">\( f(2)=2\times2+1=5 \)</span></p>
+    </div>
+  </div>
+
+  <div class="question">
+    <h3>Question 3 — Compléter le tableau de valeurs 📊</h3>
+    <p class="competence">Compétences : Réaliser, Analyser/Raisonner</p>
+
+    <p>Complète le tableau de valeurs de la fonction \(f(x)=2x+1\).</p>
+
+    <table>
+      <tr>
+        <th>\(x\)</th>
+        <td>-2</td>
+        <td>-1</td>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>\(f(x)\)</th>
+        <td>…</td>
+        <td>…</td>
+        <td>…</td>
+        <td>…</td>
+        <td>…</td>
+      </tr>
+    </table>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Pour chaque valeur de \(x\), utilise la formule <span class="formula">\( f(x)=2x+1 \)</span>.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+
+      <table>
+        <tr>
+          <th>\(x\)</th>
+          <td>-2</td>
+          <td>-1</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <th>\(f(x)\)</th>
+          <td>-3</td>
+          <td>-1</td>
+          <td>1</td>
+          <td>3</td>
+          <td>5</td>
+        </tr>
+      </table>
+
+      <p><span class="formula">\( f(-2)=2\times(-2)+1=-3 \)</span></p>
+      <p><span class="formula">\( f(-1)=2\times(-1)+1=-1 \)</span></p>
+      <p><span class="formula">\( f(0)=1 \)</span></p>
+      <p><span class="formula">\( f(1)=3 \)</span></p>
+      <p><span class="formula">\( f(2)=5 \)</span></p>
+    </div>
+  </div>
+
+  <div class="question">
+    <h3>Question 4 — Associer tableau et points du graphique 📍</h3>
+    <p class="competence">Compétence : Réaliser</p>
+
+    <p>À partir du tableau, écris les coordonnées des points à placer dans le repère.</p>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Chaque colonne donne un point de coordonnées <span class="formula">\( (x\,;\,f(x)) \)</span>.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+      <p>Les points sont :</p>
+      <p>
+        <span class="formula">\( (-2\,;\,-3) \)</span>,
+        <span class="formula">\( (-1\,;\,-1) \)</span>,
+        <span class="formula">\( (0\,;\,1) \)</span>,
+        <span class="formula">\( (1\,;\,3) \)</span>,
+        <span class="formula">\( (2\,;\,5) \)</span>.
+      </p>
+    </div>
+  </div>
+
+  <div class="question">
+    <h3>Question 5 — Lire un graphique 👀</h3>
+    <p class="competence">Compétences : S’approprier, Valider</p>
+
+    <p>On observe un point du graphique : <span class="formula">\( (3\,;\,7) \)</span>. Vérifie par le calcul si ce point appartient bien à la courbe de la fonction \(f(x)=2x+1\).</p>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Calcule \(f(3)\), puis compare le résultat avec 7.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+      <p><span class="formula">\( f(3)=2\times3+1=6+1=7 \)</span></p>
+      <p>Le point <span class="formula">\( (3\,;\,7) \)</span> appartient donc bien à la représentation graphique de la fonction.</p>
+    </div>
+  </div>
+
+  <div class="question">
+    <h3>Question 6 — Communiquer la méthode 🗣️</h3>
+    <p class="competence">Compétence : Communiquer</p>
+
+    <p>Explique avec tes mots comment construire le graphique d’une fonction à partir d’un tableau de valeurs.</p>
+
+    <h4>Réponse de l’élève :</h4>
+    <textarea></textarea>
+
+    <div class="help">
+      <strong>Coup de pouce 💡</strong>
+      <p>Utilise les mots : formule, tableau, calculer, points, repère, graphique.</p>
+    </div>
+
+    <div class="answer">
+      <strong>Réponse complète ✅</strong>
+      <p>Pour construire le graphique d’une fonction, je choisis plusieurs valeurs de \(x\). Ensuite, je calcule les images \(f(x)\) avec la formule. Je complète le tableau de valeurs. Puis je place les points de coordonnées <span class="formula">\( (x\,;\,f(x)) \)</span> dans un repère. Enfin, je relie les points si c’est possible.</p>
+    </div>
+  </div>
+
+  <h2>Tableau d’évaluation ✅</h2>
+
+  <table>
+    <tr>
+      <th>Compétences</th>
+      <th>Très bonne maîtrise</th>
+      <th>Maîtrise satisfaisante</th>
+      <th>Fragile</th>
+      <th>Insuffisant</th>
+    </tr>
+    <tr>
+      <td>S’approprier — Questions 1 et 5</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Réaliser — Questions 2, 3 et 4</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Analyser/Raisonner — Question 3</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Valider — Question 5</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>Communiquer — Question 6</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+      <td>☐</td>
+    </tr>
+  </table>
+
+</div>
+
+<script>
+  function toggleEdit() {
+    const page = document.querySelector('.page');
+    const current = page.getAttribute('contenteditable');
+    page.setAttribute('contenteditable', current === 'true' ? 'false' : 'true');
+
+    const button = document.querySelector('button');
+    button.textContent = page.getAttribute('contenteditable') === 'true'
+      ? '🔒 Verrouiller la page'
+      : '✏️ Rendre la page éditable';
+  }
+</script>
+
+</body>
+</html>
