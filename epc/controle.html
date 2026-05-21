@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Contrôle - Bases de l'électricité</title>
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f7fbff;
+      color: #1f2937;
+      line-height: 1.5;
+    }
+
+    .identity {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding: 10px;
+      background: #e0f2fe;
+      border-radius: 10px;
+      border: 1px solid #7dd3fc;
+    }
+
+    .identity input {
+      width: 140px;
+      padding: 5px;
+      border: 1px solid #94a3b8;
+      border-radius: 5px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #075985;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-weight: bold;
+      color: #334155;
+      margin-bottom: 25px;
+    }
+
+    .question {
+      background: white;
+      border-left: 6px solid #0284c7;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 55px;
+      margin-top: 8px;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+      resize: vertical;
+      background: #ffffff;
+    }
+
+    .answer {
+      background: #ecfdf5;
+      border-left: 6px solid #10b981;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+
+    .formula {
+      font-size: 1.15em;
+      font-weight: bold;
+      color: #0f766e;
+    }
+
+    .photo-box {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .photo-box img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 2px solid #bae6fd;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .editable-note {
+      background: #fef3c7;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #f59e0b;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    @media print {
+      .editable-note, button {
+        display: none;
+      }
+
+      body {
+        background: white;
+      }
+
+      .question {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="identity">
+    <label>Nom : <input type="text"></label>
+    <label>Prénom : <input type="text"></label>
+    <label>Classe : <input type="text"></label>
+    <label>Date : <input type="text"></label>
+  </div>
+
+  <div class="editable-note">
+    Mode édition activé : clique directement sur le texte pour le modifier si besoin.
+  </div>
+
+  <h1>Contrôle — Bases de l’électricité ⚡</h1>
+  <p class="subtitle">Unités, symboles, mesures, multimètre, loi d’Ohm — Durée conseillée : 30 à 40 min</p>
+
+  <div class="photo-box">
+    <img src="https://images.unsplash.com/photo-1581092921461-39b9d08a9b21?auto=format&fit=crop&w=1200&q=80" alt="Multimètre et composants électriques">
+  </div>
+
+  <section>
+    <div class="question">
+      <strong>1.</strong> Complète : la tension électrique se mesure en ……… et son symbole d’unité est ………
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>2.</strong> Complète : l’intensité du courant électrique se mesure en ……… et son symbole d’unité est ………
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>3.</strong> Complète : la résistance électrique se mesure en ……… et son symbole d’unité est ………
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>4.</strong> Associe chaque grandeur à son symbole : tension, intensité, résistance. Symboles proposés : <strong>U</strong>, <strong>I</strong>, <strong>R</strong>.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>5.</strong> Quel appareil utilise-t-on pour mesurer une tension électrique ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>6.</strong> Quel appareil utilise-t-on pour mesurer une intensité électrique ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>7.</strong> Quel appareil utilise-t-on pour mesurer une résistance électrique ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>8.</strong> Sur un multimètre, que signifie la position <strong>V⎓</strong> ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>9.</strong> Sur un multimètre, que signifie la position <strong>Ω</strong> ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>10.</strong> Pour mesurer une tension aux bornes d’un dipôle, le multimètre se branche-t-il en série ou en dérivation ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>11.</strong> Pour mesurer une intensité dans un circuit, le multimètre se branche-t-il en série ou en dérivation ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>12.</strong> Donne la formule de la loi d’Ohm.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>13.</strong> Une résistance de <strong>10 Ω</strong> est traversée par un courant de <strong>0,5 A</strong>. Calcule la tension à ses bornes.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>14.</strong> Une lampe est soumise à une tension de <strong>12 V</strong> et traversée par un courant de <strong>2 A</strong>. Calcule sa résistance.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>15.</strong> Une résistance de <strong>20 Ω</strong> est soumise à une tension de <strong>10 V</strong>. Calcule l’intensité du courant.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>16.</strong> Convertis : <strong>250 mA = ……… A</strong>
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>17.</strong> Convertis : <strong>2,5 kΩ = ……… Ω</strong>
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>18.</strong> Un multimètre indique <strong>0,03 A</strong>. Exprime cette intensité en milliampères.
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>19.</strong> Pourquoi ne faut-il pas mesurer une résistance dans un circuit sous tension ?
+      <textarea></textarea>
+    </div>
+
+    <div class="question">
+      <strong>20.</strong> Un élève veut mesurer une tension mais place les cordons sur les bornes <strong>COM</strong> et <strong>A</strong>. Quelle erreur a-t-il faite ?
+      <textarea></textarea>
+    </div>
+  </section>
+
+  <h2>Corrigé</h2>
+
+  <div class="answer"><strong>1.</strong> La tension électrique se mesure en <strong>volt</strong>, symbole <strong>V</strong>.</div>
+  <div class="answer"><strong>2.</strong> L’intensité électrique se mesure en <strong>ampère</strong>, symbole <strong>A</strong>.</div>
+  <div class="answer"><strong>3.</strong> La résistance électrique se mesure en <strong>ohm</strong>, symbole <strong>Ω</strong>.</div>
+  <div class="answer"><strong>4.</strong> Tension : <strong>U</strong> ; Intensité : <strong>I</strong> ; Résistance : <strong>R</strong>.</div>
+  <div class="answer"><strong>5.</strong> On utilise un <strong>voltmètre</strong> ou un <strong>multimètre en position voltmètre</strong>.</div>
+  <div class="answer"><strong>6.</strong> On utilise un <strong>ampèremètre</strong> ou un <strong>multimètre en position ampèremètre</strong>.</div>
+  <div class="answer"><strong>7.</strong> On utilise un <strong>ohmmètre</strong> ou un <strong>multimètre en position ohmmètre</strong>.</div>
+  <div class="answer"><strong>8.</strong> <strong>V⎓</strong> signifie mesure d’une <strong>tension continue</strong>.</div>
+  <div class="answer"><strong>9.</strong> <strong>Ω</strong> signifie mesure d’une <strong>résistance électrique</strong>.</div>
+  <div class="answer"><strong>10.</strong> Pour mesurer une tension, le multimètre se branche <strong>en dérivation</strong>.</div>
+  <div class="answer"><strong>11.</strong> Pour mesurer une intensité, le multimètre se branche <strong>en série</strong>.</div>
+  <div class="answer"><strong>12.</strong> Loi d’Ohm : <span class="formula">\( U = R \times I \)</span>.</div>
+  <div class="answer"><strong>13.</strong> <span class="formula">\( U = R \times I = 10 \times 0,5 = 5 \, V \)</span>.</div>
+  <div class="answer"><strong>14.</strong> <span class="formula">\( R = \dfrac{U}{I} = \dfrac{12}{2} = 6 \, Ω \)</span>.</div>
+  <div class="answer"><strong>15.</strong> <span class="formula">\( I = \dfrac{U}{R} = \dfrac{10}{20} = 0,5 \, A \)</span>.</div>
+  <div class="answer"><strong>16.</strong> <strong>250 mA = 0,250 A</strong>.</div>
+  <div class="answer"><strong>17.</strong> <strong>2,5 kΩ = 2 500 Ω</strong>.</div>
+  <div class="answer"><strong>18.</strong> <strong>0,03 A = 30 mA</strong>.</div>
+  <div class="answer"><strong>19.</strong> Il ne faut pas mesurer une résistance sous tension car cela peut <strong>fausser la mesure</strong> et <strong>endommager le multimètre</strong>.</div>
+  <div class="answer"><strong>20.</strong> Il a branché le cordon rouge sur la borne <strong>A</strong>, réservée à la mesure d’intensité. Pour mesurer une tension, il faut utiliser les bornes <strong>COM</strong> et <strong>V</strong>.</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.contentEditable = "true";
+
+      const textareas = document.querySelectorAll("textarea");
+      textareas.forEach(function(textarea) {
+        textarea.contentEditable = "true";
+      });
+
+      const inputs = document.querySelectorAll("input");
+      inputs.forEach(function(input) {
+        input.contentEditable = "true";
+      });
+    });
+  </script>
+
+</body>
+</html>
