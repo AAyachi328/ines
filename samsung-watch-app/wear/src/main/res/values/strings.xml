@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Samsung Active</string>
+    <string name="status_idle">En veille</string>
+    <string name="status_running">Surveillance active</string>
+    <string name="status_inactive">Inactif !</string>
+    <string name="btn_start">Démarrer</string>
+    <string name="btn_stop">Arrêter</string>
+    <string name="alert_title">Trop assis !</string>
+    <string name="alert_get_up">Se lever 🚶</string>
+    <string name="alert_snooze">Plus tard ⏰</string>
+    <string name="notif_service_text">Surveillance en cours…</string>
+    <string name="notif_alert_text">Levez-vous ! Vous êtes inactif depuis trop longtemps.</string>
+</resources>
