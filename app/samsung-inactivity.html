@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Samsung Active – Détection d'inactivité</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Samsung+Sans:wght@300;400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --samsung-blue: #1428A0;
+            --samsung-light-blue: #4285f4;
+            --accent: #00C4FF;
+            --accent2: #7B61FF;
+            --success: #00D97E;
+            --warning: #FFB300;
+            --danger: #FF4B4B;
+            --bg: #0A0A0F;
+            --bg2: #12121A;
+            --bg3: #1A1A26;
+            --card: rgba(255,255,255,0.05);
+            --card-border: rgba(255,255,255,0.08);
+            --text: #FFFFFF;
+            --text-muted: rgba(255,255,255,0.5);
+            --text-dim: rgba(255,255,255,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            width: 100%; height: 100%;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* ── FOND ANIMÉ ── */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            transition: all 1.5s ease;
+        }
+        .bg-glow.g1 { width: 400px; height: 400px; background: rgba(20,40,160,0.25); top: -100px; right: -100px; }
+        .bg-glow.g2 { width: 300px; height: 300px; background: rgba(0,196,255,0.08); bottom: 100px; left: -80px; }
+        .bg-glow.g3 { width: 200px; height: 200px; background: rgba(123,97,255,0.1); top: 40%; left: 40%; }
+
+        /* ── LAYOUT ── */
+        #app {
+            position: relative;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 20px 20px;
+            max-width: 430px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--samsung-blue), var(--accent));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+        .logo-text { font-size: 1rem; font-weight: 600; }
+        .logo-sub { font-size: 0.7rem; color: var(--text-muted); font-weight: 300; }
+
+        .header-actions { display: flex; gap: 10px; }
+        .icon-btn {
+            width: 36px; height: 36px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* ── CERCLE PRINCIPAL ── */
+        .ring-container {
+            position: relative;
+            width: 220px; height: 220px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        svg.ring-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .ring-track {
+            fill: none;
+            stroke: rgba(255,255,255,0.06);
+            stroke-width: 12;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke: url(#ringGradient);
+            transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
+        }
+
+        .ring-inner {
+            text-align: center;
+            z-index: 1;
+        }
+        .ring-status-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            margin-bottom: 4px;
+            transition: all 0.4s ease;
+        }
+        .ring-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .ring-time {
+            font-size: 1.6rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+            margin-top: 2px;
+        }
+        .ring-time.danger { color: var(--danger); }
+        .ring-time.warning { color: var(--warning); }
+        .ring-time.ok { color: var(--success); }
+
+        /* ── STATUT ── */
+        .status-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .stat-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .stat-icon { font-size: 1rem; }
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-sub { font-size: 0.7rem; color: var(--text-dim); }
+
+        /* ── CAPTEUR STATUS ── */
+        .sensor-bar {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sensor-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        .sensor-dot.inactive { background: var(--text-dim); box-shadow: none; }
+        .sensor-dot.alert { background: var(--danger); box-shadow: 0 0 8px var(--danger); animation: pulse-dot 1s infinite; }
+        @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+        .sensor-text { flex: 1; }
+        .sensor-title { font-size: 0.82rem; font-weight: 600; }
+        .sensor-desc { font-size: 0.7rem; color: var(--text-muted); }
+
+        .sensor-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: rgba(0,217,126,0.15);
+            color: var(--success);
+            border: 1px solid rgba(0,217,126,0.3);
+        }
+        .sensor-badge.sim { background: rgba(255,179,0,0.12); color: var(--warning); border-color: rgba(255,179,0,0.3); }
+        .sensor-badge.alert { background: rgba(255,75,75,0.15); color: var(--danger); border-color: rgba(255,75,75,0.3); }
+
+        /* ── BOUTON PRINCIPAL ── */
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02em;
+        }
+        .main-btn.start {
+            background: linear-gradient(135deg, var(--samsung-blue), var(--accent2));
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(20,40,160,0.4);
+        }
+        .main-btn.start:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(20,40,160,0.5); }
+        .main-btn.stop {
+            background: rgba(255,75,75,0.12);
+            color: var(--danger);
+            border: 1px solid rgba(255,75,75,0.3);
+        }
+        .main-btn.stop:hover { background: rgba(255,75,75,0.2); }
+
+        /* ── OVERLAY ALERTE ── */
+        #alert-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #alert-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .alert-card {
+            width: 100%;
+            max-width: 430px;
+            background: var(--bg3);
+            border: 1px solid rgba(255,75,75,0.25);
+            border-radius: 24px;
+            padding: 28px 24px 24px;
+            transform: translateY(40px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #alert-overlay.visible .alert-card {
+            transform: translateY(0);
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .alert-icon-wrap {
+            width: 52px; height: 52px;
+            background: rgba(255,75,75,0.12);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%,100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+        .alert-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 3px; }
+        .alert-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Activités suggérées */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .activity-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 14px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .activity-card:hover, .activity-card.selected {
+            background: rgba(20,40,160,0.25);
+            border-color: rgba(0,196,255,0.4);
+            transform: scale(1.03);
+        }
+        .activity-card.selected { border-color: var(--accent); }
+        .activity-emoji { font-size: 1.8rem; margin-bottom: 6px; }
+        .activity-name { font-size: 0.78rem; font-weight: 600; }
+        .activity-dur { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* Boutons d'action */
+        .alert-actions { display: flex; gap: 10px; }
+        .btn-snooze {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+            background: var(--card);
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-snooze:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+        .btn-go {
+            flex: 2;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--samsung-blue), var(--accent));
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .btn-go:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,196,255,0.3); }
+
+        /* ── PANNEAU PARAMÈTRES ── */
+        #settings-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 90;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #settings-overlay.visible { opacity: 1; pointer-events: all; }
+
+        .settings-card {
+            width: 100%;
+            max-width: 430px;
+            background: var(--bg3);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+            transform: translateY(30px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        #settings-overlay.visible .settings-card { transform: translateY(0); }
+
+        .settings-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .settings-close { cursor: pointer; font-size: 1.2rem; opacity: 0.5; }
+        .settings-close:hover { opacity: 1; }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-label { font-size: 0.88rem; font-weight: 500; }
+        .setting-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+        .threshold-select {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            outline: none;
+        }
+        .threshold-select option { background: #1A1A26; }
+
+        .switch {
+            position: relative;
+            width: 44px; height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch .slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.15);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .switch .slider:before {
+            content: '';
+            position: absolute;
+            width: 18px; height: 18px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .switch input:checked + .slider { background: linear-gradient(135deg, var(--samsung-blue), var(--accent)); }
+        .switch input:checked + .slider:before { transform: translateX(20px); }
+
+        /* ── OVERLAY ACTIVITÉ EN COURS ── */
+        #exercise-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            text-align: center;
+        }
+        #exercise-overlay.visible { opacity: 1; pointer-events: all; }
+
+        .exercise-emoji { font-size: 5rem; margin-bottom: 20px; animation: bounce 1s ease-in-out infinite alternate; }
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-12px); }
+        }
+        .exercise-name { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+        .exercise-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 36px; max-width: 280px; line-height: 1.5; }
+
+        .exercise-timer-ring {
+            position: relative;
+            width: 140px; height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 40px;
+        }
+        .exercise-timer-ring svg {
+            position: absolute;
+            inset: 0;
+            transform: rotate(-90deg);
+        }
+        .ex-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+        .ex-progress { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+        .ex-time { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+        .btn-finish {
+            padding: 16px 48px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, var(--samsung-blue), var(--accent));
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .btn-finish:hover { transform: translateY(-2px); }
+
+        /* ── TOAST ── */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(30,30,44,0.95);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 300;
+            transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.3s;
+            opacity: 0;
+            white-space: nowrap;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-height: 700px) {
+            #app { padding: 16px 16px 14px; }
+            .ring-container { width: 180px; height: 180px; }
+            .ring-status-icon { font-size: 2.2rem; }
+            .ring-time { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Fonds lumineux -->
+<div class="bg-glow g1"></div>
+<div class="bg-glow g2"></div>
+<div class="bg-glow g3"></div>
+
+<!-- App principale -->
+<div id="app">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">🏃</div>
+            <div>
+                <div class="logo-text">Samsung Active</div>
+                <div class="logo-sub">Détection d'inactivité</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="icon-btn" id="btn-settings" title="Paramètres">⚙️</div>
+        </div>
+    </div>
+
+    <!-- Anneau principal -->
+    <div class="ring-container">
+        <svg class="ring-svg" viewBox="0 0 220 220">
+            <defs>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1428A0"/>
+                    <stop offset="100%" stop-color="#00C4FF"/>
+                </linearGradient>
+                <linearGradient id="ringDanger" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FF4B4B"/>
+                    <stop offset="100%" stop-color="#FFB300"/>
+                </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="110" cy="110" r="96"/>
+            <circle class="ring-progress" id="ring-progress" cx="110" cy="110" r="96"/>
+        </svg>
+        <div class="ring-inner">
+            <div class="ring-status-icon" id="status-icon">🪑</div>
+            <div class="ring-label" id="ring-label">Inactif</div>
+            <div class="ring-time ok" id="ring-time">--:--</div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="status-row">
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <div class="stat-label">Inactif depuis</div>
+                <div class="stat-icon">⏱️</div>
+            </div>
+            <div class="stat-value" id="stat-inactive">--:--</div>
+            <div class="stat-sub">minutes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <div class="stat-label">Sessions actives</div>
+                <div class="stat-icon">🏅</div>
+            </div>
+            <div class="stat-value" id="stat-sessions">0</div>
+            <div class="stat-sub">aujourd'hui</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <div class="stat-label">Seuil alerte</div>
+                <div class="stat-icon">🔔</div>
+            </div>
+            <div class="stat-value" id="stat-threshold">30</div>
+            <div class="stat-sub">min</div>
+        </div>
+    </div>
+
+    <!-- Barre capteur -->
+    <div class="sensor-bar">
+        <div class="sensor-dot inactive" id="sensor-dot"></div>
+        <div class="sensor-text">
+            <div class="sensor-title" id="sensor-title">Surveillance inactive</div>
+            <div class="sensor-desc" id="sensor-desc">Appuyez sur Démarrer pour activer</div>
+        </div>
+        <div class="sensor-badge sim" id="sensor-badge">Arrêté</div>
+    </div>
+
+    <!-- Bouton principal -->
+    <button class="main-btn start" id="main-btn">▶  Démarrer la surveillance</button>
+</div>
+
+<!-- ── OVERLAY ALERTE INACTIVITÉ ── -->
+<div id="alert-overlay">
+    <div class="alert-card">
+        <div class="alert-header">
+            <div class="alert-icon-wrap" id="alert-icon">🪑</div>
+            <div>
+                <div class="alert-title" id="alert-title">Vous êtes inactif !</div>
+                <div class="alert-subtitle" id="alert-sub">Levez-vous et bougez un peu 💪</div>
+            </div>
+        </div>
+
+        <div class="activities-grid" id="activities-grid">
+            <!-- rempli par JS -->
+        </div>
+
+        <div class="alert-actions">
+            <button class="btn-snooze" id="btn-snooze">⏰ Rappel +10 min</button>
+            <button class="btn-go" id="btn-go">C'est parti ! 🚀</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── OVERLAY EXERCICE EN COURS ── -->
+<div id="exercise-overlay">
+    <div class="exercise-emoji" id="ex-emoji">🚶</div>
+    <div class="exercise-name" id="ex-name">Marche rapide</div>
+    <div class="exercise-desc" id="ex-desc">Marchez à un rythme soutenu dans la pièce ou dehors.</div>
+
+    <div class="exercise-timer-ring">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+            <circle class="ex-track" cx="70" cy="70" r="58"/>
+            <circle class="ex-progress" id="ex-progress" cx="70" cy="70" r="58"/>
+        </svg>
+        <div class="ex-time" id="ex-time">5:00</div>
+    </div>
+
+    <button class="btn-finish" id="btn-finish">✓  Terminé !</button>
+</div>
+
+<!-- ── PARAMÈTRES ── -->
+<div id="settings-overlay">
+    <div class="settings-card">
+        <div class="settings-title">
+            <span>⚙️  Paramètres</span>
+            <span class="settings-close" id="settings-close">✕</span>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <div class="setting-label">Seuil d'inactivité</div>
+                <div class="setting-desc">Durée avant l'alerte</div>
+            </div>
+            <select class="threshold-select" id="threshold-select">
+                <option value="1">1 min (test)</option>
+                <option value="10">10 min</option>
+                <option value="20">20 min</option>
+                <option value="30" selected>30 min</option>
+                <option value="45">45 min</option>
+                <option value="60">60 min</option>
+            </select>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <div class="setting-label">Son d'alerte</div>
+                <div class="setting-desc">Bip sonore à chaque alerte</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toggle-sound" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <div class="setting-label">Vibration</div>
+                <div class="setting-desc">Vibreur si disponible</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toggle-vibrate" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-row">
+            <div>
+                <div class="setting-label">Mouvement réel</div>
+                <div class="setting-desc">Utiliser l'accéléromètre du capteur</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toggle-motion" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ────────────────────────────────────────────
+//  DONNÉES
+// ────────────────────────────────────────────
+const ACTIVITIES = [
+    { emoji: '🚶', name: 'Marche rapide',   desc: 'Marchez d\'un bon pas dans la pièce ou dehors.',  dur: 5*60, label: '5 min' },
+    { emoji: '🧘', name: 'Étirements',      desc: 'Étirez vos bras, jambes et dos doucement.',       dur: 3*60, label: '3 min' },
+    { emoji: '💃', name: '10 squats',        desc: 'Faites 10 squats lentement, genoux à 90°.',       dur: 2*60, label: '2 min' },
+    { emoji: '🏃', name: 'Monte les escaliers', desc: 'Montez et descendez les escaliers 2 fois.',    dur: 4*60, label: '4 min' },
+    { emoji: '🤸', name: 'Jumping jacks',   desc: 'Faites 20 jumping jacks pour activer votre cœur.',dur: 2*60, label: '2 min' },
+    { emoji: '💪', name: 'Pompes',           desc: 'Faites 5 à 10 pompes à votre rythme.',            dur: 3*60, label: '3 min' },
+];
+
+// ────────────────────────────────────────────
+//  ÉTAT
+// ────────────────────────────────────────────
+const state = {
+    running: false,
+    inactiveSince: null,
+    totalInactiveMs: 0,
+    sessions: 0,
+    threshold: 30,          // minutes
+    soundEnabled: true,
+    vibrateEnabled: true,
+    motionEnabled: true,
+    lastMotion: Date.now(),
+    movementBuffer: [],
+    selectedActivity: 0,
+    alertShown: false,
+    snoozedUntil: null,
+    exercising: false,
+    exTimeLeft: 0,
+    exTimerRef: null,
+    mainIntervalRef: null,
+    motionPermAsked: false,
+};
+
+// ────────────────────────────────────────────
+//  ÉLÉMENTS DOM
+// ────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const ringProgress = $('ring-progress');
+const ringCircumference = 2 * Math.PI * 96;
+ringProgress.style.strokeDasharray = ringCircumference;
+ringProgress.style.strokeDashoffset = ringCircumference;
+
+const exCircumference = 2 * Math.PI * 58;
+$('ex-progress').style.strokeDasharray = exCircumference;
+
+// ────────────────────────────────────────────
+//  UTILITAIRES
+// ────────────────────────────────────────────
+function fmt(ms) {
+    const total = Math.floor(ms / 1000);
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function showToast(msg, duration = 2500) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function playBeep() {
+    if (!state.soundEnabled) return;
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = 880;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.8);
+
+        // 2e bip
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.frequency.value = 660;
+        osc2.type = 'sine';
+        gain2.gain.setValueAtTime(0, ctx.currentTime + 0.9);
+        gain2.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.95);
+        gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.7);
+        osc2.connect(gain2); gain2.connect(ctx.destination);
+        osc2.start(ctx.currentTime + 0.9); osc2.stop(ctx.currentTime + 1.7);
+    } catch(e) {}
+}
+
+function vibrateAlert() {
+    if (!state.vibrateEnabled) return;
+    if ('vibrate' in navigator) navigator.vibrate([300, 200, 300, 200, 500]);
+}
+
+// ────────────────────────────────────────────
+//  ANNEAUX
+// ────────────────────────────────────────────
+function updateRing(ratio, danger) {
+    const offset = ringCircumference * (1 - Math.min(ratio, 1));
+    ringProgress.style.strokeDashoffset = offset;
+    ringProgress.style.stroke = danger
+        ? 'url(#ringDanger)'
+        : 'url(#ringGradient)';
+}
+
+function updateMainUI() {
+    if (!state.running || state.inactiveSince === null) {
+        $('ring-time').textContent = '--:--';
+        $('ring-time').className = 'ring-time ok';
+        $('stat-inactive').textContent = '--:--';
+        updateRing(0, false);
+        $('status-icon').textContent = '🪑';
+        $('ring-label').textContent = 'Surveillance inactive';
+        return;
+    }
+
+    const elapsed = Date.now() - state.inactiveSince;
+    const threshMs = state.threshold * 60 * 1000;
+    const ratio = elapsed / threshMs;
+    const danger = ratio >= 0.8;
+    const over = elapsed >= threshMs;
+
+    updateRing(ratio, danger);
+
+    const timeEl = $('ring-time');
+    timeEl.textContent = fmt(elapsed);
+    timeEl.className = 'ring-time ' + (over ? 'danger' : danger ? 'warning' : 'ok');
+
+    $('stat-inactive').textContent = fmt(elapsed);
+    $('stat-sessions').textContent = state.sessions;
+    $('stat-threshold').textContent = state.threshold;
+
+    // icône & label
+    if (over) {
+        $('status-icon').textContent = '⚠️';
+        $('ring-label').textContent = 'Alerte inactivité';
+    } else if (danger) {
+        $('status-icon').textContent = '😴';
+        $('ring-label').textContent = 'Quasi-inactif';
+    } else {
+        $('status-icon').textContent = '🪑';
+        $('ring-label').textContent = 'Inactif';
+    }
+
+    // déclenchement alerte
+    if (over && !state.alertShown && !state.exercising) {
+        const snoozed = state.snoozedUntil && Date.now() < state.snoozedUntil;
+        if (!snoozed) triggerAlert();
+    }
+}
+
+// ────────────────────────────────────────────
+//  ACCÉLÉROMÈTRE
+// ────────────────────────────────────────────
+const MOTION_THRESHOLD = 1.5;  // m/s²
+const MOVEMENT_COOLDOWN = 3000; // ms après le dernier mouvement détecté
+
+function onDeviceMotion(e) {
+    const acc = e.accelerationIncludingGravity || e.acceleration;
+    if (!acc) return;
+    const mag = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
+
+    // On filtre la gravité statique en suivant la moyenne glissante
+    state.movementBuffer.push(mag);
+    if (state.movementBuffer.length > 10) state.movementBuffer.shift();
+    const avg = state.movementBuffer.reduce((a,b)=>a+b,0) / state.movementBuffer.length;
+    const delta = Math.abs(mag - avg);
+
+    if (delta > MOTION_THRESHOLD) {
+        registerMovement();
+    }
+}
+
+function registerMovement() {
+    state.lastMotion = Date.now();
+    if (state.inactiveSince !== null) {
+        state.inactiveSince = null;
+        state.alertShown = false;
+        updateSensorUI(true);
+    }
+    // Relance le timer d'inactivité après MOVEMENT_COOLDOWN
+    clearTimeout(registerMovement._t);
+    registerMovement._t = setTimeout(() => {
+        if (state.running && state.inactiveSince === null) {
+            state.inactiveSince = Date.now();
+            updateSensorUI(false);
+        }
+    }, MOVEMENT_COOLDOWN);
+}
+
+async function requestMotionPermission() {
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+        try {
+            const perm = await DeviceMotionEvent.requestPermission();
+            return perm === 'granted';
+        } catch(e) { return false; }
+    }
+    return typeof DeviceMotionEvent !== 'undefined';
+}
+
+// ────────────────────────────────────────────
+//  CAPTEUR UI
+// ────────────────────────────────────────────
+function updateSensorUI(moving) {
+    const dot = $('sensor-dot');
+    const badge = $('sensor-badge');
+    const title = $('sensor-title');
+    const desc = $('sensor-desc');
+
+    if (!state.running) {
+        dot.className = 'sensor-dot inactive';
+        badge.className = 'sensor-badge sim';
+        badge.textContent = 'Arrêté';
+        title.textContent = 'Surveillance inactive';
+        desc.textContent = 'Appuyez sur Démarrer pour activer';
+        return;
+    }
+
+    if (moving) {
+        dot.className = 'sensor-dot';
+        badge.className = 'sensor-badge';
+        badge.textContent = 'Mouvement';
+        title.textContent = 'Mouvement détecté';
+        desc.textContent = 'Continuez à bouger !';
+    } else {
+        dot.className = 'sensor-dot alert';
+        badge.className = 'sensor-badge alert';
+        badge.textContent = 'Inactif';
+        title.textContent = 'Aucun mouvement';
+        desc.textContent = state.motionEnabled
+            ? 'Accéléromètre actif – en attente de mouvement'
+            : 'Mode simulation – timer en cours';
+    }
+}
+
+// ────────────────────────────────────────────
+//  ALERTE
+// ────────────────────────────────────────────
+function buildActivitiesGrid() {
+    const grid = $('activities-grid');
+    grid.innerHTML = '';
+    ACTIVITIES.forEach((act, i) => {
+        const card = document.createElement('div');
+        card.className = 'activity-card' + (i === state.selectedActivity ? ' selected' : '');
+        card.innerHTML = `
+            <div class="activity-emoji">${act.emoji}</div>
+            <div class="activity-name">${act.name}</div>
+            <div class="activity-dur">${act.label}</div>`;
+        card.addEventListener('click', () => {
+            state.selectedActivity = i;
+            grid.querySelectorAll('.activity-card').forEach((c,j) =>
+                c.classList.toggle('selected', j === i));
+        });
+        grid.appendChild(card);
+    });
+}
+
+function triggerAlert() {
+    state.alertShown = true;
+    buildActivitiesGrid();
+    $('alert-overlay').classList.add('visible');
+    playBeep();
+    vibrateAlert();
+}
+
+$('btn-snooze').addEventListener('click', () => {
+    state.snoozedUntil = Date.now() + 10 * 60 * 1000;
+    $('alert-overlay').classList.remove('visible');
+    showToast('⏰ Rappel dans 10 minutes');
+    state.alertShown = false;
+});
+
+$('btn-go').addEventListener('click', () => {
+    $('alert-overlay').classList.remove('visible');
+    startExercise(ACTIVITIES[state.selectedActivity]);
+});
+
+// ────────────────────────────────────────────
+//  EXERCICE
+// ────────────────────────────────────────────
+function startExercise(act) {
+    state.exercising = true;
+    state.exTimeLeft = act.dur;
+    $('ex-emoji').textContent = act.emoji;
+    $('ex-name').textContent = act.name;
+    $('ex-desc').textContent = act.desc;
+    $('exercise-overlay').classList.add('visible');
+    updateExTimer(act.dur, act.dur);
+
+    clearInterval(state.exTimerRef);
+    state.exTimerRef = setInterval(() => {
+        state.exTimeLeft--;
+        updateExTimer(state.exTimeLeft, act.dur);
+        if (state.exTimeLeft <= 0) finishExercise();
+    }, 1000);
+}
+
+function updateExTimer(left, total) {
+    const m = Math.floor(left / 60);
+    const s = left % 60;
+    $('ex-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+    const offset = exCircumference * (1 - left / total);
+    $('ex-progress').style.strokeDashoffset = offset;
+}
+
+function finishExercise() {
+    clearInterval(state.exTimerRef);
+    state.exercising = false;
+    state.sessions++;
+    $('stat-sessions').textContent = state.sessions;
+    $('exercise-overlay').classList.remove('visible');
+
+    // reset inactivité
+    state.inactiveSince = Date.now();
+    state.alertShown = false;
+    state.snoozedUntil = null;
+    updateSensorUI(false);
+    showToast('🎉 Bravo ! Continuez comme ça !');
+    playBeep();
+    if ('vibrate' in navigator && state.vibrateEnabled) navigator.vibrate([100, 100, 100]);
+}
+
+$('btn-finish').addEventListener('click', finishExercise);
+
+// ────────────────────────────────────────────
+//  DÉMARRER / ARRÊTER
+// ────────────────────────────────────────────
+async function startSurveillance() {
+    state.running = true;
+    state.inactiveSince = Date.now();
+    state.alertShown = false;
+    state.snoozedUntil = null;
+
+    // Demande permission accéléromètre
+    let motionOk = false;
+    if (state.motionEnabled) {
+        if (!state.motionPermAsked) {
+            state.motionPermAsked = true;
+            motionOk = await requestMotionPermission();
+        } else {
+            motionOk = true;
+        }
+        if (motionOk) {
+            window.addEventListener('devicemotion', onDeviceMotion, { passive: true });
+            showToast('📡 Accéléromètre activé');
+        } else {
+            showToast('⚠️ Accéléromètre indisponible – mode simulation');
+        }
+    }
+
+    // Interaction souris/touch comme proxy de mouvement sur desktop
+    const onInteraction = () => { if (state.running && state.motionEnabled === false) registerMovement(); };
+    document.addEventListener('mousemove', onInteraction, { passive: true });
+    document.addEventListener('touchmove', onInteraction, { passive: true });
+
+    updateSensorUI(false);
+
+    const btn = $('main-btn');
+    btn.textContent = '⏹  Arrêter la surveillance';
+    btn.className = 'main-btn stop';
+
+    state.mainIntervalRef = setInterval(updateMainUI, 500);
+    updateMainUI();
+}
+
+function stopSurveillance() {
+    state.running = false;
+    state.inactiveSince = null;
+    clearInterval(state.mainIntervalRef);
+    window.removeEventListener('devicemotion', onDeviceMotion);
+    $('alert-overlay').classList.remove('visible');
+
+    updateSensorUI(false);
+    updateMainUI();
+    updateRing(0, false);
+
+    const btn = $('main-btn');
+    btn.textContent = '▶  Démarrer la surveillance';
+    btn.className = 'main-btn start';
+    showToast('Surveillance arrêtée');
+}
+
+$('main-btn').addEventListener('click', () => {
+    if (state.running) stopSurveillance();
+    else startSurveillance();
+});
+
+// ────────────────────────────────────────────
+//  PARAMÈTRES
+// ────────────────────────────────────────────
+$('btn-settings').addEventListener('click', () => $('settings-overlay').classList.add('visible'));
+$('settings-close').addEventListener('click', () => $('settings-overlay').classList.remove('visible'));
+$('settings-overlay').addEventListener('click', e => {
+    if (e.target === $('settings-overlay')) $('settings-overlay').classList.remove('visible');
+});
+
+$('threshold-select').addEventListener('change', e => {
+    state.threshold = parseInt(e.target.value);
+    $('stat-threshold').textContent = state.threshold;
+    if (state.running) {
+        state.inactiveSince = Date.now();
+        state.alertShown = false;
+    }
+    showToast(`Seuil mis à jour : ${state.threshold} min`);
+});
+
+$('toggle-sound').addEventListener('change', e => { state.soundEnabled = e.target.checked; });
+$('toggle-vibrate').addEventListener('change', e => { state.vibrateEnabled = e.target.checked; });
+$('toggle-motion').addEventListener('change', e => {
+    state.motionEnabled = e.target.checked;
+    if (!e.target.checked) window.removeEventListener('devicemotion', onDeviceMotion);
+    else if (state.running) window.addEventListener('devicemotion', onDeviceMotion, { passive: true });
+});
+
+// ────────────────────────────────────────────
+//  INIT
+// ────────────────────────────────────────────
+$('stat-threshold').textContent = state.threshold;
+</script>
+</body>
+</html>
