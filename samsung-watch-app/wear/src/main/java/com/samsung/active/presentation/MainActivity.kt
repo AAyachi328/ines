@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private var isRunning = false
     private var thresholdMinutes = 30
     private var uiJob: Job? = null
+    private var alertSuppressedUntil = 0L  // timestamp jusqu'où l'alerte est silencieuse
 
     // Détecteur local pour afficher le timer en temps réel dans l'UI
     private lateinit var detector: InactivityDetector
@@ -104,13 +105,17 @@ class MainActivity : AppCompatActivity() {
             tvThreshold.text = "${thresholdMinutes}min"
         }
 
-        // Panel alerte : boutons d'action
+        // "Se lever" : reset le timer → la personne a un nouveau seuil complet
         findViewById<View>(R.id.btn_get_up).setOnClickListener {
             alertPanel.visibility = View.GONE
+            detector.resetTimer()
+            alertSuppressedUntil = System.currentTimeMillis() + thresholdMinutes * 60 * 1000L
             showMotivation()
         }
+        // "Plus tard" : snooze 10 min sans reset du timer
         findViewById<View>(R.id.btn_snooze).setOnClickListener {
             alertPanel.visibility = View.GONE
+            alertSuppressedUntil = System.currentTimeMillis() + 10 * 60 * 1000L
         }
     }
 
@@ -155,7 +160,8 @@ class MainActivity : AppCompatActivity() {
             while (true) {
                 detector.tick()
                 updateTimerDisplay()
-                if (detector.isInactive.value) showAlertPanel()
+                if (detector.isInactive.value && System.currentTimeMillis() > alertSuppressedUntil)
+                    showAlertPanel()
                 delay(1_000)
             }
         }

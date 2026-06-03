@@ -61,5 +61,10 @@ class InactivityDetector(context: Context) : SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
+    fun resetTimer() {
+        lastStepTime = System.currentTimeMillis()
+        _isInactive.value = false
+    }
+
     fun hasStepSensor() = stepDetector != null
 }
