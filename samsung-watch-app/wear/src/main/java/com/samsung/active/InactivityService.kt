@@ -67,10 +67,10 @@ class InactivityService : LifecycleService() {
             while (true) {
                 detector.tick()
 
-                if (detector.isInactive.value && !alertCooldown) {
+                if (detector.state.value == InactivityDetector.State.ALERT && !alertCooldown) {
                     triggerInactivityAlert()
                     alertCooldown = true
-                } else if (!detector.isInactive.value) {
+                } else if (detector.state.value == InactivityDetector.State.ACTIVE) {
                     alertCooldown = false
                 }
 
@@ -140,10 +140,12 @@ class InactivityService : LifecycleService() {
         val elapsed = detector.inactiveDurationMs.value
         val mins    = elapsed / 60000
         val secs    = (elapsed % 60000) / 1000
-        val text    = if (detector.isInactive.value)
-            "⚠️ Inactif depuis $mins min $secs s"
-        else
-            "✅ Actif – inactif depuis $mins min"
+        val text = when (detector.state.value) {
+            InactivityDetector.State.ACTIVE    -> "🟢 Actif"
+            InactivityDetector.State.DETECTING -> "⚪ Détection position assise…"
+            InactivityDetector.State.SITTING   -> "🟡 Assis depuis $mins min $secs s"
+            InactivityDetector.State.ALERT     -> "🔴 Trop assis ! Levez-vous !"
+        }
 
         val notif = NotificationCompat.Builder(this, SamsungActiveApp.CHANNEL_SERVICE)
             .setSmallIcon(android.R.drawable.ic_menu_compass)

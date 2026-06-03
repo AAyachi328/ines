@@ -123,27 +123,46 @@ class MainActivity : AppCompatActivity() {
             while (true) {
                 detector.tick()
                 updateTimerDisplay()
-                if (detector.isInactive.value && System.currentTimeMillis() > alertSuppressedUntil)
-                    showAlertPanel()
+                // L'alerte est gérée dans updateTimerDisplay()
                 delay(1_000)
             }
         }
     }
 
     private fun updateTimerDisplay() {
-        val ms   = detector.inactiveDurationMs.value
+        val ms   = detector.sittingDurationMs.value
         val mins = ms / 60000
         val secs = (ms % 60000) / 1000
-        tvTimer.text = "%02d:%02d".format(mins, secs)
 
-        val ratio = ms.toFloat() / detector.thresholdMs
-        tvTimer.setTextColor(when {
-            ratio >= 1f   -> 0xFFFF4B4B.toInt()
-            ratio >= 0.8f -> 0xFFFFB300.toInt()
-            else          -> 0xFFFFFFFF.toInt()
-        })
-
-        tvStatus.text = if (detector.isInactive.value) "🔴 Trop assis !" else "🔵 Surveillance"
+        when (detector.state.value) {
+            InactivityDetector.State.ACTIVE -> {
+                tvStatus.text = "🟢 Actif"
+                tvTimer.text  = "--:--"
+                tvTimer.setTextColor(0xFFFFFFFF.toInt())
+                alertPanel.visibility = View.GONE
+            }
+            InactivityDetector.State.DETECTING -> {
+                tvStatus.text = "⚪ Détection…"
+                tvTimer.text  = "--:--"
+                tvTimer.setTextColor(0xFFAAAAAA.toInt())
+            }
+            InactivityDetector.State.SITTING -> {
+                tvStatus.text = "🟡 Assis"
+                tvTimer.text  = "%02d:%02d".format(mins, secs)
+                val ratio = ms.toFloat() / detector.thresholdMs
+                tvTimer.setTextColor(when {
+                    ratio >= 0.8f -> 0xFFFFB300.toInt()
+                    else          -> 0xFFFFFFFF.toInt()
+                })
+            }
+            InactivityDetector.State.ALERT -> {
+                tvStatus.text = "🔴 Trop assis !"
+                tvTimer.text  = "%02d:%02d".format(mins, secs)
+                tvTimer.setTextColor(0xFFFF4B4B.toInt())
+                if (System.currentTimeMillis() > alertSuppressedUntil)
+                    showAlertPanel()
+            }
+        }
     }
 
     private fun showAlertPanel() {
