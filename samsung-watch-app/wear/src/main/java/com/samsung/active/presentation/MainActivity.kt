@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         // Seuil : appui court = +10 min (cycle 10→20→30→45→60→10…)
         tvThreshold.setOnClickListener {
-            val steps = listOf(10, 20, 30, 45, 60)
+            val steps = listOf(2, 10, 20, 30, 45, 60)
             val idx = steps.indexOf(thresholdMinutes)
             thresholdMinutes = steps[(idx + 1) % steps.size]
             detector.thresholdMs = thresholdMinutes * 60 * 1000L
