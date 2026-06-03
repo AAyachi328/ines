@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var tvTimer: TextView
     private lateinit var tvThreshold: TextView
-    private lateinit var btnToggle: View
     private lateinit var btnToggleText: TextView
     private lateinit var alertPanel: View
     private lateinit var tvAlertMessage: TextView
@@ -85,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         tvStatus      = findViewById(R.id.tv_status)
         tvTimer       = findViewById(R.id.tv_timer)
         tvThreshold   = findViewById(R.id.tv_threshold)
-        btnToggle     = findViewById(R.id.btn_toggle)
         btnToggleText = findViewById(R.id.btn_toggle_text)
         alertPanel    = findViewById(R.id.alert_panel)
         tvAlertMessage = findViewById(R.id.tv_alert_message)
@@ -93,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         // Démarrer / Arrêter
-        btnToggle.setOnClickListener {
+        btnToggleText.setOnClickListener {
             if (isRunning) stopSurveillance() else checkPermissionsAndStart()
         }
 

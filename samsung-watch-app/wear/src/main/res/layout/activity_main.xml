@@ -57,23 +57,19 @@
             android:layout_marginBottom="14dp"/>
 
         <!-- Bouton Démarrer / Arrêter -->
-        <FrameLayout
-            android:id="@+id/btn_toggle"
-            android:layout_width="100dp"
-            android:layout_height="36dp"
+        <TextView
+            android:id="@+id/btn_toggle_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Démarrer"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:background="@drawable/bg_btn_primary"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:clickable="true"
-            android:focusable="true">
-            <TextView
-                android:id="@+id/btn_toggle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Démarrer"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"/>
-        </FrameLayout>
+            android:focusable="true"/>
     </LinearLayout>
 
     <!-- Panel d'alerte (superposé, caché par défaut) -->
