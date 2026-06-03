@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#0A0A0F">
 
-    <!-- Contenu principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,62 +14,37 @@
         android:padding="20dp"
         app:boxedEdges="all">
 
-        <!-- Statut -->
         <TextView
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚪ En veille"
+            android:text="🔵 Actif"
             android:textSize="10sp"
             android:textColor="#AAAACC"
             android:layout_marginBottom="2dp"/>
 
-        <!-- Chrono -->
         <TextView
             android:id="@+id/tv_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="--:--"
-            android:textSize="28sp"
+            android:text="00:00"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:fontFamily="monospace"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="6dp"/>
 
-        <!-- Seuil + Démarrer sur la même ligne -->
-        <LinearLayout
+        <!-- Seuil cliquable -->
+        <TextView
+            android:id="@+id/tv_threshold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="0dp">
-
-            <TextView
-                android:id="@+id/tv_threshold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30min"
-                android:textSize="10sp"
-                android:textColor="#7777AA"
-                android:background="@drawable/bg_chip"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/btn_toggle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Démarrer"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_btn_primary"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:clickable="true"
-                android:focusable="true"/>
-        </LinearLayout>
+            android:text="30min"
+            android:textSize="10sp"
+            android:textColor="#7777AA"
+            android:background="@drawable/bg_chip"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"/>
 
     </LinearLayout>
 
@@ -81,7 +55,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#E5000000"
+        android:background="#EE000000"
         android:padding="16dp"
         android:visibility="gone">
 
@@ -94,7 +68,7 @@
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:gravity="center"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="12dp"/>
 
         <FrameLayout
             android:id="@+id/btn_get_up"
@@ -103,15 +77,15 @@
             android:background="@drawable/bg_btn_primary"
             android:clickable="true"
             android:focusable="true"
-            android:paddingHorizontal="14dp"
+            android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="8dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="🚶 Se lever"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"/>
         </FrameLayout>
@@ -123,14 +97,14 @@
             android:background="@drawable/bg_btn_secondary"
             android:clickable="true"
             android:focusable="true"
-            android:paddingHorizontal="14dp"
+            android:paddingHorizontal="16dp"
             android:paddingVertical="6dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="⏰ Plus tard"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:textColor="#AAAACC"/>
         </FrameLayout>
     </LinearLayout>
