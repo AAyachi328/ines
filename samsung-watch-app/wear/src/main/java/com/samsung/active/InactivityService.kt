@@ -93,10 +93,17 @@ class InactivityService : LifecycleService() {
         )
 
         val mins = thresholdMinutes
+        val suggestions = listOf(
+            "Levez-vous et marchez 5 min 🚶",
+            "10 squats maintenant ! 💪",
+            "Étirez dos et épaules 🧘",
+            "10 pompes, allez ! 🏋️",
+            "Montez les escaliers 2x 🏃"
+        )
         val notification = NotificationCompat.Builder(this, SamsungActiveApp.CHANNEL_ALERT)
             .setSmallIcon(android.R.drawable.ic_dialog_alert)
-            .setContentTitle("⚠️ Trop assis !")
-            .setContentText("Vous êtes inactif depuis $mins min. Levez-vous ! 🚶")
+            .setContentTitle("Assis depuis $mins min !")
+            .setContentText(suggestions.random())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setAutoCancel(true)
