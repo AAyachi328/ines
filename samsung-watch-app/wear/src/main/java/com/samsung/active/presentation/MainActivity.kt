@@ -105,10 +105,13 @@ class MainActivity : AppCompatActivity() {
             tvThreshold.text = "${thresholdMinutes}min"
         }
 
-        // "Se lever" : reset le timer → la personne a un nouveau seuil complet
+        // "Se lever" : reset les deux détecteurs (UI + service)
         findViewById<View>(R.id.btn_get_up).setOnClickListener {
             alertPanel.visibility = View.GONE
             detector.resetTimer()
+            startService(Intent(this, InactivityService::class.java).apply {
+                action = InactivityService.ACTION_RESET
+            })
             alertSuppressedUntil = System.currentTimeMillis() + thresholdMinutes * 60 * 1000L
             showMotivation()
         }

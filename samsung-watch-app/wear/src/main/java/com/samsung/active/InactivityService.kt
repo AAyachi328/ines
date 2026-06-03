@@ -46,6 +46,11 @@ class InactivityService : LifecycleService() {
                 stopSelf()
                 return START_NOT_STICKY
             }
+            ACTION_RESET -> {
+                detector.resetTimer()
+                alertCooldown = false
+                return START_NOT_STICKY
+            }
         }
 
         startForeground(NOTIF_SERVICE_ID, buildServiceNotification())
@@ -165,6 +170,7 @@ class InactivityService : LifecycleService() {
 
     companion object {
         const val ACTION_STOP              = "com.samsung.active.STOP"
+        const val ACTION_RESET             = "com.samsung.active.RESET"
         const val EXTRA_THRESHOLD_MINUTES  = "threshold_minutes"
         private const val NOTIF_SERVICE_ID = 1
         private const val NOTIF_ALERT_ID   = 2
