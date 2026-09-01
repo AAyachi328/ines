@@ -20,17 +20,25 @@ Portée : pilote 20–50 élèves + personnel, 4–6 semaines, un seul
     API séparée plus tard (ex. si une app mobile native ou un partenaire
     ENT a besoin d'un accès API dédié) sans tout réécrire.
 
-- **Base de données** : **PostgreSQL managé**, avec **Row-Level Security
+- **Base de données** : **PostgreSQL**, avec **Row-Level Security
   (RLS)** activée pour l'isolation multi-tenant (voir §4).
-  - Recommandation V0 : **Supabase (région UE — Francfort)** pour
-    Auth + Postgres + Storage (pièces jointes légères, pas la vidéo) +
-    RLS native. Accélère fortement le développement (auth prête,
-    policies RLS déclaratives, dashboard SQL).
-  - *Compromis* : dépendance à Supabase (vendor lock-in partiel). Comme
-    c'est du Postgres standard + RLS standard, une migration vers un
-    Postgres managé « nu » (Neon, RDS, Scaleway) reste possible sans
-    réécrire le schéma. À trancher avec le DPO si l'hébergement doit
-    rester strictement en France plutôt qu'UE au sens large.
+  - Recommandation V0 : **PostgreSQL o2switch** (hébergement mutualisé,
+    société française, datacenter propre à Clermont-Ferrand). RLS ne
+    nécessite pas de droits superuser (juste la propriété des tables),
+    donc le schéma et les policies du §3 fonctionnent tels quels.
+  - *Compromis* : pas de pooler de connexions managé ni de haute
+    disponibilité multi-AZ comme sur un Postgres managé (Scaleway,
+    Neon, RDS) — acceptable à l'échelle du pilote (50 utilisateurs),
+    à surveiller en cas de croissance. En contrepartie, souveraineté
+    maximale (société et datacenter 100% français, aucune dépendance à
+    un acteur sous juridiction US) et coût très faible, ce qui simplifie
+    la conversation DPO. Le schéma restant du Postgres standard, une
+    migration ultérieure vers un Postgres managé (si le projet dépasse
+    le pilote) ne nécessite pas de réécriture.
+  - Côté application : utiliser un pool de connexions restreint
+    (`pg-pool`, `max` bas, ex. 5–10) car Next.js sous Phusion Passenger
+    peut lancer plusieurs process Node, et l'offre mutualisée plafonne
+    le nombre de connexions Postgres simultanées.
 
 - **Vidéo** : fournisseur spécialisé, **Cloudflare Stream**
   recommandé (vs Mux).
@@ -39,16 +47,22 @@ Portée : pilote 20–50 élèves + personnel, 4–6 semaines, un seul
     ce qui correspond exactement à l'exigence « pas d'URL publique
     permanente ». Mux est équivalent fonctionnellement mais plus cher au
     stade pilote. À reconfirmer selon les tarifs au moment de
-    l'implémentation.
+    l'implémentation. Ce composant reste externe quel que soit
+    l'hébergement applicatif choisi.
 
-- **Hébergement applicatif** : **Vercel (région UE)** pour le
-  Next.js, ou alternative self-hosted (Docker sur Scaleway/OVH) si la
-  souveraineté des données est un critère strict du DPO.
-  - *Compromis* : Vercel = zéro ops, déploiement instantané, mais données
-    de requêtes transitant par une plateforme US (même en région EU pour
-    le compute). Pour un pilote interne sans données de santé/sensibles
-    au sens RGPD strict, c'est un compromis raisonnable ; à documenter
-    dans l'analyse DPO.
+- **Hébergement applicatif** : **o2switch (hébergement mutualisé,
+  France)**, Next.js déployé en Node.js via cPanel/Phusion Passenger
+  (SSH + git pull + redémarrage de l'application).
+  - *Compromis* : pas de déploiement continu ni de previews par branche
+    comme sur une plateforme serverless (Vercel) — déploiement manuel ou
+    scripté via SSH, ce qui demande un peu plus d'ops côté enseignant-
+    ingénieur. En échange : hébergement français de bout en bout
+    (application + base de données), coût très faible, et un dossier
+    DPO beaucoup plus simple qu'avec un hébergeur sous juridiction US
+    (même en région UE). Suffisant pour un pilote 4–6 semaines ; à
+    réévaluer (retour vers une plateforme managée) si le service doit
+    monter en charge ou nécessiter du scaling automatique/CI-CD après
+    le pilote.
 
 - **Auth V0** : Auth.js (NextAuth) avec provider *Credentials* +
   *Email magic link*, comptes créés par invitation (voir §6). Architecture
@@ -56,9 +70,14 @@ Portée : pilote 20–50 élèves + personnel, 4–6 semaines, un seul
   l'ajout de providers OIDC — Entra ID, ENT — sans changer le modèle de
   données).
 
-- **Rate limiting / sécurité applicative** : Upstash Redis (ou
-  équivalent) pour rate limiting des routes sensibles (upload, login,
-  commentaires, signalements).
+- **Rate limiting / sécurité applicative** : pas de Redis managé
+  disponible sur l'hébergement mutualisé o2switch. V0 utilise une table
+  Postgres dédiée (`rate_limit_bucket`, compteur par utilisateur/IP et
+  fenêtre glissante) pour les routes sensibles (upload, login,
+  commentaires, signalements) — suffisant à l'échelle du pilote.
+  *Compromis* : latence légèrement supérieure à Redis et un peu plus de
+  charge DB, non significatif à 50 utilisateurs ; à remplacer par Redis
+  managé si le trafic augmente après le pilote.
 
 ### 1.2 Pourquoi pas plus complexe ?
 
@@ -78,14 +97,14 @@ flowchart TB
         UI["Next.js App Router\nReact + TypeScript\nFeed vertical / Groupes / Publier / Profil"]
     end
 
-    subgraph Edge["Vercel (EU)"]
+    subgraph Edge["o2switch (France) — cPanel / Phusion Passenger"]
         API["Route Handlers Next.js\n(API V0)"]
         MW["Middleware\nAuth session + RBAC + tenant scoping"]
     end
 
-    subgraph Data["Données"]
-        PG[("PostgreSQL\n+ Row-Level Security\n(Supabase, région UE)")]
-        REDIS[("Redis\nRate limiting / cache feed")]
+    subgraph Data["Données (o2switch, France)"]
+        PG[("PostgreSQL\n+ Row-Level Security")]
+        RL[("Table rate_limit_bucket\n(rate limiting, cache feed léger)")]
     end
 
     subgraph VideoProvider["Cloudflare Stream"]
@@ -101,7 +120,7 @@ flowchart TB
 
     UI -->|HTTPS| MW --> API
     API --> PG
-    API --> REDIS
+    API --> RL
     API -->|génère URL upload signée| UPLOAD
     UPLOAD --> TRANSCODE --> PLAYBACK
     UI -->|lecture via URL signée courte durée| PLAYBACK
@@ -463,7 +482,7 @@ la session, jamais d'un paramètre `org_id` client).
 | Élévation de privilège (rôle falsifié côté client) | Élevé | Rôle stocké uniquement en base, jamais dans un champ modifiable côté client ; JWT signé serveur ; vérification systématique côté serveur |
 | Vol de session / cookie | Élevé | Cookies httpOnly/Secure/SameSite, durée de session courte, révocation possible (table sessions ou JWT à courte durée + refresh) |
 | Fuite/réutilisation d'URL de lecture vidéo | Moyen | URLs de lecture signées à TTL court (5–10 min), jamais d'URL permanente stockée ou partageable |
-| Abus (spam, flood de commentaires/signalements) | Moyen | Rate limiting par utilisateur/IP (Redis) sur upload, commentaire, signalement, création de compte |
+| Abus (spam, flood de commentaires/signalements) | Moyen | Rate limiting par utilisateur/IP (table `rate_limit_bucket` en base) sur upload, commentaire, signalement, création de compte |
 | Falsification de code d'invitation | Moyen | Codes aléatoires cryptographiquement forts, expiration, usages max, révocation possible |
 | Contenu malveillant dans un fichier vidéo uploadé | Faible-Moyen | Le transcodage systématique par Cloudflare Stream élimine l'exécution de payloads actifs dans le fichier lui-même ; validation de type MIME/taille en amont |
 | Non-conformité RGPD (mineurs, rétention, droits) | Critique (juridique) | Minimisation des données, politique de rétention configurable, export/suppression sur demande, base légale claire (mission d'intérêt public de l'établissement + information des familles), consultation DPO avant pilote |
@@ -505,7 +524,7 @@ lycee-video-network/
 │   ├── db/                      # schéma Drizzle/Prisma + migrations
 │   └── shared/                  # types partagés, constantes de rôles
 └── infra/
-    └── README.md                # notes de déploiement (Vercel/Supabase/CF Stream)
+    └── README.md                # notes de déploiement (o2switch/cPanel + CF Stream)
 ```
 
 *Compromis* : structure monorepo légère (pas de Turborepo/Nx imposé en
@@ -518,8 +537,9 @@ séparée ou une app mobile native arrivent plus tard.
 ## 13. Plan d'implémentation par étapes
 
 1. **Fondations** — repo, monorepo, CI basique (lint/typecheck/test),
-   compte Supabase (EU) + Cloudflare Stream, variables d'environnement,
-   squelette Next.js + PWA manifest.
+   hébergement o2switch (base PostgreSQL + Node.js/Passenger via
+   cPanel) + compte Cloudflare Stream, variables d'environnement,
+   squelette Next.js + PWA manifest, script de déploiement SSH.
 2. **Modèle de données + migrations** — schéma complet (§3), RLS
    activée, seed de test avec deux organisations fictives pour valider
    l'isolation dès le départ.
