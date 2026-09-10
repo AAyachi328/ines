@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercices fractions et pourcentages</title>
+<style>
+  body{
+    font-family: Arial, sans-serif;
+    background:#f5f7fb;
+    color:#1f2937;
+    margin:0;
+    padding:30px;
+  }
+  h1{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .subtitle{
+    text-align:center;
+    margin-bottom:28px;
+    color:#4b5563;
+  }
+  .exercise{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    margin:16px auto;
+    max-width:850px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+  }
+  .level{
+    font-weight:bold;
+    margin-bottom:10px;
+  }
+  .statement{
+    line-height:1.6;
+    margin-bottom:14px;
+  }
+  .editable{
+    display:inline-block;
+    min-width:45px;
+    padding:2px 6px;
+    border-bottom:2px dashed #6b7280;
+    background:#f9fafb;
+  }
+  input{
+    width:110px;
+    padding:8px;
+    margin:4px 6px 4px 0;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+  }
+  button{
+    padding:9px 14px;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:8px;
+  }
+  .check{ background:#e5e7eb; }
+  .show{ background:#dbeafe; }
+  .result{
+    margin-top:10px;
+    font-weight:bold;
+  }
+  .ok{ color:#15803d; }
+  .no{ color:#b91c1c; }
+  .answer{
+    display:none;
+    margin-top:10px;
+    padding:10px;
+    border-radius:8px;
+    background:#f0fdf4;
+  }
+</style>
+</head>
+<body>
+
+<h1>Fractions → Quantités → Pourcentages</h1>
+<div class="subtitle">10 situations professionnelles — difficulté progressive. Les énoncés sont modifiables directement.</div>
+
+<div id="container"></div>
+
+<script>
+const exercises = [
+  {n:1, diff:"Très facile", role:"employé dans un magasin", action:"ranger", num:1, den:2, total:20},
+  {n:2, diff:"Très facile", role:"employé dans une réserve", action:"classer", num:3, den:5, total:40},
+  {n:3, diff:"Facile", role:"préparateur de commandes", action:"préparer", num:3, den:4, total:36},
+  {n:4, diff:"Facile", role:"employé de bibliothèque", action:"ranger", num:2, den:3, total:45},
+  {n:5, diff:"Moyen", role:"employé dans un entrepôt", action:"étiqueter", num:5, den:8, total:64},
+  {n:6, diff:"Moyen", role:"agent logistique", action:"contrôler", num:7, den:10, total:90},
+  {n:7, diff:"Assez difficile", role:"employé dans une pharmacie", action:"inventorier", num:7, den:12, total:84},
+  {n:8, diff:"Difficile", role:"responsable de rayon", action:"mettre en rayon", num:11, den:20, total:120},
+  {n:9, diff:"Difficile", role:"agent de stock", action:"vérifier", num:13, den:25, total:150},
+  {n:10, diff:"Plus difficile", role:"responsable logistique", action:"traiter", num:17, den:40, total:240}
+];
+
+function render() {
+  const container = document.getElementById("container");
+  container.innerHTML = "";
+
+  exercises.forEach((ex, i) => {
+    const qty = ex.total * ex.num / ex.den;
+    const pct = ex.num / ex.den * 100;
+
+    const div = document.createElement("div");
+    div.className = "exercise";
+
+    div.innerHTML = `
+      <div class="level">Exercice ${ex.n} — ${ex.diff}</div>
+
+      <div class="statement" contenteditable="true">
+        Vous êtes ${ex.role}. On vous demande de ${ex.action}
+        <span class="editable">${ex.num}/${ex.den}</span>
+        de <span class="editable">${ex.total}</span> articles.
+        Combien d’articles devez-vous ${ex.action} ?
+        À quel pourcentage du total cela correspond-il ?
+      </div>
+
+      <div>
+        <label>Nombre d’articles :
+          <input type="number" id="q${i}" placeholder="Réponse">
+        </label>
+        <label>Pourcentage :
+          <input type="number" step="0.01" id="p${i}" placeholder="%">
+        </label>
+      </div>
+
+      <button class="check" onclick="check(${i}, ${qty}, ${pct})">Vérifier</button>
+      <button class="show" onclick="showAnswer(${i})">Afficher la correction</button>
+
+      <div class="result" id="r${i}"></div>
+
+      <div class="answer" id="a${i}">
+        Calcul : ${ex.num}/${ex.den} × ${ex.total} = <strong>${qty}</strong> articles.<br>
+        Pourcentage : ${ex.num}/${ex.den} × 100 = <strong>${pct}%</strong>.
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function check(i, qty, pct){
+  const q = parseFloat(document.getElementById("q"+i).value);
+  const p = parseFloat(document.getElementById("p"+i).value);
+  const r = document.getElementById("r"+i);
+
+  const qOk = Math.abs(q - qty) < 0.001;
+  const pOk = Math.abs(p - pct) < 0.01;
+
+  if(qOk && pOk){
+    r.className = "result ok";
+    r.textContent = "✓ Bonne réponse";
+  } else {
+    r.className = "result no";
+    r.textContent = "✗ À revoir";
+  }
+}
+
+function showAnswer(i){
+  const a = document.getElementById("a"+i);
+  a.style.display = a.style.display === "block" ? "none" : "block";
+}
+
+render();
+</script>
+</body>
+</html>
