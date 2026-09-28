@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correction TP - Cellule photovoltaïque - Première Bac Pro MSPC</title>
+<style>
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    background:#f4f7fb;
+    color:#1f2937;
+    line-height:1.6;
+  }
+  .container{
+    max-width:1100px;
+    margin:30px auto;
+    background:white;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 8px 28px rgba(0,0,0,.08);
+  }
+  h1{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .subtitle{
+    text-align:center;
+    color:#4b5563;
+    margin-bottom:30px;
+  }
+  h2{
+    margin-top:34px;
+    border-bottom:2px solid #dbe4f0;
+    padding-bottom:8px;
+  }
+  h3{margin-top:24px;}
+  .box{
+    background:#eef5ff;
+    border-left:5px solid #3b82f6;
+    padding:16px 18px;
+    margin:16px 0;
+    border-radius:10px;
+  }
+  .answer{
+    background:#ecfdf5;
+    border-left:5px solid #10b981;
+    padding:16px 18px;
+    margin:16px 0;
+    border-radius:10px;
+  }
+  .warning{
+    background:#fff7ed;
+    border-left:5px solid #f59e0b;
+    padding:16px 18px;
+    margin:16px 0;
+    border-radius:10px;
+  }
+  .formula{
+    font-size:1.25rem;
+    text-align:center;
+    padding:10px;
+    font-weight:bold;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-size:.95rem;
+  }
+  th,td{
+    border:1px solid #9ca3af;
+    padding:8px;
+    text-align:center;
+  }
+  th{background:#e5e7eb;}
+  pre{
+    background:#111827;
+    color:#f9fafb;
+    padding:18px;
+    border-radius:12px;
+    overflow:auto;
+  }
+  .small{font-size:.93rem;color:#4b5563;}
+  .conclusion{
+    background:#f3e8ff;
+    border-left:5px solid #8b5cf6;
+    padding:18px;
+    border-radius:10px;
+    margin-top:28px;
+  }
+  @media print{
+    body{background:white;}
+    .container{box-shadow:none;margin:0;max-width:none;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Correction du TP — Étude d’une cellule photovoltaïque</h1>
+  <div class="subtitle">Niveau Première Bac Pro MSPC</div>
+
+  <h2>1. Chaîne d’énergie</h2>
+  <div class="answer">
+    <pre>Énergie lumineuse
+        ↓
+CELLULE PHOTOVOLTAÏQUE
+        ↓
+Énergie électrique utile
+
++ pertes principalement sous forme d’énergie thermique</pre>
+    <p><strong>Énergie fournie :</strong> énergie lumineuse.</p>
+    <p><strong>Énergie utile :</strong> énergie électrique.</p>
+  </div>
+
+  <h2>2. Relation du rendement</h2>
+  <div class="formula">η = P<sub>utile</sub> / P<sub>fournie</sub></div>
+  <p>Pour la cellule photovoltaïque :</p>
+  <div class="formula">η = P<sub>E</sub> / P<sub>L</sub></div>
+  <p>Or :</p>
+  <div class="formula">P<sub>E</sub> = U × I</div>
+  <p>Donc :</p>
+  <div class="formula">η = (U × I) / P<sub>L</sub></div>
+  <p>En pourcentage :</p>
+  <div class="formula">η (%) = [(U × I) / P<sub>L</sub>] × 100</div>
+
+  <h2>3. Réalisation du montage</h2>
+  <div class="box">
+    <ul>
+      <li>L’ampèremètre se branche <strong>en série</strong>.</li>
+      <li>Le voltmètre se branche <strong>en dérivation</strong> aux bornes de la cellule.</li>
+      <li>La résistance variable permet de modifier le point de fonctionnement.</li>
+      <li>L’éclairement doit rester voisin de <strong>1000 lux</strong>.</li>
+    </ul>
+  </div>
+
+  <h2>4 et 5. Tableau de mesures et puissance électrique</h2>
+  <p>Pour chaque valeur de résistance, on relève U et I puis on calcule :</p>
+  <div class="formula">P<sub>E</sub> = U × I</div>
+
+  <table>
+    <tr>
+      <th>R (Ω)</th>
+      <th>0</th><th>500</th><th>1000</th><th>2000</th><th>3000</th>
+      <th>4000</th><th>5000</th><th>6000</th><th>7000</th><th>8000</th>
+      <th>9000</th><th>10000</th>
+    </tr>
+    <tr>
+      <th>U (V)</th>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+    </tr>
+    <tr>
+      <th>I (A)</th>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+    </tr>
+    <tr>
+      <th>P = U × I (W)</th>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+    </tr>
+    <tr>
+      <th>η (%)</th>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+      <td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td>
+    </tr>
+  </table>
+
+  <div class="box">
+    <strong>Exemple :</strong><br>
+    Si U = 2,0 V et I = 0,008 A :<br>
+    P = 2,0 × 0,008 = <strong>0,016 W</strong> = <strong>16 mW</strong>.
+  </div>
+
+  <h2>6. Tracé des caractéristiques</h2>
+
+  <h3>a) Caractéristique courant-tension</h3>
+  <div class="formula">I = f(U)</div>
+  <p>La tension U est placée en abscisse et le courant I en ordonnée.</p>
+  <pre>I
+│───────────────\
+│                \
+│                 \
+│                  \
+│                   ●
+└──────────────────────── U</pre>
+
+  <h3>b) Caractéristique puissance-tension</h3>
+  <div class="formula">P = f(U)</div>
+  <pre>P
+│
+│             ● Pmax
+│           /   \
+│         /       \
+│       /           \
+│_____/               \_____
+└──────────────────────────── U</pre>
+
+  <p>La puissance augmente, atteint une valeur maximale, puis diminue.</p>
+
+  <h2>7. Détermination de P<sub>E max</sub></h2>
+  <p>On lit sur la courbe P = f(U) la valeur maximale de la puissance électrique.</p>
+  <div class="answer">
+    <p><strong>P<sub>E max</sub> = valeur au sommet de la courbe.</strong></p>
+    <p>On relève également la tension correspondante <strong>U<sub>Pmax</sub></strong>.</p>
+  </div>
+  <p class="small">Les valeurs numériques dépendent des mesures expérimentales.</p>
+
+  <h2>8. Calcul de la puissance lumineuse P<sub>L</sub></h2>
+  <p>On utilise :</p>
+  <div class="formula">P<sub>L</sub> = E × S</div>
+
+  <p>À 1000 lux, le document donne :</p>
+  <div class="formula">E = 25 W·m<sup>−2</sup></div>
+
+  <p>Surface de la cellule :</p>
+  <div class="formula">S = 12 cm²</div>
+
+  <p>Conversion :</p>
+  <div class="formula">12 cm² = 12 / 10 000 = 0,0012 m²</div>
+
+  <p>Donc :</p>
+  <div class="formula">P<sub>L</sub> = 25 × 0,0012 = 0,030 W</div>
+
+  <div class="answer">
+    <strong>P<sub>L</sub> = 0,030 W = 30 mW</strong>
+  </div>
+
+  <h2>9. Calcul du rendement</h2>
+  <p>Pour chaque résistance :</p>
+  <div class="formula">η = P<sub>E</sub> / P<sub>L</sub></div>
+
+  <p>Comme P<sub>L</sub> = 0,030 W :</p>
+  <div class="formula">η = (U × I) / 0,030</div>
+
+  <p>En pourcentage :</p>
+  <div class="formula">η (%) = [(U × I) / 0,030] × 100</div>
+
+  <div class="warning">
+    <strong>Exemple uniquement :</strong><br>
+    Si U = 2,0 V et I = 0,008 A :<br>
+    P<sub>E</sub> = 0,016 W<br>
+    η = 0,016 / 0,030 = 0,533<br>
+    soit <strong>η ≈ 53,3 %</strong>.<br><br>
+    Cette valeur n’est pas la valeur attendue du TP : elle sert seulement à illustrer le calcul.
+  </div>
+
+  <h3>Commentaire attendu</h3>
+  <p>
+    Le rendement n’est pas identique pour toutes les résistances.
+    Lorsque la résistance change, la tension et l’intensité changent.
+    La puissance électrique P = U × I varie donc également.
+  </p>
+
+  <pre>R change
+   ↓
+U et I changent
+   ↓
+P = U × I change
+   ↓
+η change</pre>
+
+  <p>
+    Comme la puissance lumineuse reçue reste constante, le rendement est maximal lorsque
+    la puissance électrique délivrée par la cellule est maximale.
+  </p>
+
+  <div class="formula">η<sub>max</sub> = P<sub>E max</sub> / 0,030</div>
+
+  <div class="conclusion">
+    <h2 style="margin-top:0">Conclusion</h2>
+    <p>
+      Une cellule photovoltaïque convertit une partie de l’énergie lumineuse reçue
+      en énergie électrique.
+    </p>
+    <p><strong>Puissance lumineuse reçue :</strong> P<sub>L</sub> = 0,030 W</p>
+    <p><strong>Puissance électrique produite :</strong> P<sub>E</sub> = U × I</p>
+    <p><strong>Rendement :</strong> η = P<sub>E</sub> / P<sub>L</sub></p>
+    <p>
+      Le rendement dépend du point de fonctionnement de la cellule et est maximal
+      lorsque la puissance électrique délivrée est maximale.
+    </p>
+  </div>
+</div>
+</body>
+</html>
